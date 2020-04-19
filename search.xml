@@ -30,7 +30,8 @@
 <p>话不多说，干起来！！<br>经过1,2的天的准备，我选择了用hexo+github 框架来搭建自己的博客。</p>
 <h3 id="一-hexo安装"><a href="#一-hexo安装" class="headerlink" title="一. hexo安装"></a>一. hexo安装</h3><p>这个直接参考其官网<a href="https://hexo.io/zh-cn/docs/" target="_blank" rel="noopener">hexo官网</a>操作即可，官网文档很详细。</p>
 <h4 id="1-1-hexo安装完成后，新建hexo项目"><a href="#1-1-hexo安装完成后，新建hexo项目" class="headerlink" title="1.1. hexo安装完成后，新建hexo项目"></a>1.1. hexo安装完成后，新建hexo项目</h4><p>新建一个要存放代码的空文件夹，cmd命令进入此文件夹，执行命令：<br><strong>hexo init</strong></p>
-<p><img src="/" class="lazyload" data-src="en-resource://database/705:1"  alt="f1d1cd11f5476e804a8b23c9c953d20d.png"><br>此时项目创建成功，项目结构如下：</p>
+<p><img src="/" class="lazyload" data-src="/blog/hexo-init.png"  alt=""></p>
+<p>此时项目创建成功，项目结构如下：</p>
 <p><img src="/" class="lazyload" data-src="en-resource://database/709:1"  alt="b981ac9d6f1ae8189a2e476b45db9fea.png"></p>
 <h4 id="1-2-主要关注以下目录及文件"><a href="#1-2-主要关注以下目录及文件" class="headerlink" title="1.2 主要关注以下目录及文件:"></a>1.2 主要关注以下目录及文件:</h4><p><strong>_config.yml</strong>   网站的配置信息，可以在此配置大部分的参数。</p>
 <p>source/_posts  存放我们编写的文档的路径</p>
