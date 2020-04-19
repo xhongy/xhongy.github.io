@@ -91,21 +91,21 @@ function activateLightMode(){
 <li>bintray-release是帮助将类库推送到bintray的助手。 它用来帮助配置与maven和bintray建立联系。 目前它用于Android Library工程，Java项目以及Groovy项目，但其重点主要是用来支持Android项目。</li>
 </ul>
 <p><strong>接下来开始美妙的编程时刻吧！LET’S GO!!</strong></p>
-<h3 id="创建一个项目"><a href="#创建一个项目" class="headerlink" title="创建一个项目"></a>创建一个项目</h3><p>在AndroidStudio上建android Project，然后新建一个module，结果如下<br><img src="/" class="lazyload" data-src="/.com//new-pro-suc.png"  alt></p>
+<h3 id="创建一个项目"><a href="#创建一个项目" class="headerlink" title="创建一个项目"></a>创建一个项目</h3><p>在AndroidStudio上建android Project，然后新建一个module，结果如下<br><img src="/" class="lazyload" data-src="/.io//new-pro-suc.png"  alt></p>
 <h3 id="调试module"><a href="#调试module" class="headerlink" title="调试module"></a>调试module</h3><p>接下来编写新建的module块代码，并将此module作为app模块的依赖，调试成功。<br>这里仅仅添加一条打印日志</p>
-<p><img src="/" class="lazyload" data-src="/.com//module-class.png"  alt></p>
+<p><img src="/" class="lazyload" data-src="/.io//module-class.png"  alt></p>
 <h3 id="module代码上传github"><a href="#module代码上传github" class="headerlink" title="module代码上传github"></a>module代码上传github</h3><p> 将调试成功的module块代码上传到github仓库(代码中转库)<br>此步骤可参考另一篇相关帖子</p>
 <h3 id="module上传jcenter"><a href="#module上传jcenter" class="headerlink" title="module上传jcenter"></a>module上传jcenter</h3><p><strong>关键步骤，要放大招了</strong></p>
 <h4 id="注册bintray账号"><a href="#注册bintray账号" class="headerlink" title="注册bintray账号"></a>注册bintray账号</h4><p>这里是通过bintray-release中转站，没有bintray账号的先注册一个账号</p>
 <blockquote>
 <p><a href="https://bintray.com/signup/oss" target="_blank" rel="noopener">注册地址</a><br>可以直接注册或者通过Github帐号注册。具体步骤自行操作，不做过多讲述了。</p>
 </blockquote>
-<h4 id="bintray新建仓库"><a href="#bintray新建仓库" class="headerlink" title="bintray新建仓库"></a>bintray新建仓库</h4><p><img src="/" class="lazyload" data-src="/.com//new-repository.png"  alt></p>
+<h4 id="bintray新建仓库"><a href="#bintray新建仓库" class="headerlink" title="bintray新建仓库"></a>bintray新建仓库</h4><p><img src="/" class="lazyload" data-src="/.io//new-repository.png"  alt></p>
 <p>点击<strong>Add New Repository</strong>，进入新建仓库配置页面</p>
-<p><img src="/" class="lazyload" data-src="/.com//info-repository.png"  alt></p>
+<p><img src="/" class="lazyload" data-src="/.io//info-repository.png"  alt></p>
 <h3 id="获取API-KEY"><a href="#获取API-KEY" class="headerlink" title="获取API-KEY"></a>获取API-KEY</h3><p>获取API KEY，在头像下选择 Edit Profile 进入新页面可以看到API KEY然后复制保存备用；</p>
 <p>可以点击show查看key或者直接点击右侧的复制按钮复制</p>
-<p><img src="/" class="lazyload" data-src="/.com//get-api-key.png"  alt></p>
+<p><img src="/" class="lazyload" data-src="/.io//get-api-key.png"  alt></p>
 <p>到此，所有的准备功能已经准备完毕！接下来就要进入到ANDROID STUDIO 中进行代码的一些配置；</p>
 <h3 id="AndroidStudio代码配置"><a href="#AndroidStudio代码配置" class="headerlink" title="AndroidStudio代码配置"></a>AndroidStudio代码配置</h3><h4 id="工程-根目录-build-gradle中添加"><a href="#工程-根目录-build-gradle中添加" class="headerlink" title="工程(根目录)build.gradle中添加"></a>工程(根目录)build.gradle中添加</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">repositories &#123;</span><br><span class="line">        ...</span><br><span class="line">        jcenter()</span><br><span class="line">&#125;</span><br><span class="line">dependencies &#123;</span><br><span class="line">        ...</span><br><span class="line">        classpath <span class="string">'com.novoda:bintray-release:0.8.1'</span> // 添加</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -119,16 +119,16 @@ function activateLightMode(){
 <blockquote>
 <p>文中的yourUserName替换为你注册binary的用户名，yourAPIKEY替换为你的key.</p>
 </blockquote>
-<p>稍后出现BUILD SUCCESSFUL即上传成功<br><img src="/" class="lazyload" data-src="/.com//gradlew-suc.png"  alt></p>
+<p>稍后出现BUILD SUCCESSFUL即上传成功<br><img src="/" class="lazyload" data-src="/.io//gradlew-suc.png"  alt></p>
 <p>截止到此时，我们已经成功的把module 上传到了 bintray 的 Respository中。</p>
-<p><img src="/" class="lazyload" data-src="/.com//bintray-new-rep.png"  alt></p>
+<p><img src="/" class="lazyload" data-src="/.io//bintray-new-rep.png"  alt></p>
 <h4 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h4><p>此时若要引用此库，需要在项目根build.gradle文件下加入想要的maven库依赖</p>
-<p><img src="/" class="lazyload" data-src="/.com//lib-use.png"  alt></p>
+<p><img src="/" class="lazyload" data-src="/.io//lib-use.png"  alt></p>
 <p>在需要引用的库里添加想要的implenmention</p>
 <h3 id="最后一步"><a href="#最后一步" class="headerlink" title="最后一步"></a>最后一步</h3><p>若开放给别人使用每次都添加maven依赖是不是太麻烦，那就需要同步到Jcenter，操作如下图，耐心等待审核(注：版本升级不用再次同步到Jcenter)</p>
-<p><img src="/" class="lazyload" data-src="/.com//add-to-jcenter.png"  alt></p>
+<p><img src="/" class="lazyload" data-src="/.io//add-to-jcenter.png"  alt></p>
 <p>等待审核通过，就ok了！！</p>
-<p><img src="/" class="lazyload" data-src="/.com//end.png"  alt></p>
+<p><img src="/" class="lazyload" data-src="/.io//end.png"  alt></p>
 <p>这是在项目中只通过implemention来使用就ok.</p>
 <h3 id="版本更新"><a href="#版本更新" class="headerlink" title="版本更新"></a>版本更新</h3><p>如果需要更新升级的时候，更新完代码只需要把module里面的publishVersion更新到自己的版本<br>如1.0.0 —-&gt;1.0.1<br>然后在次执行:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./gradlew clean build bintrayUpload -PbintrayUser=xxx -PbintrayKey=xxx -PdryRun=<span class="literal">false</span></span><br></pre></td></tr></table></figure>

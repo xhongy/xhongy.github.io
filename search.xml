@@ -34,21 +34,21 @@
 <li>bintray-release是帮助将类库推送到bintray的助手。 它用来帮助配置与maven和bintray建立联系。 目前它用于Android Library工程，Java项目以及Groovy项目，但其重点主要是用来支持Android项目。</li>
 </ul>
 <p><strong>接下来开始美妙的编程时刻吧！LET’S GO!!</strong></p>
-<h3 id="创建一个项目"><a href="#创建一个项目" class="headerlink" title="创建一个项目"></a>创建一个项目</h3><p>在AndroidStudio上建android Project，然后新建一个module，结果如下<br><img src="/" class="lazyload" data-src="/.com//new-pro-suc.png"  alt></p>
+<h3 id="创建一个项目"><a href="#创建一个项目" class="headerlink" title="创建一个项目"></a>创建一个项目</h3><p>在AndroidStudio上建android Project，然后新建一个module，结果如下<br><img src="/" class="lazyload" data-src="/.io//new-pro-suc.png"  alt></p>
 <h3 id="调试module"><a href="#调试module" class="headerlink" title="调试module"></a>调试module</h3><p>接下来编写新建的module块代码，并将此module作为app模块的依赖，调试成功。<br>这里仅仅添加一条打印日志</p>
-<p><img src="/" class="lazyload" data-src="/.com//module-class.png"  alt></p>
+<p><img src="/" class="lazyload" data-src="/.io//module-class.png"  alt></p>
 <h3 id="module代码上传github"><a href="#module代码上传github" class="headerlink" title="module代码上传github"></a>module代码上传github</h3><p> 将调试成功的module块代码上传到github仓库(代码中转库)<br>此步骤可参考另一篇相关帖子</p>
 <h3 id="module上传jcenter"><a href="#module上传jcenter" class="headerlink" title="module上传jcenter"></a>module上传jcenter</h3><p><strong>关键步骤，要放大招了</strong></p>
 <h4 id="注册bintray账号"><a href="#注册bintray账号" class="headerlink" title="注册bintray账号"></a>注册bintray账号</h4><p>这里是通过bintray-release中转站，没有bintray账号的先注册一个账号</p>
 <blockquote>
 <p><a href="https://bintray.com/signup/oss" target="_blank" rel="noopener">注册地址</a><br>可以直接注册或者通过Github帐号注册。具体步骤自行操作，不做过多讲述了。</p>
 </blockquote>
-<h4 id="bintray新建仓库"><a href="#bintray新建仓库" class="headerlink" title="bintray新建仓库"></a>bintray新建仓库</h4><p><img src="/" class="lazyload" data-src="/.com//new-repository.png"  alt></p>
+<h4 id="bintray新建仓库"><a href="#bintray新建仓库" class="headerlink" title="bintray新建仓库"></a>bintray新建仓库</h4><p><img src="/" class="lazyload" data-src="/.io//new-repository.png"  alt></p>
 <p>点击<strong>Add New Repository</strong>，进入新建仓库配置页面</p>
-<p><img src="/" class="lazyload" data-src="/.com//info-repository.png"  alt></p>
+<p><img src="/" class="lazyload" data-src="/.io//info-repository.png"  alt></p>
 <h3 id="获取API-KEY"><a href="#获取API-KEY" class="headerlink" title="获取API-KEY"></a>获取API-KEY</h3><p>获取API KEY，在头像下选择 Edit Profile 进入新页面可以看到API KEY然后复制保存备用；</p>
 <p>可以点击show查看key或者直接点击右侧的复制按钮复制</p>
-<p><img src="/" class="lazyload" data-src="/.com//get-api-key.png"  alt></p>
+<p><img src="/" class="lazyload" data-src="/.io//get-api-key.png"  alt></p>
 <p>到此，所有的准备功能已经准备完毕！接下来就要进入到ANDROID STUDIO 中进行代码的一些配置；</p>
 <h3 id="AndroidStudio代码配置"><a href="#AndroidStudio代码配置" class="headerlink" title="AndroidStudio代码配置"></a>AndroidStudio代码配置</h3><h4 id="工程-根目录-build-gradle中添加"><a href="#工程-根目录-build-gradle中添加" class="headerlink" title="工程(根目录)build.gradle中添加"></a>工程(根目录)build.gradle中添加</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">repositories &#123;</span><br><span class="line">        ...</span><br><span class="line">        jcenter()</span><br><span class="line">&#125;</span><br><span class="line">dependencies &#123;</span><br><span class="line">        ...</span><br><span class="line">        classpath <span class="string">'com.novoda:bintray-release:0.8.1'</span> // 添加</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -62,16 +62,16 @@
 <blockquote>
 <p>文中的yourUserName替换为你注册binary的用户名，yourAPIKEY替换为你的key.</p>
 </blockquote>
-<p>稍后出现BUILD SUCCESSFUL即上传成功<br><img src="/" class="lazyload" data-src="/.com//gradlew-suc.png"  alt></p>
+<p>稍后出现BUILD SUCCESSFUL即上传成功<br><img src="/" class="lazyload" data-src="/.io//gradlew-suc.png"  alt></p>
 <p>截止到此时，我们已经成功的把module 上传到了 bintray 的 Respository中。</p>
-<p><img src="/" class="lazyload" data-src="/.com//bintray-new-rep.png"  alt></p>
+<p><img src="/" class="lazyload" data-src="/.io//bintray-new-rep.png"  alt></p>
 <h4 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h4><p>此时若要引用此库，需要在项目根build.gradle文件下加入想要的maven库依赖</p>
-<p><img src="/" class="lazyload" data-src="/.com//lib-use.png"  alt></p>
+<p><img src="/" class="lazyload" data-src="/.io//lib-use.png"  alt></p>
 <p>在需要引用的库里添加想要的implenmention</p>
 <h3 id="最后一步"><a href="#最后一步" class="headerlink" title="最后一步"></a>最后一步</h3><p>若开放给别人使用每次都添加maven依赖是不是太麻烦，那就需要同步到Jcenter，操作如下图，耐心等待审核(注：版本升级不用再次同步到Jcenter)</p>
-<p><img src="/" class="lazyload" data-src="/.com//add-to-jcenter.png"  alt></p>
+<p><img src="/" class="lazyload" data-src="/.io//add-to-jcenter.png"  alt></p>
 <p>等待审核通过，就ok了！！</p>
-<p><img src="/" class="lazyload" data-src="/.com//end.png"  alt></p>
+<p><img src="/" class="lazyload" data-src="/.io//end.png"  alt></p>
 <p>这是在项目中只通过implemention来使用就ok.</p>
 <h3 id="版本更新"><a href="#版本更新" class="headerlink" title="版本更新"></a>版本更新</h3><p>如果需要更新升级的时候，更新完代码只需要把module里面的publishVersion更新到自己的版本<br>如1.0.0 —-&gt;1.0.1<br>然后在次执行:</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">./gradlew clean build bintrayUpload -PbintrayUser=xxx -PbintrayKey=xxx -PdryRun=<span class="literal">false</span></span><br></pre></td></tr></table></figure>
@@ -100,36 +100,36 @@
 <h4 id="新建hexo项目"><a href="#新建hexo项目" class="headerlink" title="新建hexo项目"></a>新建hexo项目</h4><p>新建一个要存放代码的空文件夹，cmd命令进入此文件夹，执行命令：</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo init</span><br></pre></td></tr></table></figure>
 
-<p><img src="/" class="lazyload" data-src="/.com//hexo-init.png"  alt="hexo-init"></p>
+<p><img src="/" class="lazyload" data-src="/.io//hexo-init.png"  alt="hexo-init"></p>
 <p>此时项目创建成功，项目结构如下：</p>
-<p><img src="/" class="lazyload" data-src="/.com//init-suc.png"  alt></p>
+<p><img src="/" class="lazyload" data-src="/.io//init-suc.png"  alt></p>
 <h4 id="重点目录"><a href="#重点目录" class="headerlink" title="重点目录"></a>重点目录</h4><blockquote>
 <p><strong>_config.yml</strong>   网站的配置信息，可以在此配置大部分的参数。<br><strong>source/_posts</strong>  存放我们编写的文档的路径<br><strong>themes</strong>   主题文件夹,你down的喜欢的主题文件都在此</p>
 </blockquote>
 <h4 id="生成静态页面"><a href="#生成静态页面" class="headerlink" title="生成静态页面"></a>生成静态页面</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo -g</span><br></pre></td></tr></table></figure>
 
-<p><img src="/" class="lazyload" data-src="/.com//hexo-g"  alt></p>
+<p><img src="/" class="lazyload" data-src="/.io//hexo-g"  alt></p>
 <p>命令执行后会生成public文件夹</p>
-<p><img src="/" class="lazyload" data-src="/.com//hexo-g-suc.png"  alt></p>
+<p><img src="/" class="lazyload" data-src="/.io//hexo-g-suc.png"  alt></p>
 <h4 id="查看静态页面"><a href="#查看静态页面" class="headerlink" title="查看静态页面"></a>查看静态页面</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo s</span><br></pre></td></tr></table></figure>
 
-<p><img src="/" class="lazyload" data-src="/.com//hexo-s.png"  alt></p>
-<p>浏览器打开效果如下<br><img src="/" class="lazyload" data-src="/.com//hexo-s-show.png"  alt></p>
+<p><img src="/" class="lazyload" data-src="/.io//hexo-s.png"  alt></p>
+<p>浏览器打开效果如下<br><img src="/" class="lazyload" data-src="/.io//hexo-s-show.png"  alt></p>
 <h3 id="更换主题"><a href="#更换主题" class="headerlink" title="更换主题"></a>更换主题</h3><p>若当前主题不是你喜欢的风格，可以更换为自己想要的风格</p>
 <h4 id="下载主题"><a href="#下载主题" class="headerlink" title="下载主题"></a>下载主题</h4><p>执行以下命令，下载你喜欢的主题</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> -b master https://github.com/jerryc127/hexo-theme-butterfly.git themes/Butterfly</span><br></pre></td></tr></table></figure>
 
-<h4 id="查看主题"><a href="#查看主题" class="headerlink" title="查看主题"></a>查看主题</h4><p><img src="/" class="lazyload" data-src="/.com//hexo-change-theme.png"  alt></p>
+<h4 id="查看主题"><a href="#查看主题" class="headerlink" title="查看主题"></a>查看主题</h4><p><img src="/" class="lazyload" data-src="/.io//hexo-change-theme.png"  alt></p>
 <h4 id="修改主题"><a href="#修改主题" class="headerlink" title="修改主题"></a>修改主题</h4><blockquote>
 <p>修改站点配置文件_config.yml,把主题修改为Butterfly</p>
 </blockquote>
-<p><img src="/" class="lazyload" data-src="/.com//hexo-theme-set.png"  alt></p>
+<p><img src="/" class="lazyload" data-src="/.io//hexo-theme-set.png"  alt></p>
 <h4 id="接下来执行以下命令"><a href="#接下来执行以下命令" class="headerlink" title="接下来执行以下命令"></a>接下来执行以下命令</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo clean // 清除旧的主题</span><br><span class="line">hexo g // 生成新的主题</span><br><span class="line">hexo s</span><br></pre></td></tr></table></figure>
 
 <p>此时浏览器查看效果，会发现如下问题</p>
-<p><img src="/" class="lazyload" data-src="/.com//hexo-theme-fail.png"  alt></p>
+<p><img src="/" class="lazyload" data-src="/.io//hexo-theme-fail.png"  alt></p>
 <p>对应的解决方案可以在Butterfly的Github主页看到：</p>
-<p><img src="/" class="lazyload" data-src="/.com//hexo-resolve-theme.png"  alt></p>
+<p><img src="/" class="lazyload" data-src="/.io//hexo-resolve-theme.png"  alt></p>
 <h4 id="执行下面命令："><a href="#执行下面命令：" class="headerlink" title="执行下面命令："></a>执行下面命令：</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install hexo-renderer-pug hexo-renderer-stylus</span><br></pre></td></tr></table></figure>
 
 <p>再次</p>
@@ -146,15 +146,15 @@
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">title: Hexo 添加分类及标签</span><br><span class="line">date: 2017-05-26 12:12:57</span><br><span class="line">categories: android</span><br></pre></td></tr></table></figure>
 
 
-<p>至此，成功给文章添加分类，点击首页的“分类”可以看到该分类下的所有文章。当然，只有添加了categories: xxx的文章才会被收录到首页的“分类”中。<br><img src="/" class="lazyload" data-src="/.com//hexo-categories-suc.png"  alt></p>
+<p>至此，成功给文章添加分类，点击首页的“分类”可以看到该分类下的所有文章。当然，只有添加了categories: xxx的文章才会被收录到首页的“分类”中。<br><img src="/" class="lazyload" data-src="/.io//hexo-categories-suc.png"  alt></p>
 <h4 id="创建“标签”选项"><a href="#创建“标签”选项" class="headerlink" title="创建“标签”选项"></a>创建“标签”选项</h4><h5 id="执行下方命令-1"><a href="#执行下方命令-1" class="headerlink" title="执行下方命令"></a>执行下方命令</h5><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new page tags</span><br></pre></td></tr></table></figure>
 
 <h5 id="查看tags"><a href="#查看tags" class="headerlink" title="查看tags"></a>查看tags</h5><p>在tags文件夹下，找到index.md这个文件，打开后默认内容是这样的：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">title: 标签</span><br><span class="line">date: 2019-04-22 14:22:08</span><br></pre></td></tr></table></figure>
 
-<h5 id="添加type-“tags”"><a href="#添加type-“tags”" class="headerlink" title="添加type: “tags”"></a>添加type: “tags”</h5><p><img src="/" class="lazyload" data-src="/.com//hexo-tags-suc.png"  alt></p>
+<h5 id="添加type-“tags”"><a href="#添加type-“tags”" class="headerlink" title="添加type: “tags”"></a>添加type: “tags”</h5><p><img src="/" class="lazyload" data-src="/.io//hexo-tags-suc.png"  alt></p>
 <h5 id="给文章添加“tags”属性"><a href="#给文章添加“tags”属性" class="headerlink" title="给文章添加“tags”属性"></a>给文章添加“tags”属性</h5><p>打开需要添加标签的文章，为其添加tags属性。</p>
-<p><img src="/" class="lazyload" data-src="/.com//hexo-add-tags.png"  alt></p>
+<p><img src="/" class="lazyload" data-src="/.io//hexo-add-tags.png"  alt></p>
 <blockquote>
 <p><strong>这些属性和属性值之间必须有一个空格，否则解析错误。</strong></p>
 </blockquote>
@@ -163,7 +163,7 @@
 <blockquote>
 <p>tool 新建文章的存放目录<br>blog 文章名字<br>“hexo+github搭建个人博客” 文章标题</p>
 </blockquote>
-<h4 id="生成路径如下"><a href="#生成路径如下" class="headerlink" title="生成路径如下"></a>生成路径如下</h4><p><img src="/" class="lazyload" data-src="/.com//hexo-new-suc.png"  alt></p>
+<h4 id="生成路径如下"><a href="#生成路径如下" class="headerlink" title="生成路径如下"></a>生成路径如下</h4><p><img src="/" class="lazyload" data-src="/.io//hexo-new-suc.png"  alt></p>
 <p>现在就可以编辑blog.md文件来优化文章内容</p>
 <h3 id="解决不显示图片问题"><a href="#解决不显示图片问题" class="headerlink" title="解决不显示图片问题"></a>解决不显示图片问题</h3><p>测试发现markdown编辑好的文档，在hexo里面调试的时候图片加载不出来，别着急，解决办法如下</p>
 <h4 id="安装图片插件"><a href="#安装图片插件" class="headerlink" title="安装图片插件"></a>安装图片插件</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install hexo-asset-image --save</span><br></pre></td></tr></table></figure>
@@ -171,10 +171,10 @@
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo new post -p android/bintray-release <span class="string">"通过bintray-release，发布库到Jcenter"</span></span><br></pre></td></tr></table></figure>
 
 <p>此时会发现在android目录下多出一个与文章同名的文件夹，在此存在相关的资源文件</p>
-<p><img src="/" class="lazyload" data-src="/.com//hexo-resolve-img.png"  alt></p>
+<p><img src="/" class="lazyload" data-src="/.io//hexo-resolve-img.png"  alt></p>
 <h4 id="使用图片资源语法如下"><a href="#使用图片资源语法如下" class="headerlink" title="使用图片资源语法如下"></a>使用图片资源语法如下</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">![](hexo-resolve-img.png)</span><br></pre></td></tr></table></figure>
 <h3 id="部署到github"><a href="#部署到github" class="headerlink" title="部署到github"></a>部署到github</h3><h4 id="创建仓库"><a href="#创建仓库" class="headerlink" title="创建仓库"></a>创建仓库</h4><p>没有github账号的话，先去注册一个。在此假设你已有github账号了，进入geihub创建仓库</p>
-<p><img src="/" class="lazyload" data-src="/.com//github-new-repository.png"  alt><br><img src="/" class="lazyload" data-src="/.com//github-repository-setname.png"  alt></p>
+<p><img src="/" class="lazyload" data-src="/.io//github-new-repository.png"  alt><br><img src="/" class="lazyload" data-src="/.io//github-repository-setname.png"  alt></p>
 <blockquote>
 <p>注意名字使用你<strong>github用户名</strong>.github.io</p>
 </blockquote>
@@ -188,7 +188,7 @@
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo d</span><br></pre></td></tr></table></figure>
 
 <p>刷新github对应的repository页面，即可看到提交的内容</p>
-<p><img src="/" class="lazyload" data-src="/.com//github-upload-code.png"  alt></p>
+<p><img src="/" class="lazyload" data-src="/.io//github-upload-code.png"  alt></p>
 <h4 id="浏览查看效果"><a href="#浏览查看效果" class="headerlink" title="浏览查看效果"></a>浏览查看效果</h4><p>在浏览器输入地址<a href="http://github用户名.github.io" target="_blank" rel="noopener">http://github用户名.github.io</a></p>
 <h3 id="END"><a href="#END" class="headerlink" title="END"></a>END</h3><p>到此，如何使用hexo+github搭建个人博客就讲完了，现在只是借助github来部署，后续我会申请一个域名进行部署，显得更高大上一些<br>，期待ing….</p>
 ]]></content>
@@ -208,20 +208,20 @@
 <p>我们使用git需要先安装git工具，<a href="https://git-for-windows.github.io/" target="_blank" rel="noopener">下载地址</a></p>
 <p>接下来进入正题</p>
 <h4 id="创建仓库"><a href="#创建仓库" class="headerlink" title="创建仓库"></a>创建仓库</h4><p>进入Github首页，点击New repository</p>
-<p><img src="/" class="lazyload" data-src="/.com//new-rep.png"  alt><br><img src="/" class="lazyload" data-src="en-resource://database/645:1"  alt="416db46fd34d49f85f78e17d5b6feb16.png"></p>
+<p><img src="/" class="lazyload" data-src="/.io//new-rep.png"  alt><br><img src="/" class="lazyload" data-src="en-resource://database/645:1"  alt="416db46fd34d49f85f78e17d5b6feb16.png"></p>
 <p>填写相应信息后点击create即可</p>
 <blockquote>
 <p>Repository name: 仓库名称<br>Description(可选): 仓库描述介绍<br>Public：仓库权限（公开共享，私有或指定合作者）<br>Initialize this repository with a README: 添加一个README.mdgitignore: 不需要进行版本管理的仓库类型，对应生成文件.gitignorelicense: </p>
 </blockquote>
-<p><img src="/" class="lazyload" data-src="/.com//rep-info.png"  alt><br><img src="/" class="lazyload" data-src="en-resource://database/647:1"  alt="3a85027374509338413d0e583adfa2eb.png"></p>
+<p><img src="/" class="lazyload" data-src="/.io//rep-info.png"  alt><br><img src="/" class="lazyload" data-src="en-resource://database/647:1"  alt="3a85027374509338413d0e583adfa2eb.png"></p>
 <h4 id="仓库代码复制到本地"><a href="#仓库代码复制到本地" class="headerlink" title="仓库代码复制到本地"></a>仓库代码复制到本地</h4><p>执行相关命令将新建的仓库clone到本地</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> 仓库地址</span><br></pre></td></tr></table></figure>
-<p><img src="/" class="lazyload" data-src="/.com//git-add.png"  alt><br><img src="/" class="lazyload" data-src="en-resource://database/649:1"  alt="9831aadc3d915ba4826acd5fdbbadff3.png"></p>
+<p><img src="/" class="lazyload" data-src="/.io//git-add.png"  alt><br><img src="/" class="lazyload" data-src="en-resource://database/649:1"  alt="9831aadc3d915ba4826acd5fdbbadff3.png"></p>
 <h4 id="上传代码"><a href="#上传代码" class="headerlink" title="上传代码"></a>上传代码</h4><p>将本地要上传的代码放入刚clone下来的目录里面，cd 存放代码的路径,执行以下命令上传:</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git add . </span><br><span class="line">git commit -m <span class="string">"提交描述"</span></span><br><span class="line">git push -u origin master  （注：此操作目的是把本地仓库push到github上面，此步骤需要你输入 帐号和密码）</span><br></pre></td></tr></table></figure>
 
 <h4 id="查看上传是否成功"><a href="#查看上传是否成功" class="headerlink" title="查看上传是否成功"></a>查看上传是否成功</h4><h4 id><a href="#" class="headerlink" title></a></h4><p>此时就可以去github查看上传的代码，如下，上传成功</p>
-<p><img src="/" class="lazyload" data-src="/.com//upload-suc.png"  alt><br><img src="/" class="lazyload" data-src="en-resource://database/651:1"  alt="df4aca98ce53a80cb662a9e4563b13e1.png"></p>
+<p><img src="/" class="lazyload" data-src="/.io//upload-suc.png"  alt><br><img src="/" class="lazyload" data-src="en-resource://database/651:1"  alt="df4aca98ce53a80cb662a9e4563b13e1.png"></p>
 <h3 id="END"><a href="#END" class="headerlink" title="END"></a>END</h3><p>本文是针对有计算机基础的，不是每个步骤都说的太详尽，有不明白的可在自行百度。</p>
 ]]></content>
       <categories>
