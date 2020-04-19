@@ -24,7 +24,69 @@
   <entry>
     <title>hexo+github搭建个人博客</title>
     <url>/2020/04/19/hexo+github%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/</url>
-    <content><![CDATA[]]></content>
+    <content><![CDATA[<blockquote>
+<p>本人程序员一枚，自从开始从事本行就心心念念的想搞一个自己的博客，怎奈有心无行动。<br>最近恍然一悟，最好的行动的时间永远都是当下，在不行动，永远只能羡慕别人的博客了。</p>
+</blockquote>
+<p>话不多说，干起来！！<br>经过1,2的天的准备，我选择了用hexo+github 框架来搭建自己的博客。</p>
+<h3 id="一-hexo安装"><a href="#一-hexo安装" class="headerlink" title="一. hexo安装"></a>一. hexo安装</h3><p>这个直接参考其官网<a href="https://hexo.io/zh-cn/docs/" target="_blank" rel="noopener">hexo官网</a>操作即可，官网文档很详细。</p>
+<h4 id="1-1-hexo安装完成后，新建hexo项目"><a href="#1-1-hexo安装完成后，新建hexo项目" class="headerlink" title="1.1. hexo安装完成后，新建hexo项目"></a>1.1. hexo安装完成后，新建hexo项目</h4><p>新建一个要存放代码的空文件夹，cmd命令进入此文件夹，执行命令：<br><strong>hexo init</strong></p>
+<p><img src="/" class="lazyload" data-src="en-resource://database/705:1"  alt="f1d1cd11f5476e804a8b23c9c953d20d.png"><br>此时项目创建成功，项目结构如下：</p>
+<p><img src="/" class="lazyload" data-src="en-resource://database/709:1"  alt="b981ac9d6f1ae8189a2e476b45db9fea.png"></p>
+<h4 id="1-2-主要关注以下目录及文件"><a href="#1-2-主要关注以下目录及文件" class="headerlink" title="1.2 主要关注以下目录及文件:"></a>1.2 主要关注以下目录及文件:</h4><p><strong>_config.yml</strong>   网站的配置信息，可以在此配置大部分的参数。</p>
+<p>source/_posts  存放我们编写的文档的路径</p>
+<p><strong>themes</strong>   主题文件夹,你down的喜欢的主题文件都在此</p>
+<h4 id="1-3-使用命令-hexo-g-生成静态页面"><a href="#1-3-使用命令-hexo-g-生成静态页面" class="headerlink" title="1.3. 使用命令 hexo g 生成静态页面"></a>1.3. 使用命令 <strong>hexo g</strong> 生成静态页面</h4><p><img src="/" class="lazyload" data-src="en-resource://database/711:1"  alt="27ee5f4cf221facd8458cf0795bb7dfc.png"></p>
+<p>命令执行后会生成public文件夹</p>
+<p><img src="/" class="lazyload" data-src="en-resource://database/713:1"  alt="8896a734ca27a38e9ecc656b57b5b9c3.png"><br><img src="/" class="lazyload" data-src="en-resource://database/715:1"  alt="58104e106621863511f4ddc03b722830.png"></p>
+<h4 id="1-4-此时运行命令-hexo-s-来查看生成的静态页面"><a href="#1-4-此时运行命令-hexo-s-来查看生成的静态页面" class="headerlink" title="1.4. 此时运行命令 hexo s 来查看生成的静态页面"></a>1.4. 此时运行命令 <strong>hexo s</strong> 来查看生成的静态页面</h4><p><img src="/" class="lazyload" data-src="en-resource://database/719:1"  alt="30f39577a9ec809e983003168d1be9db.png"></p>
+<p>浏览器打开效果如下</p>
+<p><img src="/" class="lazyload" data-src="en-resource://database/717:1"  alt="a7e1875bb913b4ca0104554f21619aaa.png"></p>
+<h3 id="二-更换主题"><a href="#二-更换主题" class="headerlink" title="二. 更换主题"></a>二. 更换主题</h3><p>若当前主题不是你喜欢的风格，可以更好为自己想要的风格</p>
+<h4 id="2-1-执行以下命令"><a href="#2-1-执行以下命令" class="headerlink" title="2.1 执行以下命令"></a>2.1 执行以下命令</h4><p><strong>git clone -b master <a href="https://github.com/jerryc127/hexo-theme-butterfly.git" target="_blank" rel="noopener">https://github.com/jerryc127/hexo-theme-butterfly.git</a> themes/Butterfly</strong></p>
+<p>此时在你的theme路径下会看到刚加入的主题</p>
+<p><img src="/" class="lazyload" data-src="en-resource://database/739:0"  alt="10a1f4d76beef01d8862d25eb69d5e46.png"></p>
+<p><strong>修改站点配置文件_config.yml,把主题修改为Butterfly</strong></p>
+<p><img src="/" class="lazyload" data-src="en-resource://database/723:1"  alt="46bfb31d35ebbea4aff875c1eedf4f1b.png"></p>
+<p>接下来执行以下命令<br>hexo clean // 清除旧的主题<br>hexo g // 生成新的主题<br>hexo s</p>
+<p><img src="/" class="lazyload" data-src="en-resource://database/725:1"  alt="24d175dcf56e0a2d924e504b68605038.png"></p>
+<p>对应的解决方案可以在Butterfly的Github主页看到：</p>
+<p><img src="/" class="lazyload" data-src="en-resource://database/727:1"  alt="b5f00c71a9f53106a5ea77aaafa60bdb.png"></p>
+<p>npm install hexo-renderer-pug hexo-renderer-stylus</p>
+<p>再次<br>hexo clean<br>hexo g<br>hexo s</p>
+<p>开始编辑博客内容吧</p>
+<ol>
+<li>创建“分类”选项<br>生成“分类”页并添加tpye属性,进入博客目录。执行命令下方命令</li>
+</ol>
+<p>$ hexo new page categories</p>
+<p>categories文件夹下会有index.md这个文件，打开后默认内容是这样的：</p>
+<hr>
+<p>title: categories<br>date: 2019-04-22 14:47:40</p>
+<hr>
+<p>添加type: “categories”到内容中，添加后是这样的：</p>
+<hr>
+<p>title: 分类<br>date: 2019-04-24 15:30:30<br>type: categories</p>
+<hr>
+<p>保存并关闭文件。给文章添加“categories”属性打开需要添加分类的文章，为其添加categories属性。下方的categories:Hexo表示这篇文章添加到到“Hexo”这个分类。注意：一篇文章只会添加到一个分类中，如果是多个默认放到第一个分类中。</p>
+<hr>
+<p>title: Hexo 添加分类及标签<br>date: 2017-05-26 12:12:57<br>categories: android</p>
+<hr>
+<p>至此，成功给文章添加分类，点击首页的“分类”可以看到该分类下的所有文章。当然，只有添加了categories: xxx的文章才会被收录到首页的“分类”中。<br><img src="/" class="lazyload" data-src="en-resource://database/729:0"  alt="8ca4be64a70750e2aa8d361f193b3092.png"></p>
+<ol start="2">
+<li>创建“标签”选项生成“标签”页并添加tpye属性</li>
+</ol>
+<p>$ hexo new page tags</p>
+<p>在tags文件夹下，找到index.md这个文件，打开后默认内容是这样的：</p>
+<hr>
+<p>title: 标签<br>date: 2019-04-22 14:22:08</p>
+<hr>
+<p>添加type: “tags”到内容中，添加后是这样的：</p>
+<p><img src="/" class="lazyload" data-src="en-resource://database/733:0"  alt="2ad9b67ffe48ca13bcb048a10c2a8a12.png"></p>
+<p>保存并关闭文件。给文章添加“tags”属性,打开需要添加标签的文章，为其添加tags属性。</p>
+<p><img src="/" class="lazyload" data-src="en-resource://database/737:0"  alt="d36b97b9ffe0bb2cca3cffc100e7640f.png"></p>
+<p>这些属性和属性值之间必须有一个空格，否则解析错误。</p>
+<p>加入站点内容搜索功能步骤如下：<br>运行：<br>npm install hexo-generator-searchdb –save<br>1<br>在根目录的下的config.yml 页面最后添加代码。<br>#next search<br>search:<br>    path: search.xml<br>    field: post<br>    format: html<br>    limit: 10000</p>
+<p>// 在android目录下面创建了一个名叫test的文件，标题为a<br>hexo new post -p android/test “a”</p>
+]]></content>
       <categories>
         <category>工具</category>
       </categories>
