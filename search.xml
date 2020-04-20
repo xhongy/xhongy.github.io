@@ -49,9 +49,10 @@
 <h4 id="If-Range"><a href="#If-Range" class="headerlink" title="If-Range"></a>If-Range</h4><p>断点续传，说白点也就是分多次下载，既然不是一次性下载，那么就无法保证多次下载的间隔。<br>也就是说，有可能出现这种场景，这次由于某些原因只下载的一部分，而下次重启继续下载，但可能等到过了很多天后才重启去继续下载，如果在这期间，服务端的这份文件更新了怎么办？<br>只要不是一次性下载的，那么就有可能会出现这种场景，显然，这时候，就不希望断点续传了，而是要让客户端直接重头开始下载，毕竟文件都已经发生更新了，不是同一份了，再继续恢复下载也没有什么意义。<br>那么，客户端要如何知道服务端的文件是否发生变化，要重头下载呢？<br>这时就可以结合 If-Range 字段来实现了，这个也是在请求头中的字段，跟 Range 字段一起使用，它的作用是给 Range<br>字段生效设置了一些条件，只有满足这些条件，Range 才能生效。<br>也就是说，只有先满足 If-Range，那么才能通过 Range 来实现断点续传。<br>那它的条件值可以设置为哪些呢？有两种，Last-Modified 或者 ETag，这两个也都是响应头中。</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">response.header(&quot;Content-Length&quot;) &#x2F;&#x2F; 文件长度</span><br><span class="line">response.header(&quot;Last-Modified&quot;)  &#x2F;&#x2F; 修改时间</span><br><span class="line">response.header(&quot;ETag&quot;)      &#x2F;&#x2F;ETag标识</span><br></pre></td></tr></table></figure>
 
-<p>本人已采用okhttp框架实现了此功能，代码已上传至github，地址：</p>
+<h3 id="代码查看"><a href="#代码查看" class="headerlink" title="代码查看"></a>代码查看</h3><p>本人已采用okhttp框架实现了此功能，代码已上传至github，地址：</p>
 <p><a href="https://github.com/xhongy/OkHttpLib" target="_blank" rel="noopener">https://github.com/xhongy/OkHttpLib</a></p>
 <p>同时插件也上传了jcenter，想使用此插件的友友们，可以访问一下地址查看详情</p>
+<p><a href="https://bintray.com/beta/#/xhongy/maven/OkHttpPlugin" target="_blank" rel="noopener">https://bintray.com/beta/#/xhongy/maven/OkHttpPlugin</a></p>
 ]]></content>
       <categories>
         <category>android</category>
@@ -77,7 +78,10 @@
 <h3 id="创建一个项目"><a href="#创建一个项目" class="headerlink" title="创建一个项目"></a>创建一个项目</h3><p>在AndroidStudio上建android Project，然后新建一个module，结果如下<br><img src="/" class="lazyload" data-src="/2020/04/19/%E9%80%9A%E8%BF%87bintray-release%EF%BC%8C%E5%8F%91%E5%B8%83%E5%BA%93%E5%88%B0Jcenter/new-pro-suc.png"  alt></p>
 <h3 id="调试module"><a href="#调试module" class="headerlink" title="调试module"></a>调试module</h3><p>接下来编写新建的module块代码，并将此module作为app模块的依赖，调试成功。<br>这里仅仅添加一条打印日志</p>
 <p><img src="/" class="lazyload" data-src="/2020/04/19/%E9%80%9A%E8%BF%87bintray-release%EF%BC%8C%E5%8F%91%E5%B8%83%E5%BA%93%E5%88%B0Jcenter/module-class.png"  alt></p>
-<h3 id="module代码上传github"><a href="#module代码上传github" class="headerlink" title="module代码上传github"></a>module代码上传github</h3><p> 将调试成功的module块代码上传到github仓库(代码中转库)<br>此步骤可参考另一篇相关帖子</p>
+<h3 id="module代码上传github"><a href="#module代码上传github" class="headerlink" title="module代码上传github"></a>module代码上传github</h3><p> 将调试成功的module块代码上传到github仓库(代码中转库)<br>此步骤可参考另一篇相关帖子,</p>
+<blockquote>
+<p><a href="https://xhongy.github.io/2020/04/19/%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E5%88%B0github/">github上传文件</a></p>
+</blockquote>
 <h3 id="module上传jcenter"><a href="#module上传jcenter" class="headerlink" title="module上传jcenter"></a>module上传jcenter</h3><p><strong>关键步骤，要放大招了</strong></p>
 <h4 id="注册bintray账号"><a href="#注册bintray账号" class="headerlink" title="注册bintray账号"></a>注册bintray账号</h4><p>这里是通过bintray-release中转站，没有bintray账号的先注册一个账号</p>
 <blockquote>
@@ -124,6 +128,7 @@
 <blockquote>
 <p>注意：第一次上传的时候需要add to jcenter, 后面更新只需要在命令行提交到bintary即可。</p>
 </blockquote>
+<h3 id="番外"><a href="#番外" class="headerlink" title="番外"></a>番外</h3><p>在使用中有可能会出现各种问题，可参考<br><a href="https://www.jianshu.com/p/6b272fe9bd28" target="_blank" rel="noopener">转载</a></p>
 ]]></content>
       <categories>
         <category>android</category>
@@ -255,20 +260,20 @@
 <p>我们使用git需要先安装git工具，<a href="https://git-for-windows.github.io/" target="_blank" rel="noopener">下载地址</a></p>
 <p>接下来进入正题</p>
 <h4 id="创建仓库"><a href="#创建仓库" class="headerlink" title="创建仓库"></a>创建仓库</h4><p>进入Github首页，点击New repository</p>
-<p><img src="/" class="lazyload" data-src="/2020/04/19/%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E5%88%B0github/new-rep.png"  alt><br><img src="/" class="lazyload" data-src="en-resource://database/645:1"  alt="416db46fd34d49f85f78e17d5b6feb16.png"></p>
+<p><img src="/" class="lazyload" data-src="/2020/04/19/%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E5%88%B0github/new-rep.png"  alt></p>
 <p>填写相应信息后点击create即可</p>
 <blockquote>
 <p>Repository name: 仓库名称<br>Description(可选): 仓库描述介绍<br>Public：仓库权限（公开共享，私有或指定合作者）<br>Initialize this repository with a README: 添加一个README.mdgitignore: 不需要进行版本管理的仓库类型，对应生成文件.gitignorelicense: </p>
 </blockquote>
-<p><img src="/" class="lazyload" data-src="/2020/04/19/%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E5%88%B0github/rep-info.png"  alt><br><img src="/" class="lazyload" data-src="en-resource://database/647:1"  alt="3a85027374509338413d0e583adfa2eb.png"></p>
+<p><img src="/" class="lazyload" data-src="/2020/04/19/%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E5%88%B0github/rep-info.png"  alt></p>
 <h4 id="仓库代码复制到本地"><a href="#仓库代码复制到本地" class="headerlink" title="仓库代码复制到本地"></a>仓库代码复制到本地</h4><p>执行相关命令将新建的仓库clone到本地</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> 仓库地址</span><br></pre></td></tr></table></figure>
-<p><img src="/" class="lazyload" data-src="/2020/04/19/%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E5%88%B0github/git-add.png"  alt><br><img src="/" class="lazyload" data-src="en-resource://database/649:1"  alt="9831aadc3d915ba4826acd5fdbbadff3.png"></p>
+<p><img src="/" class="lazyload" data-src="/2020/04/19/%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E5%88%B0github/git-add.png"  alt></p>
 <h4 id="上传代码"><a href="#上传代码" class="headerlink" title="上传代码"></a>上传代码</h4><p>将本地要上传的代码放入刚clone下来的目录里面，cd 存放代码的路径,执行以下命令上传:</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git add . </span><br><span class="line">git commit -m <span class="string">"提交描述"</span></span><br><span class="line">git push -u origin master  （注：此操作目的是把本地仓库push到github上面，此步骤需要你输入 帐号和密码）</span><br></pre></td></tr></table></figure>
 
-<h4 id="查看上传是否成功"><a href="#查看上传是否成功" class="headerlink" title="查看上传是否成功"></a>查看上传是否成功</h4><h4 id><a href="#" class="headerlink" title></a></h4><p>此时就可以去github查看上传的代码，如下，上传成功</p>
-<p><img src="/" class="lazyload" data-src="/2020/04/19/%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E5%88%B0github/upload-suc.png"  alt><br><img src="/" class="lazyload" data-src="en-resource://database/651:1"  alt="df4aca98ce53a80cb662a9e4563b13e1.png"></p>
+<h4 id="查看上传是否成功"><a href="#查看上传是否成功" class="headerlink" title="查看上传是否成功"></a>查看上传是否成功</h4><p>此时就可以去github查看上传的代码，如下，上传成功</p>
+<p><img src="/" class="lazyload" data-src="/2020/04/19/%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E5%88%B0github/upload-suc.png"  alt></p>
 <h3 id="END"><a href="#END" class="headerlink" title="END"></a>END</h3><p>本文是针对有计算机基础的，不是每个步骤都说的太详尽，有不明白的可在自行百度。</p>
 ]]></content>
       <categories>
