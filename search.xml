@@ -22,45 +22,15 @@
       </tags>
   </entry>
   <entry>
-    <title>断点续传</title>
-    <url>/2020/04/19/%E6%96%AD%E7%82%B9%E7%BB%AD%E4%BC%A0/</url>
-    <content><![CDATA[<h3 id="什么是断点续传："><a href="#什么是断点续传：" class="headerlink" title="什么是断点续传："></a>什么是断点续传：</h3><blockquote>
-<p>说得白一点，<em>其实也</em>就是下载文件时，不必重头开始下载，而是从指定的位置继续下载，这样的功能就叫做断点续传。<br>既然如此，那么要实现断点续传的关键点其实也就是两点：</p>
-</blockquote>
-<ul>
-<li>如何告知服务端，从指定的位置下载</li>
-<li>如何知道客户端想要的指定位置是多少</li>
-</ul>
-<p>其实，很简单，并不需要我们自己去写一些什么，HTTP 协议本身就支持断点续传，<br>而且文件是下载到客户端设备上的，那么只要获取到这份下载到一半的文件，<br>看一下它目前的大小，也就知道需要让服务端从哪开始继续下载了。</p>
-<p>那么，下面就介绍一下涉及到的相关理论</p>
-<h3 id="Range-amp-Content-Length-amp-Content-Range-amp-If-Range"><a href="#Range-amp-Content-Length-amp-Content-Range-amp-If-Range" class="headerlink" title="Range &amp; Content-Length &amp; Content-Range &amp; If-Range"></a>Range &amp; Content-Length &amp; Content-Range &amp; If-Range</h3><p>这些都是 HTTP 包中 Header 头部的一些字段信息，其中 Range 和 If-Range 是请求头中<br>其中 Range 和 If-Range 是请求头中的字段，Content-Length 和 Content-Range 是响应头中的字段。</p>
-<h4 id="Range"><a href="#Range" class="headerlink" title="Range"></a>Range</h4><p>当请求头中出现 Range 字段时，表示告知服务端，客户端下载该文件想要从指定的位置开始下载，至于 Range 字段属性值的格式有以下几种：</p>
-<p>格式</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Range:bytes&#x3D;0-500  表示下载从0到500字节的文件，即头500个字节</span><br><span class="line"></span><br><span class="line">Range:bytes&#x3D;501-1000  表示下载从500到1000这部分的文件，单位字节</span><br><span class="line"></span><br><span class="line">Range:bytes&#x3D;-500   表示下载最后的500个字节</span><br><span class="line"></span><br><span class="line">Range:bytes&#x3D;500-   表示下载从500开始到文件结束这部分的内容</span><br></pre></td></tr></table></figure>
-<p>如果 app 想实现断点续传，文件下载到一半被迫中断，下次启动还可以继续接着上次<br>进度下载时，那么此时可以使用 Range:bytes=500- 这种格式了，只要先获取本地那<br>份文件目前的大小，通过在请求头中加入 Range 字段信息即可</p>
-<h4 id="Content-Length"><a href="#Content-Length" class="headerlink" title="Content-Length"></a>Content-Length</h4><p>Content-Length 字段出现在响应头中，用于告知客户端此次下载的文件大小。</p>
-<p>一般，如果客户端需要实现下载进度实时更新时，就需要知道文件的总大小和目前下载的大小，后者可以通过对本地文件的操作得知，前者一般就是通过响应头中的 Content-Length 字段得知。</p>
-<p>另外，如果想要实现多线程同时分段下载大文件功能时，显然在下载前，客户端需要先知道文件总大小，才可以做到动态进行分段，因此一般在下载前都会先发送一个不需要携带 body 信息请求，用于先获取响应头中的 Content-Length 字段来得知文件总大小。</p>
-<p>但有一点需要注意：Content-Length 只表示此链接中下载的文件大小</p>
-<p>什么意思，也就是说，如果这条链接是一次性将整个文件下载下来的，那么 Content-Length 就表示这个文件的总大小。</p>
-<p>但，如果这条链接指定了 Range，表明了只是下载文件的指定部分的内容，那么此时 Content-Length 表示的就只是这一部分的大小。</p>
-<p>所以，如果客户端实现了下载进度实时更新功能时，需要注意一下。因为如果文件是断点续传的，那么进度条的分母就不能用每次 HTTP 链接中的 Content-Length。要么下载前先发一条获取用于文件总大小的请求，然后一直维护着这个数据，要么就使用 Content-Range 字段。</p>
-<h4 id="Content-Range"><a href="#Content-Range" class="headerlink" title="Content-Range"></a>Content-Range</h4><p>Content-Range 字段也是出现在响应头中，用于告知客户端此链接下载的文件是哪个部分的，以及文件的总大小。<br>比如，当客户端在请求头中指定了 Range:bayes=501-1000 来下载一个总大小为 2000 字节文件的中间一部分内容时，此时，响应头中的 Content-Range 字段信息如下：<br>Content-Range:bytes 501-1000/2000<br>斜杠前表示此链接下载的文件是哪一部分，斜杠后表示文件的总大小。</p>
-<h4 id="If-Range"><a href="#If-Range" class="headerlink" title="If-Range"></a>If-Range</h4><p>断点续传，说白点也就是分多次下载，既然不是一次性下载，那么就无法保证多次下载的间隔。<br>也就是说，有可能出现这种场景，这次由于某些原因只下载的一部分，而下次重启继续下载，但可能等到过了很多天后才重启去继续下载，如果在这期间，服务端的这份文件更新了怎么办？<br>只要不是一次性下载的，那么就有可能会出现这种场景，显然，这时候，就不希望断点续传了，而是要让客户端直接重头开始下载，毕竟文件都已经发生更新了，不是同一份了，再继续恢复下载也没有什么意义。<br>那么，客户端要如何知道服务端的文件是否发生变化，要重头下载呢？<br>这时就可以结合 If-Range 字段来实现了，这个也是在请求头中的字段，跟 Range 字段一起使用，它的作用是给 Range<br>字段生效设置了一些条件，只有满足这些条件，Range 才能生效。<br>也就是说，只有先满足 If-Range，那么才能通过 Range 来实现断点续传。<br>那它的条件值可以设置为哪些呢？有两种，Last-Modified 或者 ETag，这两个也都是响应头中。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">response.header(&quot;Content-Length&quot;) &#x2F;&#x2F; 文件长度</span><br><span class="line">response.header(&quot;Last-Modified&quot;)  &#x2F;&#x2F; 修改时间</span><br><span class="line">response.header(&quot;ETag&quot;)      &#x2F;&#x2F;ETag标识</span><br></pre></td></tr></table></figure>
+    <title>切面编程</title>
+    <url>/2020/04/21/%E5%88%87%E9%9D%A2%E7%BC%96%E7%A8%8B/</url>
+    <content><![CDATA[<h4 id="项目根路径添加一下代码"><a href="#项目根路径添加一下代码" class="headerlink" title="项目根路径添加一下代码"></a>项目根路径添加一下代码</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">buildscript &#123;</span><br><span class="line">    ...</span><br><span class="line">    dependencies &#123;</span><br><span class="line">        ...</span><br><span class="line">        classpath &#39;org.aspectj:aspectjtools:1.9.1&#39;</span><br><span class="line">        classpath &#39;org.aspectj:aspectjweaver:1.9.1&#39;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="项目app的buid-gradle文件中添加如下代码"><a href="#项目app的buid-gradle文件中添加如下代码" class="headerlink" title="项目app的buid.gradle文件中添加如下代码"></a>项目app的buid.gradle文件中添加如下代码</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">import org.aspectj.bridge.IMessage</span><br><span class="line">import org.aspectj.bridge.MessageHandler</span><br><span class="line">import org.aspectj.tools.ajc.Main</span><br><span class="line"></span><br><span class="line">android &#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br><span class="line">final def log &#x3D; project.logger</span><br><span class="line">final def variants &#x3D; project.android.applicationVariants</span><br><span class="line">variants.all &#123; variant -&gt;</span><br><span class="line">    if (!variant.buildType.isDebuggable()) &#123;</span><br><span class="line">        log.debug(&quot;Skipping non-debuggable build type &#39;$&#123;variant.buildType.name&#125;&#39;.&quot;)</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    JavaCompile javaCompile &#x3D; variant.javaCompile</span><br><span class="line">    javaCompile.doLast &#123;</span><br><span class="line">        String[] args &#x3D; [&quot;-showWeaveInfo&quot;,</span><br><span class="line">                         &quot;-1.8&quot;,</span><br><span class="line">                         &quot;-inpath&quot;, javaCompile.destinationDir.toString(),</span><br><span class="line">                         &quot;-aspectpath&quot;, javaCompile.classpath.asPath,</span><br><span class="line">                         &quot;-d&quot;, javaCompile.destinationDir.toString(),</span><br><span class="line">                         &quot;-classpath&quot;, javaCompile.classpath.asPath,</span><br><span class="line">                         &quot;-bootclasspath&quot;, project.android.bootClasspath.join(File.pathSeparator)]</span><br><span class="line">        log.debug &quot;ajc args: &quot; + Arrays.toString(args)</span><br><span class="line"></span><br><span class="line">        MessageHandler handler &#x3D; new MessageHandler(true);</span><br><span class="line">        new Main().run(args, handler);</span><br><span class="line">        for (IMessage message : handler.getMessages(null, true)) &#123;</span><br><span class="line">            switch (message.getKind()) &#123;</span><br><span class="line">                case IMessage.ABORT:</span><br><span class="line">                case IMessage.ERROR:</span><br><span class="line">                case IMessage.FAIL:</span><br><span class="line">                    log.error message.message, message.thrown</span><br><span class="line">                    break;</span><br><span class="line">                case IMessage.WARNING:</span><br><span class="line">                    log.warn message.message, message.thrown</span><br><span class="line">                    break;</span><br><span class="line">                case IMessage.INFO:</span><br><span class="line">                    log.info message.message, message.thrown</span><br><span class="line">                    break;</span><br><span class="line">                case IMessage.DEBUG:</span><br><span class="line">                    log.debug message.message, message.thrown</span><br><span class="line">                    break;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">dependencies &#123;</span><br><span class="line">    ...</span><br><span class="line">	</span><br><span class="line">    implementation &#39;org.aspectj:aspectjrt:1.9.1&#39;</span><br><span class="line">    implementation project(path: &#39;:aspectjlib&#39;) &#x2F;&#x2F; 加入的依赖包</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h3 id="代码查看"><a href="#代码查看" class="headerlink" title="代码查看"></a>代码查看</h3><p>本人已采用okhttp框架实现了此功能，代码已上传至github，地址：</p>
-<p><a href="https://github.com/xhongy/OkHttpLib" target="_blank" rel="noopener">https://github.com/xhongy/OkHttpLib</a></p>
-<p>同时插件也上传了jcenter，想使用此插件的友友们，可以访问一下地址查看详情</p>
-<p><a href="https://bintray.com/beta/#/xhongy/maven/OkHttpPlugin" target="_blank" rel="noopener">https://bintray.com/beta/#/xhongy/maven/OkHttpPlugin</a></p>
+<h4 id="运行项目"><a href="#运行项目" class="headerlink" title="运行项目"></a>运行项目</h4><p>默认设置日志存放路径为 <strong>/data/user/0/包名/files</strong></p>
+<p>具体查看在androidstudio里面打开Device File Explorer，开发方法如下：</p>
+<p><img src="/" class="lazyload" data-src="/2020/04/21/%E5%88%87%E9%9D%A2%E7%BC%96%E7%A8%8B/file-open.png"  alt><br><img src="/" class="lazyload" data-src="/2020/04/21/%E5%88%87%E9%9D%A2%E7%BC%96%E7%A8%8B/file-search.png"  alt></p>
 ]]></content>
-      <categories>
-        <category>android</category>
-      </categories>
-      <tags>
-        <tag>断点续传</tag>
-        <tag>okhttp</tag>
-      </tags>
   </entry>
   <entry>
     <title>通过bintray-release，发布库到Jcenter</title>
@@ -140,6 +110,77 @@
       </tags>
   </entry>
   <entry>
+    <title>断点续传</title>
+    <url>/2020/04/19/%E6%96%AD%E7%82%B9%E7%BB%AD%E4%BC%A0/</url>
+    <content><![CDATA[<h3 id="什么是断点续传："><a href="#什么是断点续传：" class="headerlink" title="什么是断点续传："></a>什么是断点续传：</h3><blockquote>
+<p>说得白一点，<em>其实也</em>就是下载文件时，不必重头开始下载，而是从指定的位置继续下载，这样的功能就叫做断点续传。<br>既然如此，那么要实现断点续传的关键点其实也就是两点：</p>
+</blockquote>
+<ul>
+<li>如何告知服务端，从指定的位置下载</li>
+<li>如何知道客户端想要的指定位置是多少</li>
+</ul>
+<p>其实，很简单，并不需要我们自己去写一些什么，HTTP 协议本身就支持断点续传，<br>而且文件是下载到客户端设备上的，那么只要获取到这份下载到一半的文件，<br>看一下它目前的大小，也就知道需要让服务端从哪开始继续下载了。</p>
+<p>那么，下面就介绍一下涉及到的相关理论</p>
+<h3 id="Range-amp-Content-Length-amp-Content-Range-amp-If-Range"><a href="#Range-amp-Content-Length-amp-Content-Range-amp-If-Range" class="headerlink" title="Range &amp; Content-Length &amp; Content-Range &amp; If-Range"></a>Range &amp; Content-Length &amp; Content-Range &amp; If-Range</h3><p>这些都是 HTTP 包中 Header 头部的一些字段信息，其中 Range 和 If-Range 是请求头中<br>其中 Range 和 If-Range 是请求头中的字段，Content-Length 和 Content-Range 是响应头中的字段。</p>
+<h4 id="Range"><a href="#Range" class="headerlink" title="Range"></a>Range</h4><p>当请求头中出现 Range 字段时，表示告知服务端，客户端下载该文件想要从指定的位置开始下载，至于 Range 字段属性值的格式有以下几种：</p>
+<p>格式</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Range:bytes&#x3D;0-500  表示下载从0到500字节的文件，即头500个字节</span><br><span class="line"></span><br><span class="line">Range:bytes&#x3D;501-1000  表示下载从500到1000这部分的文件，单位字节</span><br><span class="line"></span><br><span class="line">Range:bytes&#x3D;-500   表示下载最后的500个字节</span><br><span class="line"></span><br><span class="line">Range:bytes&#x3D;500-   表示下载从500开始到文件结束这部分的内容</span><br></pre></td></tr></table></figure>
+<p>如果 app 想实现断点续传，文件下载到一半被迫中断，下次启动还可以继续接着上次<br>进度下载时，那么此时可以使用 Range:bytes=500- 这种格式了，只要先获取本地那<br>份文件目前的大小，通过在请求头中加入 Range 字段信息即可</p>
+<h4 id="Content-Length"><a href="#Content-Length" class="headerlink" title="Content-Length"></a>Content-Length</h4><p>Content-Length 字段出现在响应头中，用于告知客户端此次下载的文件大小。</p>
+<p>一般，如果客户端需要实现下载进度实时更新时，就需要知道文件的总大小和目前下载的大小，后者可以通过对本地文件的操作得知，前者一般就是通过响应头中的 Content-Length 字段得知。</p>
+<p>另外，如果想要实现多线程同时分段下载大文件功能时，显然在下载前，客户端需要先知道文件总大小，才可以做到动态进行分段，因此一般在下载前都会先发送一个不需要携带 body 信息请求，用于先获取响应头中的 Content-Length 字段来得知文件总大小。</p>
+<p>但有一点需要注意：Content-Length 只表示此链接中下载的文件大小</p>
+<p>什么意思，也就是说，如果这条链接是一次性将整个文件下载下来的，那么 Content-Length 就表示这个文件的总大小。</p>
+<p>但，如果这条链接指定了 Range，表明了只是下载文件的指定部分的内容，那么此时 Content-Length 表示的就只是这一部分的大小。</p>
+<p>所以，如果客户端实现了下载进度实时更新功能时，需要注意一下。因为如果文件是断点续传的，那么进度条的分母就不能用每次 HTTP 链接中的 Content-Length。要么下载前先发一条获取用于文件总大小的请求，然后一直维护着这个数据，要么就使用 Content-Range 字段。</p>
+<h4 id="Content-Range"><a href="#Content-Range" class="headerlink" title="Content-Range"></a>Content-Range</h4><p>Content-Range 字段也是出现在响应头中，用于告知客户端此链接下载的文件是哪个部分的，以及文件的总大小。<br>比如，当客户端在请求头中指定了 Range:bayes=501-1000 来下载一个总大小为 2000 字节文件的中间一部分内容时，此时，响应头中的 Content-Range 字段信息如下：<br>Content-Range:bytes 501-1000/2000<br>斜杠前表示此链接下载的文件是哪一部分，斜杠后表示文件的总大小。</p>
+<h4 id="If-Range"><a href="#If-Range" class="headerlink" title="If-Range"></a>If-Range</h4><p>断点续传，说白点也就是分多次下载，既然不是一次性下载，那么就无法保证多次下载的间隔。<br>也就是说，有可能出现这种场景，这次由于某些原因只下载的一部分，而下次重启继续下载，但可能等到过了很多天后才重启去继续下载，如果在这期间，服务端的这份文件更新了怎么办？<br>只要不是一次性下载的，那么就有可能会出现这种场景，显然，这时候，就不希望断点续传了，而是要让客户端直接重头开始下载，毕竟文件都已经发生更新了，不是同一份了，再继续恢复下载也没有什么意义。<br>那么，客户端要如何知道服务端的文件是否发生变化，要重头下载呢？<br>这时就可以结合 If-Range 字段来实现了，这个也是在请求头中的字段，跟 Range 字段一起使用，它的作用是给 Range<br>字段生效设置了一些条件，只有满足这些条件，Range 才能生效。<br>也就是说，只有先满足 If-Range，那么才能通过 Range 来实现断点续传。<br>那它的条件值可以设置为哪些呢？有两种，Last-Modified 或者 ETag，这两个也都是响应头中。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">response.header(&quot;Content-Length&quot;) &#x2F;&#x2F; 文件长度</span><br><span class="line">response.header(&quot;Last-Modified&quot;)  &#x2F;&#x2F; 修改时间</span><br><span class="line">response.header(&quot;ETag&quot;)      &#x2F;&#x2F;ETag标识</span><br></pre></td></tr></table></figure>
+
+<h3 id="代码查看"><a href="#代码查看" class="headerlink" title="代码查看"></a>代码查看</h3><p>本人已采用okhttp框架实现了此功能，代码已上传至github，地址：</p>
+<p><a href="https://github.com/xhongy/OkHttpLib" target="_blank" rel="noopener">https://github.com/xhongy/OkHttpLib</a></p>
+<p>同时插件也上传了jcenter，想使用此插件的友友们，可以访问一下地址查看详情</p>
+<p><a href="https://bintray.com/beta/#/xhongy/maven/OkHttpPlugin" target="_blank" rel="noopener">https://bintray.com/beta/#/xhongy/maven/OkHttpPlugin</a></p>
+]]></content>
+      <categories>
+        <category>android</category>
+      </categories>
+      <tags>
+        <tag>断点续传</tag>
+        <tag>okhttp</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>上传文件到github</title>
+    <url>/2020/04/19/%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E5%88%B0github/</url>
+    <content><![CDATA[<h3 id="注册账号"><a href="#注册账号" class="headerlink" title="注册账号"></a>注册账号</h3><p>首先先去  <a href="https://github.com/" target="_blank" rel="noopener">github官网</a>  注册一个账号。</p>
+<p>我们使用git需要先安装git工具，<a href="https://git-for-windows.github.io/" target="_blank" rel="noopener">下载地址</a></p>
+<p>接下来进入正题</p>
+<h4 id="创建仓库"><a href="#创建仓库" class="headerlink" title="创建仓库"></a>创建仓库</h4><p>进入Github首页，点击New repository</p>
+<p><img src="/" class="lazyload" data-src="/2020/04/19/%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E5%88%B0github/new-rep.png"  alt></p>
+<p>填写相应信息后点击create即可</p>
+<blockquote>
+<p>Repository name: 仓库名称<br>Description(可选): 仓库描述介绍<br>Public：仓库权限（公开共享，私有或指定合作者）<br>Initialize this repository with a README: 添加一个README.mdgitignore: 不需要进行版本管理的仓库类型，对应生成文件.gitignorelicense: </p>
+</blockquote>
+<p><img src="/" class="lazyload" data-src="/2020/04/19/%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E5%88%B0github/rep-info.png"  alt></p>
+<h4 id="仓库代码复制到本地"><a href="#仓库代码复制到本地" class="headerlink" title="仓库代码复制到本地"></a>仓库代码复制到本地</h4><p>执行相关命令将新建的仓库clone到本地</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> 仓库地址</span><br></pre></td></tr></table></figure>
+<p><img src="/" class="lazyload" data-src="/2020/04/19/%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E5%88%B0github/git-add.png"  alt></p>
+<h4 id="上传代码"><a href="#上传代码" class="headerlink" title="上传代码"></a>上传代码</h4><p>将本地要上传的代码放入刚clone下来的目录里面，cd 存放代码的路径,执行以下命令上传:</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git add . </span><br><span class="line">git commit -m <span class="string">"提交描述"</span></span><br><span class="line">git push -u origin master  （注：此操作目的是把本地仓库push到github上面，此步骤需要你输入 帐号和密码）</span><br></pre></td></tr></table></figure>
+
+<h4 id="查看上传是否成功"><a href="#查看上传是否成功" class="headerlink" title="查看上传是否成功"></a>查看上传是否成功</h4><p>此时就可以去github查看上传的代码，如下，上传成功</p>
+<p><img src="/" class="lazyload" data-src="/2020/04/19/%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E5%88%B0github/upload-suc.png"  alt></p>
+<h3 id="END"><a href="#END" class="headerlink" title="END"></a>END</h3><p>本文是针对有计算机基础的，不是每个步骤都说的太详尽，有不明白的可在自行百度。</p>
+]]></content>
+      <categories>
+        <category>工具</category>
+      </categories>
+      <tags>
+        <tag>github</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>hexo+github搭建个人博客</title>
     <url>/2020/04/19/hexo+github%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/</url>
     <content><![CDATA[<blockquote>
@@ -211,7 +252,8 @@
 <p><strong>这些属性和属性值之间必须有一个空格，否则解析错误。</strong></p>
 </blockquote>
 <h3 id="创建一篇文章"><a href="#创建一篇文章" class="headerlink" title="创建一篇文章"></a>创建一篇文章</h3><p>若想创建的文章分门别类的存放，便于以后查找维护，操作如下</p>
-<h4 id="执行命令"><a href="#执行命令" class="headerlink" title="执行命令"></a>执行命令</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo new post tool/blog <span class="string">"hexo+github搭建个人博客"</span></span><br></pre></td></tr></table></figure>
+<h4 id="执行命令"><a href="#执行命令" class="headerlink" title="执行命令"></a>执行命令</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo new post -p tool/blog <span class="string">"hexo+github搭建个人博客"</span></span><br></pre></td></tr></table></figure>
+<p><strong>‘-p’ 一定要添加，这样才会把新建的文章放到tool目录下，否则会放在_posts目录下</strong></p>
 <blockquote>
 <p>tool 新建文章的存放目录<br>blog 文章名字<br>“hexo+github搭建个人博客” 文章标题</p>
 </blockquote>
@@ -248,45 +290,9 @@
         <category>工具</category>
       </categories>
       <tags>
-        <tag>hexo</tag>
         <tag>github</tag>
+        <tag>hexo</tag>
         <tag>博客</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>上传文件到github</title>
-    <url>/2020/04/19/%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E5%88%B0github/</url>
-    <content><![CDATA[<h3 id="注册账号"><a href="#注册账号" class="headerlink" title="注册账号"></a>注册账号</h3><p>首先先去  <a href="https://github.com/" target="_blank" rel="noopener">github官网</a>  注册一个账号。</p>
-<p>我们使用git需要先安装git工具，<a href="https://git-for-windows.github.io/" target="_blank" rel="noopener">下载地址</a></p>
-<p>接下来进入正题</p>
-<h4 id="创建仓库"><a href="#创建仓库" class="headerlink" title="创建仓库"></a>创建仓库</h4><p>进入Github首页，点击New repository</p>
-<p><img src="/" class="lazyload" data-src="/2020/04/19/%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E5%88%B0github/new-rep.png"  alt></p>
-<p>填写相应信息后点击create即可</p>
-<blockquote>
-<p>Repository name: 仓库名称<br>Description(可选): 仓库描述介绍<br>Public：仓库权限（公开共享，私有或指定合作者）<br>Initialize this repository with a README: 添加一个README.mdgitignore: 不需要进行版本管理的仓库类型，对应生成文件.gitignorelicense: </p>
-</blockquote>
-<p><img src="/" class="lazyload" data-src="/2020/04/19/%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E5%88%B0github/rep-info.png"  alt></p>
-<h4 id="仓库代码复制到本地"><a href="#仓库代码复制到本地" class="headerlink" title="仓库代码复制到本地"></a>仓库代码复制到本地</h4><p>执行相关命令将新建的仓库clone到本地</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> 仓库地址</span><br></pre></td></tr></table></figure>
-<p><img src="/" class="lazyload" data-src="/2020/04/19/%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E5%88%B0github/git-add.png"  alt></p>
-<h4 id="上传代码"><a href="#上传代码" class="headerlink" title="上传代码"></a>上传代码</h4><p>将本地要上传的代码放入刚clone下来的目录里面，cd 存放代码的路径,执行以下命令上传:</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git add . </span><br><span class="line">git commit -m <span class="string">"提交描述"</span></span><br><span class="line">git push -u origin master  （注：此操作目的是把本地仓库push到github上面，此步骤需要你输入 帐号和密码）</span><br></pre></td></tr></table></figure>
-
-<h4 id="查看上传是否成功"><a href="#查看上传是否成功" class="headerlink" title="查看上传是否成功"></a>查看上传是否成功</h4><p>此时就可以去github查看上传的代码，如下，上传成功</p>
-<p><img src="/" class="lazyload" data-src="/2020/04/19/%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E5%88%B0github/upload-suc.png"  alt></p>
-<h3 id="END"><a href="#END" class="headerlink" title="END"></a>END</h3><p>本文是针对有计算机基础的，不是每个步骤都说的太详尽，有不明白的可在自行百度。</p>
-]]></content>
-      <categories>
-        <category>工具</category>
-      </categories>
-      <tags>
-        <tag>github</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>测试q</title>
-    <url>/2020/04/19/%E6%B5%8B%E8%AF%95q/</url>
-    <content><![CDATA[<p><img src="/" class="lazyload" data-src="/2020/04/19/%E6%B5%8B%E8%AF%95q/end.png"  alt="1"><br><img src="/" class="lazyload" data-src="/2020/04/19/%E6%B5%8B%E8%AF%95q/end.png"  alt="1"><br><img src="/" class="lazyload" data-src="/2020/04/19/%E6%B5%8B%E8%AF%95q/end.png"  alt="1"></p>
-]]></content>
   </entry>
 </search>
