@@ -22,130 +22,9 @@
       </tags>
   </entry>
   <entry>
-    <title>断点续传</title>
-    <url>/2020/04/19/%E6%96%AD%E7%82%B9%E7%BB%AD%E4%BC%A0/</url>
-    <content><![CDATA[<h3 id="什么是断点续传："><a href="#什么是断点续传：" class="headerlink" title="什么是断点续传："></a>什么是断点续传：</h3><blockquote>
-<p>说得白一点，<em>其实也</em>就是下载文件时，不必重头开始下载，而是从指定的位置继续下载，这样的功能就叫做断点续传。<br>既然如此，那么要实现断点续传的关键点其实也就是两点：</p>
-</blockquote>
-<ul>
-<li>如何告知服务端，从指定的位置下载</li>
-<li>如何知道客户端想要的指定位置是多少</li>
-</ul>
-<p>其实，很简单，并不需要我们自己去写一些什么，HTTP 协议本身就支持断点续传，<br>而且文件是下载到客户端设备上的，那么只要获取到这份下载到一半的文件，<br>看一下它目前的大小，也就知道需要让服务端从哪开始继续下载了。</p>
-<p>那么，下面就介绍一下涉及到的相关理论</p>
-<h3 id="Range-amp-Content-Length-amp-Content-Range-amp-If-Range"><a href="#Range-amp-Content-Length-amp-Content-Range-amp-If-Range" class="headerlink" title="Range &amp; Content-Length &amp; Content-Range &amp; If-Range"></a>Range &amp; Content-Length &amp; Content-Range &amp; If-Range</h3><p>这些都是 HTTP 包中 Header 头部的一些字段信息，其中 Range 和 If-Range 是请求头中<br>其中 Range 和 If-Range 是请求头中的字段，Content-Length 和 Content-Range 是响应头中的字段。</p>
-<h4 id="Range"><a href="#Range" class="headerlink" title="Range"></a>Range</h4><p>当请求头中出现 Range 字段时，表示告知服务端，客户端下载该文件想要从指定的位置开始下载，至于 Range 字段属性值的格式有以下几种：</p>
-<p>格式</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Range:bytes&#x3D;0-500  表示下载从0到500字节的文件，即头500个字节</span><br><span class="line"></span><br><span class="line">Range:bytes&#x3D;501-1000  表示下载从500到1000这部分的文件，单位字节</span><br><span class="line"></span><br><span class="line">Range:bytes&#x3D;-500   表示下载最后的500个字节</span><br><span class="line"></span><br><span class="line">Range:bytes&#x3D;500-   表示下载从500开始到文件结束这部分的内容</span><br></pre></td></tr></table></figure>
-<p>如果 app 想实现断点续传，文件下载到一半被迫中断，下次启动还可以继续接着上次<br>进度下载时，那么此时可以使用 Range:bytes=500- 这种格式了，只要先获取本地那<br>份文件目前的大小，通过在请求头中加入 Range 字段信息即可</p>
-<h4 id="Content-Length"><a href="#Content-Length" class="headerlink" title="Content-Length"></a>Content-Length</h4><p>Content-Length 字段出现在响应头中，用于告知客户端此次下载的文件大小。</p>
-<p>一般，如果客户端需要实现下载进度实时更新时，就需要知道文件的总大小和目前下载的大小，后者可以通过对本地文件的操作得知，前者一般就是通过响应头中的 Content-Length 字段得知。</p>
-<p>另外，如果想要实现多线程同时分段下载大文件功能时，显然在下载前，客户端需要先知道文件总大小，才可以做到动态进行分段，因此一般在下载前都会先发送一个不需要携带 body 信息请求，用于先获取响应头中的 Content-Length 字段来得知文件总大小。</p>
-<p>但有一点需要注意：Content-Length 只表示此链接中下载的文件大小</p>
-<p>什么意思，也就是说，如果这条链接是一次性将整个文件下载下来的，那么 Content-Length 就表示这个文件的总大小。</p>
-<p>但，如果这条链接指定了 Range，表明了只是下载文件的指定部分的内容，那么此时 Content-Length 表示的就只是这一部分的大小。</p>
-<p>所以，如果客户端实现了下载进度实时更新功能时，需要注意一下。因为如果文件是断点续传的，那么进度条的分母就不能用每次 HTTP 链接中的 Content-Length。要么下载前先发一条获取用于文件总大小的请求，然后一直维护着这个数据，要么就使用 Content-Range 字段。</p>
-<h4 id="Content-Range"><a href="#Content-Range" class="headerlink" title="Content-Range"></a>Content-Range</h4><p>Content-Range 字段也是出现在响应头中，用于告知客户端此链接下载的文件是哪个部分的，以及文件的总大小。<br>比如，当客户端在请求头中指定了 Range:bayes=501-1000 来下载一个总大小为 2000 字节文件的中间一部分内容时，此时，响应头中的 Content-Range 字段信息如下：<br>Content-Range:bytes 501-1000/2000<br>斜杠前表示此链接下载的文件是哪一部分，斜杠后表示文件的总大小。</p>
-<h4 id="If-Range"><a href="#If-Range" class="headerlink" title="If-Range"></a>If-Range</h4><p>断点续传，说白点也就是分多次下载，既然不是一次性下载，那么就无法保证多次下载的间隔。<br>也就是说，有可能出现这种场景，这次由于某些原因只下载的一部分，而下次重启继续下载，但可能等到过了很多天后才重启去继续下载，如果在这期间，服务端的这份文件更新了怎么办？<br>只要不是一次性下载的，那么就有可能会出现这种场景，显然，这时候，就不希望断点续传了，而是要让客户端直接重头开始下载，毕竟文件都已经发生更新了，不是同一份了，再继续恢复下载也没有什么意义。<br>那么，客户端要如何知道服务端的文件是否发生变化，要重头下载呢？<br>这时就可以结合 If-Range 字段来实现了，这个也是在请求头中的字段，跟 Range 字段一起使用，它的作用是给 Range<br>字段生效设置了一些条件，只有满足这些条件，Range 才能生效。<br>也就是说，只有先满足 If-Range，那么才能通过 Range 来实现断点续传。<br>那它的条件值可以设置为哪些呢？有两种，Last-Modified 或者 ETag，这两个也都是响应头中。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">response.header(&quot;Content-Length&quot;) &#x2F;&#x2F; 文件长度</span><br><span class="line">response.header(&quot;Last-Modified&quot;)  &#x2F;&#x2F; 修改时间</span><br><span class="line">response.header(&quot;ETag&quot;)      &#x2F;&#x2F;ETag标识</span><br></pre></td></tr></table></figure>
-
-<h3 id="代码查看"><a href="#代码查看" class="headerlink" title="代码查看"></a>代码查看</h3><p>本人已采用okhttp框架实现了此功能，代码已上传至github，地址：</p>
-<p><a href="https://github.com/xhongy/OkHttpLib" target="_blank" rel="noopener">https://github.com/xhongy/OkHttpLib</a></p>
-<p>同时插件也上传了jcenter，想使用此插件的友友们，可以访问一下地址查看详情</p>
-<p><a href="https://bintray.com/beta/#/xhongy/maven/OkHttpPlugin" target="_blank" rel="noopener">https://bintray.com/beta/#/xhongy/maven/OkHttpPlugin</a></p>
-]]></content>
-      <categories>
-        <category>android</category>
-      </categories>
-      <tags>
-        <tag>断点续传</tag>
-        <tag>okhttp</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>通过bintray-release，发布库到Jcenter</title>
-    <url>/2020/04/19/%E9%80%9A%E8%BF%87bintray-release%EF%BC%8C%E5%8F%91%E5%B8%83%E5%BA%93%E5%88%B0Jcenter/</url>
-    <content><![CDATA[<blockquote>
-<p>android开发时有时候需要用到一些第三方的库，只需要<strong>implementation ‘com.orhanobut:logger:2.2.0’</strong>,简单的一条语句引入即可，是不是感觉好神奇。<br>现在很多时候开发都是组件化的模式，如果能把公共部分做成开源库供大家使用那就方便多了，加下来我就以上传android的一个moudule为例一步一步教大家如何来操作。</p>
-</blockquote>
-<p>本文是通过bintray-release 来操作的，先了解一下bintray-release是什么？</p>
-<ul>
-<li>bintray-release是github上的一个开源工程库。</li>
-<li>bintray-release提供了将您的Android或者其他作品推送到Bintray的简便方案。</li>
-<li>bintray-release是帮助将类库推送到bintray的助手。 它用来帮助配置与maven和bintray建立联系。 目前它用于Android Library工程，Java项目以及Groovy项目，但其重点主要是用来支持Android项目。</li>
-</ul>
-<p><strong>接下来开始美妙的编程时刻吧！LET’S GO!!</strong></p>
-<h3 id="创建一个项目"><a href="#创建一个项目" class="headerlink" title="创建一个项目"></a>创建一个项目</h3><p>在AndroidStudio上建android Project，然后新建一个module，结果如下<br><img src="/" class="lazyload" data-src="/2020/04/19/%E9%80%9A%E8%BF%87bintray-release%EF%BC%8C%E5%8F%91%E5%B8%83%E5%BA%93%E5%88%B0Jcenter/new-pro-suc.png"  alt></p>
-<h3 id="调试module"><a href="#调试module" class="headerlink" title="调试module"></a>调试module</h3><p>接下来编写新建的module块代码，并将此module作为app模块的依赖，调试成功。<br>这里仅仅添加一条打印日志</p>
-<p><img src="/" class="lazyload" data-src="/2020/04/19/%E9%80%9A%E8%BF%87bintray-release%EF%BC%8C%E5%8F%91%E5%B8%83%E5%BA%93%E5%88%B0Jcenter/module-class.png"  alt></p>
-<h3 id="module代码上传github"><a href="#module代码上传github" class="headerlink" title="module代码上传github"></a>module代码上传github</h3><p> 将调试成功的module块代码上传到github仓库(代码中转库)<br>此步骤可参考另一篇相关帖子,</p>
-<blockquote>
-<p><a href="https://xhongy.github.io/2020/04/19/%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E5%88%B0github/">github上传文件</a></p>
-</blockquote>
-<h3 id="module上传jcenter"><a href="#module上传jcenter" class="headerlink" title="module上传jcenter"></a>module上传jcenter</h3><p><strong>关键步骤，要放大招了</strong></p>
-<h4 id="注册bintray账号"><a href="#注册bintray账号" class="headerlink" title="注册bintray账号"></a>注册bintray账号</h4><p>这里是通过bintray-release中转站，没有bintray账号的先注册一个账号</p>
-<blockquote>
-<p><a href="https://bintray.com/signup/oss" target="_blank" rel="noopener">注册地址</a><br>可以直接注册或者通过Github帐号注册。具体步骤自行操作，不做过多讲述了。</p>
-</blockquote>
-<h4 id="bintray新建仓库"><a href="#bintray新建仓库" class="headerlink" title="bintray新建仓库"></a>bintray新建仓库</h4><p><img src="/" class="lazyload" data-src="/2020/04/19/%E9%80%9A%E8%BF%87bintray-release%EF%BC%8C%E5%8F%91%E5%B8%83%E5%BA%93%E5%88%B0Jcenter/new-repository.png"  alt></p>
-<p>点击<strong>Add New Repository</strong>，进入新建仓库配置页面</p>
-<p><img src="/" class="lazyload" data-src="/2020/04/19/%E9%80%9A%E8%BF%87bintray-release%EF%BC%8C%E5%8F%91%E5%B8%83%E5%BA%93%E5%88%B0Jcenter/info-repository.png"  alt></p>
-<h3 id="获取API-KEY"><a href="#获取API-KEY" class="headerlink" title="获取API-KEY"></a>获取API-KEY</h3><p>获取API KEY，在头像下选择 Edit Profile 进入新页面可以看到API KEY然后复制保存备用；</p>
-<p>可以点击show查看key或者直接点击右侧的复制按钮复制</p>
-<p><img src="/" class="lazyload" data-src="/2020/04/19/%E9%80%9A%E8%BF%87bintray-release%EF%BC%8C%E5%8F%91%E5%B8%83%E5%BA%93%E5%88%B0Jcenter/get-api-key.png"  alt></p>
-<p>到此，所有的准备功能已经准备完毕！接下来就要进入到ANDROID STUDIO 中进行代码的一些配置；</p>
-<h3 id="AndroidStudio代码配置"><a href="#AndroidStudio代码配置" class="headerlink" title="AndroidStudio代码配置"></a>AndroidStudio代码配置</h3><h4 id="工程-根目录-build-gradle中添加"><a href="#工程-根目录-build-gradle中添加" class="headerlink" title="工程(根目录)build.gradle中添加"></a>工程(根目录)build.gradle中添加</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">repositories &#123;</span><br><span class="line">        ...</span><br><span class="line">        jcenter()</span><br><span class="line">&#125;</span><br><span class="line">dependencies &#123;</span><br><span class="line">        ...</span><br><span class="line">        classpath <span class="string">'com.novoda:bintray-release:0.8.1'</span> // 添加</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<h4 id="在待发布的module中的build-gradle添加"><a href="#在待发布的module中的build-gradle添加" class="headerlink" title="在待发布的module中的build.gradle添加"></a>在待发布的module中的build.gradle添加</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">apply plugin: <span class="string">'com.novoda.bintray-release'</span></span><br><span class="line">publish &#123;</span><br><span class="line">    userOrg = <span class="string">'yourUserName'</span>                 //bintray注册的用户名</span><br><span class="line">    groupId = <span class="string">'com.github.sunrise'</span>           //compile引用时的第1部分</span><br><span class="line">    artifactId = <span class="string">'Test'</span>                      //compile引用时的第2部分                                     </span><br><span class="line">    publishVersion = <span class="string">'1.0.0'</span>                 //版本号</span><br><span class="line">    repoName = yourRepositoryName         //你要上传至bintray仓库的名称，如果仓库名称是maven可忽略</span><br><span class="line">    desc = <span class="string">'anything you want'</span>               //描述</span><br><span class="line">    website = <span class="string">'anything you want'</span>            //网站</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="上传到bintray"><a href="#上传到bintray" class="headerlink" title="上传到bintray"></a>上传到bintray</h4><p> 在androidStudio的Terminal中输入以下命令</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">./gradlew clean build bintrayUpload -PbintrayUser=yourUserName -PbintrayKey=yourAPIKEY -PdryRun=<span class="literal">false</span></span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>文中的yourUserName替换为你注册binary的用户名，yourAPIKEY替换为你的key.</p>
-</blockquote>
-<p>稍后出现BUILD SUCCESSFUL即上传成功<br><img src="/" class="lazyload" data-src="/2020/04/19/%E9%80%9A%E8%BF%87bintray-release%EF%BC%8C%E5%8F%91%E5%B8%83%E5%BA%93%E5%88%B0Jcenter/gradlew-suc.png"  alt></p>
-<p>截止到此时，我们已经成功的把module 上传到了 bintray 的 Respository中。</p>
-<p><img src="/" class="lazyload" data-src="/2020/04/19/%E9%80%9A%E8%BF%87bintray-release%EF%BC%8C%E5%8F%91%E5%B8%83%E5%BA%93%E5%88%B0Jcenter/bintray-new-rep.png"  alt></p>
-<h4 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h4><p>此时若要引用此库，需要在项目根build.gradle文件下加入想要的maven库依赖</p>
-<p><img src="/" class="lazyload" data-src="/2020/04/19/%E9%80%9A%E8%BF%87bintray-release%EF%BC%8C%E5%8F%91%E5%B8%83%E5%BA%93%E5%88%B0Jcenter/lib-use.png"  alt></p>
-<p>在需要引用的库里添加想要的implenmention</p>
-<h3 id="最后一步"><a href="#最后一步" class="headerlink" title="最后一步"></a>最后一步</h3><p>若开放给别人使用每次都添加maven依赖是不是太麻烦，那就需要同步到Jcenter，操作如下图，耐心等待审核(注：版本升级不用再次同步到Jcenter)</p>
-<p><img src="/" class="lazyload" data-src="/2020/04/19/%E9%80%9A%E8%BF%87bintray-release%EF%BC%8C%E5%8F%91%E5%B8%83%E5%BA%93%E5%88%B0Jcenter/add-to-jcenter.png"  alt></p>
-<p>等待审核通过，就ok了！！</p>
-<p><img src="/" class="lazyload" data-src="/2020/04/19/%E9%80%9A%E8%BF%87bintray-release%EF%BC%8C%E5%8F%91%E5%B8%83%E5%BA%93%E5%88%B0Jcenter/end.png"  alt><br>这是在项目中只通过implemention来使用就ok</p>
-<h3 id="问题总结"><a href="#问题总结" class="headerlink" title="问题总结"></a>问题总结</h3><h4 id="错误-编码GBK的不可映射字符。"><a href="#错误-编码GBK的不可映射字符。" class="headerlink" title="错误: 编码GBK的不可映射字符。"></a>错误: 编码GBK的不可映射字符。</h4><p>解决办法：在项目根build.gradle中添加如下代码：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">allprojects &#123;</span><br><span class="line">    &#x2F;&#x2F;编译时报注释GBK编码错误解决</span><br><span class="line">    tasks.withType(Javadoc) &#123;</span><br><span class="line">        options.addStringOption(&#39;encoding&#39;, &#39;UTF-8&#39;)</span><br><span class="line">        options.addStringOption(&#39;charSet&#39;, &#39;UTF-8&#39;)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="return或-param不能为空"><a href="#return或-param不能为空" class="headerlink" title="@return或@param不能为空"></a>@return或@param不能为空</h4><p>解决办法：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">allprojects &#123;</span><br><span class="line">    &#x2F;&#x2F;编译时报注释GBK编码错误解决</span><br><span class="line">    tasks.withType(Javadoc) &#123;</span><br><span class="line">        &#x2F;&#x2F;方法上忽略@return和@param注解未添加说明注释</span><br><span class="line">        options.addStringOption(&#39;Xdoclint:none&#39;, &#39;-quiet&#39;)</span><br><span class="line">        &#x2F;&#x2F;解决GBK编码错误提示</span><br><span class="line">        options.addStringOption(&#39;encoding&#39;, &#39;UTF-8&#39;)</span><br><span class="line">        options.addStringOption(&#39;charSet&#39;, &#39;UTF-8&#39;)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="版本更新"><a href="#版本更新" class="headerlink" title="版本更新"></a>版本更新</h3><p>如果需要更新升级的时候，更新完代码只需要把module里面的publishVersion更新到自己的版本<br>如1.0.0 —-&gt;1.0.1<br>然后在次执行:</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">./gradlew clean build bintrayUpload -PbintrayUser=xxx -PbintrayKey=xxx -PdryRun=<span class="literal">false</span></span><br></pre></td></tr></table></figure>
-<p>那么在引入的时候改变版本号即可使用最新代码。</p>
-<blockquote>
-<p>注意：第一次上传的时候需要add to jcenter, 后面更新只需要在命令行提交到bintary即可。</p>
-</blockquote>
-<h3 id="番外"><a href="#番外" class="headerlink" title="番外"></a>番外</h3><p>在使用中有可能会出现各种问题，可参考<br><a href="https://www.jianshu.com/p/6b272fe9bd28" target="_blank" rel="noopener">转载</a></p>
-]]></content>
-      <categories>
-        <category>android</category>
-      </categories>
-      <tags>
-        <tag>jcenter</tag>
-        <tag>marven</tag>
-        <tag>bintray</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>组件化</title>
-    <url>/2020/04/21/%E7%BB%84%E4%BB%B6%E5%8C%96/</url>
-    <content><![CDATA[<p>组件化： gradle 开发中<br>插件化： 动态化：反射、类加载 运行中</p>
-<blockquote>
-</blockquote>
-]]></content>
+    <title>java进阶</title>
+    <url>/2020/04/22/java%E8%BF%9B%E9%98%B6/</url>
+    <content><![CDATA[]]></content>
   </entry>
   <entry>
     <title>hexo+github搭建个人博客</title>
@@ -293,6 +172,132 @@
       </tags>
   </entry>
   <entry>
+    <title>通过bintray-release，发布库到Jcenter</title>
+    <url>/2020/04/19/%E9%80%9A%E8%BF%87bintray-release%EF%BC%8C%E5%8F%91%E5%B8%83%E5%BA%93%E5%88%B0Jcenter/</url>
+    <content><![CDATA[<blockquote>
+<p>android开发时有时候需要用到一些第三方的库，只需要<strong>implementation ‘com.orhanobut:logger:2.2.0’</strong>,简单的一条语句引入即可，是不是感觉好神奇。<br>现在很多时候开发都是组件化的模式，如果能把公共部分做成开源库供大家使用那就方便多了，加下来我就以上传android的一个moudule为例一步一步教大家如何来操作。</p>
+</blockquote>
+<p>本文是通过bintray-release 来操作的，先了解一下bintray-release是什么？</p>
+<ul>
+<li>bintray-release是github上的一个开源工程库。</li>
+<li>bintray-release提供了将您的Android或者其他作品推送到Bintray的简便方案。</li>
+<li>bintray-release是帮助将类库推送到bintray的助手。 它用来帮助配置与maven和bintray建立联系。 目前它用于Android Library工程，Java项目以及Groovy项目，但其重点主要是用来支持Android项目。</li>
+</ul>
+<p><strong>接下来开始美妙的编程时刻吧！LET’S GO!!</strong></p>
+<h3 id="创建一个项目"><a href="#创建一个项目" class="headerlink" title="创建一个项目"></a>创建一个项目</h3><p>在AndroidStudio上建android Project，然后新建一个module，结果如下<br><img src="/" class="lazyload" data-src="/2020/04/19/%E9%80%9A%E8%BF%87bintray-release%EF%BC%8C%E5%8F%91%E5%B8%83%E5%BA%93%E5%88%B0Jcenter/new-pro-suc.png"  alt></p>
+<h3 id="调试module"><a href="#调试module" class="headerlink" title="调试module"></a>调试module</h3><p>接下来编写新建的module块代码，并将此module作为app模块的依赖，调试成功。<br>这里仅仅添加一条打印日志</p>
+<p><img src="/" class="lazyload" data-src="/2020/04/19/%E9%80%9A%E8%BF%87bintray-release%EF%BC%8C%E5%8F%91%E5%B8%83%E5%BA%93%E5%88%B0Jcenter/module-class.png"  alt></p>
+<h3 id="module代码上传github"><a href="#module代码上传github" class="headerlink" title="module代码上传github"></a>module代码上传github</h3><p> 将调试成功的module块代码上传到github仓库(代码中转库)<br>此步骤可参考另一篇相关帖子,</p>
+<blockquote>
+<p><a href="https://xhongy.github.io/2020/04/19/%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E5%88%B0github/">github上传文件</a></p>
+</blockquote>
+<h3 id="module上传jcenter"><a href="#module上传jcenter" class="headerlink" title="module上传jcenter"></a>module上传jcenter</h3><p><strong>关键步骤，要放大招了</strong></p>
+<h4 id="注册bintray账号"><a href="#注册bintray账号" class="headerlink" title="注册bintray账号"></a>注册bintray账号</h4><p>这里是通过bintray-release中转站，没有bintray账号的先注册一个账号</p>
+<blockquote>
+<p><a href="https://bintray.com/signup/oss" target="_blank" rel="noopener">注册地址</a><br>可以直接注册或者通过Github帐号注册。具体步骤自行操作，不做过多讲述了。</p>
+</blockquote>
+<h4 id="bintray新建仓库"><a href="#bintray新建仓库" class="headerlink" title="bintray新建仓库"></a>bintray新建仓库</h4><p><img src="/" class="lazyload" data-src="/2020/04/19/%E9%80%9A%E8%BF%87bintray-release%EF%BC%8C%E5%8F%91%E5%B8%83%E5%BA%93%E5%88%B0Jcenter/new-repository.png"  alt></p>
+<p>点击<strong>Add New Repository</strong>，进入新建仓库配置页面</p>
+<p><img src="/" class="lazyload" data-src="/2020/04/19/%E9%80%9A%E8%BF%87bintray-release%EF%BC%8C%E5%8F%91%E5%B8%83%E5%BA%93%E5%88%B0Jcenter/info-repository.png"  alt></p>
+<h3 id="获取API-KEY"><a href="#获取API-KEY" class="headerlink" title="获取API-KEY"></a>获取API-KEY</h3><p>获取API KEY，在头像下选择 Edit Profile 进入新页面可以看到API KEY然后复制保存备用；</p>
+<p>可以点击show查看key或者直接点击右侧的复制按钮复制</p>
+<p><img src="/" class="lazyload" data-src="/2020/04/19/%E9%80%9A%E8%BF%87bintray-release%EF%BC%8C%E5%8F%91%E5%B8%83%E5%BA%93%E5%88%B0Jcenter/get-api-key.png"  alt></p>
+<p>到此，所有的准备功能已经准备完毕！接下来就要进入到ANDROID STUDIO 中进行代码的一些配置；</p>
+<h3 id="AndroidStudio代码配置"><a href="#AndroidStudio代码配置" class="headerlink" title="AndroidStudio代码配置"></a>AndroidStudio代码配置</h3><h4 id="工程-根目录-build-gradle中添加"><a href="#工程-根目录-build-gradle中添加" class="headerlink" title="工程(根目录)build.gradle中添加"></a>工程(根目录)build.gradle中添加</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">repositories &#123;</span><br><span class="line">        ...</span><br><span class="line">        jcenter()</span><br><span class="line">&#125;</span><br><span class="line">dependencies &#123;</span><br><span class="line">        ...</span><br><span class="line">        classpath <span class="string">'com.novoda:bintray-release:0.8.1'</span> // 添加</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="在待发布的module中的build-gradle添加"><a href="#在待发布的module中的build-gradle添加" class="headerlink" title="在待发布的module中的build.gradle添加"></a>在待发布的module中的build.gradle添加</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">apply plugin: <span class="string">'com.novoda.bintray-release'</span></span><br><span class="line">publish &#123;</span><br><span class="line">    userOrg = <span class="string">'yourUserName'</span>                 //bintray注册的用户名</span><br><span class="line">    groupId = <span class="string">'com.github.sunrise'</span>           //compile引用时的第1部分</span><br><span class="line">    artifactId = <span class="string">'Test'</span>                      //compile引用时的第2部分                                     </span><br><span class="line">    publishVersion = <span class="string">'1.0.0'</span>                 //版本号</span><br><span class="line">    repoName = yourRepositoryName         //你要上传至bintray仓库的名称，如果仓库名称是maven可忽略</span><br><span class="line">    desc = <span class="string">'anything you want'</span>               //描述</span><br><span class="line">    website = <span class="string">'anything you want'</span>            //网站</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="上传到bintray"><a href="#上传到bintray" class="headerlink" title="上传到bintray"></a>上传到bintray</h4><p> 在androidStudio的Terminal中输入以下命令</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">./gradlew clean build bintrayUpload -PbintrayUser=yourUserName -PbintrayKey=yourAPIKEY -PdryRun=<span class="literal">false</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>文中的yourUserName替换为你注册binary的用户名，yourAPIKEY替换为你的key.</p>
+</blockquote>
+<p>稍后出现BUILD SUCCESSFUL即上传成功<br><img src="/" class="lazyload" data-src="/2020/04/19/%E9%80%9A%E8%BF%87bintray-release%EF%BC%8C%E5%8F%91%E5%B8%83%E5%BA%93%E5%88%B0Jcenter/gradlew-suc.png"  alt></p>
+<p>截止到此时，我们已经成功的把module 上传到了 bintray 的 Respository中。</p>
+<p><img src="/" class="lazyload" data-src="/2020/04/19/%E9%80%9A%E8%BF%87bintray-release%EF%BC%8C%E5%8F%91%E5%B8%83%E5%BA%93%E5%88%B0Jcenter/bintray-new-rep.png"  alt></p>
+<h4 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h4><p>此时若要引用此库，需要在项目根build.gradle文件下加入想要的maven库依赖</p>
+<p><img src="/" class="lazyload" data-src="/2020/04/19/%E9%80%9A%E8%BF%87bintray-release%EF%BC%8C%E5%8F%91%E5%B8%83%E5%BA%93%E5%88%B0Jcenter/lib-use.png"  alt></p>
+<p>在需要引用的库里添加想要的implenmention</p>
+<h3 id="最后一步"><a href="#最后一步" class="headerlink" title="最后一步"></a>最后一步</h3><p>若开放给别人使用每次都添加maven依赖是不是太麻烦，那就需要同步到Jcenter，操作如下图，耐心等待审核(注：版本升级不用再次同步到Jcenter)</p>
+<p><img src="/" class="lazyload" data-src="/2020/04/19/%E9%80%9A%E8%BF%87bintray-release%EF%BC%8C%E5%8F%91%E5%B8%83%E5%BA%93%E5%88%B0Jcenter/add-to-jcenter.png"  alt></p>
+<p>等待审核通过，就ok了！！</p>
+<p><img src="/" class="lazyload" data-src="/2020/04/19/%E9%80%9A%E8%BF%87bintray-release%EF%BC%8C%E5%8F%91%E5%B8%83%E5%BA%93%E5%88%B0Jcenter/end.png"  alt><br>这是在项目中只通过implemention来使用就ok</p>
+<h3 id="问题总结"><a href="#问题总结" class="headerlink" title="问题总结"></a>问题总结</h3><h4 id="错误-编码GBK的不可映射字符。"><a href="#错误-编码GBK的不可映射字符。" class="headerlink" title="错误: 编码GBK的不可映射字符。"></a>错误: 编码GBK的不可映射字符。</h4><p>解决办法：在项目根build.gradle中添加如下代码：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">allprojects &#123;</span><br><span class="line">    &#x2F;&#x2F;编译时报注释GBK编码错误解决</span><br><span class="line">    tasks.withType(Javadoc) &#123;</span><br><span class="line">        options.addStringOption(&#39;encoding&#39;, &#39;UTF-8&#39;)</span><br><span class="line">        options.addStringOption(&#39;charSet&#39;, &#39;UTF-8&#39;)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="return或-param不能为空"><a href="#return或-param不能为空" class="headerlink" title="@return或@param不能为空"></a>@return或@param不能为空</h4><p>解决办法：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">allprojects &#123;</span><br><span class="line">    &#x2F;&#x2F;编译时报注释GBK编码错误解决</span><br><span class="line">    tasks.withType(Javadoc) &#123;</span><br><span class="line">        &#x2F;&#x2F;方法上忽略@return和@param注解未添加说明注释</span><br><span class="line">        options.addStringOption(&#39;Xdoclint:none&#39;, &#39;-quiet&#39;)</span><br><span class="line">        &#x2F;&#x2F;解决GBK编码错误提示</span><br><span class="line">        options.addStringOption(&#39;encoding&#39;, &#39;UTF-8&#39;)</span><br><span class="line">        options.addStringOption(&#39;charSet&#39;, &#39;UTF-8&#39;)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="版本更新"><a href="#版本更新" class="headerlink" title="版本更新"></a>版本更新</h3><p>如果需要更新升级的时候，更新完代码只需要把module里面的publishVersion更新到自己的版本<br>如1.0.0 —-&gt;1.0.1<br>然后在次执行:</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">./gradlew clean build bintrayUpload -PbintrayUser=xxx -PbintrayKey=xxx -PdryRun=<span class="literal">false</span></span><br></pre></td></tr></table></figure>
+<p>那么在引入的时候改变版本号即可使用最新代码。</p>
+<blockquote>
+<p>注意：第一次上传的时候需要add to jcenter, 后面更新只需要在命令行提交到bintary即可。</p>
+</blockquote>
+<h3 id="番外"><a href="#番外" class="headerlink" title="番外"></a>番外</h3><p>在使用中有可能会出现各种问题，可参考<br><a href="https://www.jianshu.com/p/6b272fe9bd28" target="_blank" rel="noopener">转载</a></p>
+]]></content>
+      <categories>
+        <category>android</category>
+      </categories>
+      <tags>
+        <tag>jcenter</tag>
+        <tag>marven</tag>
+        <tag>bintray</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>组件化</title>
+    <url>/2020/04/21/%E7%BB%84%E4%BB%B6%E5%8C%96/</url>
+    <content><![CDATA[<p>组件化： gradle 开发中<br>插件化： 动态化：反射、类加载 运行中</p>
+<blockquote>
+</blockquote>
+]]></content>
+  </entry>
+  <entry>
+    <title>断点续传</title>
+    <url>/2020/04/19/%E6%96%AD%E7%82%B9%E7%BB%AD%E4%BC%A0/</url>
+    <content><![CDATA[<h3 id="什么是断点续传："><a href="#什么是断点续传：" class="headerlink" title="什么是断点续传："></a>什么是断点续传：</h3><blockquote>
+<p>说得白一点，<em>其实也</em>就是下载文件时，不必重头开始下载，而是从指定的位置继续下载，这样的功能就叫做断点续传。<br>既然如此，那么要实现断点续传的关键点其实也就是两点：</p>
+</blockquote>
+<ul>
+<li>如何告知服务端，从指定的位置下载</li>
+<li>如何知道客户端想要的指定位置是多少</li>
+</ul>
+<p>其实，很简单，并不需要我们自己去写一些什么，HTTP 协议本身就支持断点续传，<br>而且文件是下载到客户端设备上的，那么只要获取到这份下载到一半的文件，<br>看一下它目前的大小，也就知道需要让服务端从哪开始继续下载了。</p>
+<p>那么，下面就介绍一下涉及到的相关理论</p>
+<h3 id="Range-amp-Content-Length-amp-Content-Range-amp-If-Range"><a href="#Range-amp-Content-Length-amp-Content-Range-amp-If-Range" class="headerlink" title="Range &amp; Content-Length &amp; Content-Range &amp; If-Range"></a>Range &amp; Content-Length &amp; Content-Range &amp; If-Range</h3><p>这些都是 HTTP 包中 Header 头部的一些字段信息，其中 Range 和 If-Range 是请求头中<br>其中 Range 和 If-Range 是请求头中的字段，Content-Length 和 Content-Range 是响应头中的字段。</p>
+<h4 id="Range"><a href="#Range" class="headerlink" title="Range"></a>Range</h4><p>当请求头中出现 Range 字段时，表示告知服务端，客户端下载该文件想要从指定的位置开始下载，至于 Range 字段属性值的格式有以下几种：</p>
+<p>格式</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Range:bytes&#x3D;0-500  表示下载从0到500字节的文件，即头500个字节</span><br><span class="line"></span><br><span class="line">Range:bytes&#x3D;501-1000  表示下载从500到1000这部分的文件，单位字节</span><br><span class="line"></span><br><span class="line">Range:bytes&#x3D;-500   表示下载最后的500个字节</span><br><span class="line"></span><br><span class="line">Range:bytes&#x3D;500-   表示下载从500开始到文件结束这部分的内容</span><br></pre></td></tr></table></figure>
+<p>如果 app 想实现断点续传，文件下载到一半被迫中断，下次启动还可以继续接着上次<br>进度下载时，那么此时可以使用 Range:bytes=500- 这种格式了，只要先获取本地那<br>份文件目前的大小，通过在请求头中加入 Range 字段信息即可</p>
+<h4 id="Content-Length"><a href="#Content-Length" class="headerlink" title="Content-Length"></a>Content-Length</h4><p>Content-Length 字段出现在响应头中，用于告知客户端此次下载的文件大小。</p>
+<p>一般，如果客户端需要实现下载进度实时更新时，就需要知道文件的总大小和目前下载的大小，后者可以通过对本地文件的操作得知，前者一般就是通过响应头中的 Content-Length 字段得知。</p>
+<p>另外，如果想要实现多线程同时分段下载大文件功能时，显然在下载前，客户端需要先知道文件总大小，才可以做到动态进行分段，因此一般在下载前都会先发送一个不需要携带 body 信息请求，用于先获取响应头中的 Content-Length 字段来得知文件总大小。</p>
+<p>但有一点需要注意：Content-Length 只表示此链接中下载的文件大小</p>
+<p>什么意思，也就是说，如果这条链接是一次性将整个文件下载下来的，那么 Content-Length 就表示这个文件的总大小。</p>
+<p>但，如果这条链接指定了 Range，表明了只是下载文件的指定部分的内容，那么此时 Content-Length 表示的就只是这一部分的大小。</p>
+<p>所以，如果客户端实现了下载进度实时更新功能时，需要注意一下。因为如果文件是断点续传的，那么进度条的分母就不能用每次 HTTP 链接中的 Content-Length。要么下载前先发一条获取用于文件总大小的请求，然后一直维护着这个数据，要么就使用 Content-Range 字段。</p>
+<h4 id="Content-Range"><a href="#Content-Range" class="headerlink" title="Content-Range"></a>Content-Range</h4><p>Content-Range 字段也是出现在响应头中，用于告知客户端此链接下载的文件是哪个部分的，以及文件的总大小。<br>比如，当客户端在请求头中指定了 Range:bayes=501-1000 来下载一个总大小为 2000 字节文件的中间一部分内容时，此时，响应头中的 Content-Range 字段信息如下：<br>Content-Range:bytes 501-1000/2000<br>斜杠前表示此链接下载的文件是哪一部分，斜杠后表示文件的总大小。</p>
+<h4 id="If-Range"><a href="#If-Range" class="headerlink" title="If-Range"></a>If-Range</h4><p>断点续传，说白点也就是分多次下载，既然不是一次性下载，那么就无法保证多次下载的间隔。<br>也就是说，有可能出现这种场景，这次由于某些原因只下载的一部分，而下次重启继续下载，但可能等到过了很多天后才重启去继续下载，如果在这期间，服务端的这份文件更新了怎么办？<br>只要不是一次性下载的，那么就有可能会出现这种场景，显然，这时候，就不希望断点续传了，而是要让客户端直接重头开始下载，毕竟文件都已经发生更新了，不是同一份了，再继续恢复下载也没有什么意义。<br>那么，客户端要如何知道服务端的文件是否发生变化，要重头下载呢？<br>这时就可以结合 If-Range 字段来实现了，这个也是在请求头中的字段，跟 Range 字段一起使用，它的作用是给 Range<br>字段生效设置了一些条件，只有满足这些条件，Range 才能生效。<br>也就是说，只有先满足 If-Range，那么才能通过 Range 来实现断点续传。<br>那它的条件值可以设置为哪些呢？有两种，Last-Modified 或者 ETag，这两个也都是响应头中。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">response.header(&quot;Content-Length&quot;) &#x2F;&#x2F; 文件长度</span><br><span class="line">response.header(&quot;Last-Modified&quot;)  &#x2F;&#x2F; 修改时间</span><br><span class="line">response.header(&quot;ETag&quot;)      &#x2F;&#x2F;ETag标识</span><br></pre></td></tr></table></figure>
+
+<h3 id="代码查看"><a href="#代码查看" class="headerlink" title="代码查看"></a>代码查看</h3><p>本人已采用okhttp框架实现了此功能，代码已上传至github，地址：</p>
+<p><a href="https://github.com/xhongy/OkHttpLib" target="_blank" rel="noopener">https://github.com/xhongy/OkHttpLib</a></p>
+<p>同时插件也上传了jcenter，想使用此插件的友友们，可以访问一下地址查看详情</p>
+<p><a href="https://bintray.com/beta/#/xhongy/maven/OkHttpPlugin" target="_blank" rel="noopener">https://bintray.com/beta/#/xhongy/maven/OkHttpPlugin</a></p>
+]]></content>
+      <categories>
+        <category>android</category>
+      </categories>
+      <tags>
+        <tag>断点续传</tag>
+        <tag>okhttp</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>切面编程</title>
     <url>/2020/04/21/%E5%88%87%E9%9D%A2%E7%BC%96%E7%A8%8B/</url>
     <content><![CDATA[<h3 id="AOP是什么"><a href="#AOP是什么" class="headerlink" title="AOP是什么"></a>AOP是什么</h3><p>AOP(Aspect-Oriented Pragramming),面向切面编程，是一种编程思想。Aop以切面（aspect）为基础，切面是一种新的模块化机制，用来描述分散在对象、类、或函数中的横切关点。</p>
@@ -345,6 +350,77 @@
 <p><a href="https://github.com/xhongy/AspectDemo" target="_blank" rel="noopener">https://github.com/xhongy/AspectDemo</a></p>
 <h3 id="END"><a href="#END" class="headerlink" title="END"></a>END</h3><p>到此，aop简单介绍已完成，因刚开始使用，写的有些片面，更多知识请自行去官网或者百度。</p>
 <p>写的不对的地方，欢迎留言讨论！！</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>热修复、类加载与修复原理</title>
+    <url>/2020/04/22/%E7%83%AD%E4%BF%AE%E5%A4%8D%E3%80%81%E7%B1%BB%E5%8A%A0%E8%BD%BD%E4%B8%8E%E4%BF%AE%E5%A4%8D%E5%8E%9F%E7%90%86/</url>
+    <content><![CDATA[<h2 id="类加载解析"><a href="#类加载解析" class="headerlink" title="类加载解析"></a>类加载解析</h2><p>热修复一种不用发布新版本就可以修复线上bug的技术。其修复的核心原理是类加载机制。</p>
+<h3 id="ART与Dalvik"><a href="#ART与Dalvik" class="headerlink" title="ART与Dalvik"></a>ART与Dalvik</h3><h4 id="Dalvik"><a href="#Dalvik" class="headerlink" title="Dalvik"></a>Dalvik</h4><p>Dalvik是Google公司自己设计用于android平台的java虚拟机。支持已转化为<strong>.dex</strong>格式的java应用程序运行，<br>.dex格式是专为Dalvik应用设计的一种压缩格式，适合内存和处理器速度有限的系统</p>
+<h4 id="ATR"><a href="#ATR" class="headerlink" title="ATR"></a>ATR</h4><p>Android Runtime,Android 4.4中引入的一个开发者选项，也是Android5.0及更高版本的默认模式。在应用安装的时候Ahead-Of-Time(AOT)<br>预编译字节码到机器语言（ART运行的是机器语言），这一机制叫Ahead-Of-Time(AOT)预编译。应用程序安装会变慢(安装时执行了字节码到机器码的编辑过程)，但是执行将更有效率，启动更快。</p>
+<h4 id="两种区别"><a href="#两种区别" class="headerlink" title="两种区别"></a>两种区别</h4><ul>
+<li>在Dalvik下，应用程序运行需要解释执行，常用热点代码通过及时编译器（JIT-just in time)将字节码转换为机器码，运行效率低。<br>而在ART环境中，应用在安装时，字节码预编译成机器码，安装慢了，但是运行效率会高。</li>
+<li>ART占用空间比Dalvik大（字节码转机器码），空间换时间</li>
+<li>预编译也可以明显改善电池续航，因为应用程序每次运行不需要重复编译了，从而减少了CPU的使用频率，降低了能耗。</li>
+</ul>
+<p><strong>ART运行的是机器语言，但是同时ART也兼容Dalvik，也可以运行.dex文件</strong><br><img src="/" class="lazyload" data-src="/2020/04/22/%E7%83%AD%E4%BF%AE%E5%A4%8D%E3%80%81%E7%B1%BB%E5%8A%A0%E8%BD%BD%E4%B8%8E%E4%BF%AE%E5%A4%8D%E5%8E%9F%E7%90%86/img1.png"  alt></p>
+<p><img src="/" class="lazyload" data-src="/2020/04/22/%E7%83%AD%E4%BF%AE%E5%A4%8D%E3%80%81%E7%B1%BB%E5%8A%A0%E8%BD%BD%E4%B8%8E%E4%BF%AE%E5%A4%8D%E5%8E%9F%E7%90%86/img2.png"  alt></p>
+<h3 id="ClassLoader-java类加载器"><a href="#ClassLoader-java类加载器" class="headerlink" title="ClassLoader java类加载器"></a>ClassLoader java类加载器</h3><p><img src="/" class="lazyload" data-src="/2020/04/22/%E7%83%AD%E4%BF%AE%E5%A4%8D%E3%80%81%E7%B1%BB%E5%8A%A0%E8%BD%BD%E4%B8%8E%E4%BF%AE%E5%A4%8D%E5%8E%9F%E7%90%86/img3.png"  alt></p>
+<h4 id="DexClassLoader与PathClassLoader"><a href="#DexClassLoader与PathClassLoader" class="headerlink" title="DexClassLoader与PathClassLoader"></a>DexClassLoader与PathClassLoader</h4><p>来看一下DexClassLoader与PathClassLoader的构造函数</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line"> * @param optimizedDirectory directory where optimized dex files</span><br><span class="line"> *     should be written; must not be &#123;@code null&#125;</span><br><span class="line"> * optimizedDirectory:dexPath优化后的存放目录,此路径不能为sdcard，</span><br><span class="line"> * 必须为一个私有路径,如： File dexOutputDir &#x3D; context.getCodeCacheDir();</span><br><span class="line"> * @param &#123;Object&#125; String libraryPath:so文件路径</span><br><span class="line"> *&#x2F;</span><br><span class="line">public DexClassLoader(String dexPath, String optimizedDirectory,</span><br><span class="line">            String libraryPath, ClassLoader parent) &#123;</span><br><span class="line">        super(dexPath, new File(optimizedDirectory), libraryPath, parent);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line"> * </span><br><span class="line"> *&#x2F;</span><br><span class="line">&#x2F;**</span><br><span class="line"> * 第二个参数为空，实际上dexPath文件也优化了，只不过是放在了 **&#x2F;data&#x2F;dalvik-cache** 目录</span><br><span class="line"> * @param &#123;Object&#125; String dexPath</span><br><span class="line"> * @param &#123;Object&#125; String libraryPath:so文件路径</span><br><span class="line"> * @param &#123;Object&#125; ClassLoader parent</span><br><span class="line"> *&#x2F;</span><br><span class="line">public PathClassLoader(String dexPath, String libraryPath,</span><br><span class="line">            ClassLoader parent) &#123;</span><br><span class="line">        super(dexPath, null, libraryPath, parent);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以看到两者唯一的区别在于：创建<code>DexClassLoader</code>需要传递一个<code>optimizedDirectory</code>参数<br>，并且会将其创建为<code>File</code>对象传给<code>super</code>，而<code>PathClassLoader</code>则直接给到null。<br>因此两者都可以加载<strong>指定的dex，以及jar、zip、apk中的classes.dex</strong></p>
+<h4 id="双亲委托机制"><a href="#双亲委托机制" class="headerlink" title="双亲委托机制"></a>双亲委托机制</h4><p>某个类加载器在加载类时，首先将加载任务委托给父类加载器，依次递归，如果父类加载器可以<br>完成类加载任务，就成功返回；只有父类加载器无法完成此加载任务或者没有父类加载器时，<br>才自己去加载。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">protected Class&lt;?&gt; loadClass(String name, boolean resolve)</span><br><span class="line">        throws ClassNotFoundException</span><br><span class="line">    &#123;</span><br><span class="line">            &#x2F;&#x2F; First, check if the class has already been loaded</span><br><span class="line">            Class&lt;?&gt; c &#x3D; findLoadedClass(name);</span><br><span class="line">            if (c &#x3D;&#x3D; null) &#123;</span><br><span class="line">                try &#123;</span><br><span class="line">					&#x2F;&#x2F; if父亲不为空，则调用父亲的loadClass</span><br><span class="line">                    if (parent !&#x3D; null) &#123;</span><br><span class="line">                        c &#x3D; parent.loadClass(name, false);</span><br><span class="line">                    &#125; else &#123;</span><br><span class="line">                        c &#x3D; findBootstrapClassOrNull(name);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125; catch (ClassNotFoundException e) &#123;</span><br><span class="line">                    &#x2F;&#x2F; ClassNotFoundException thrown if class not found</span><br><span class="line">                    &#x2F;&#x2F; from the non-null parent class loader</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                if (c &#x3D;&#x3D; null) &#123;</span><br><span class="line">                    &#x2F;&#x2F; 如果都找不到就自己加载</span><br><span class="line">                    c &#x3D; findClass(name);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            return c;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="findClass"><a href="#findClass" class="headerlink" title="findClass"></a>findClass</h5><p>​可以看到在所有父ClassLoader无法加载Class时，则会调用自己的<code>findClass</code>方法。<br><code>findClass</code>在ClassLoader中的定义为:</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">protected</span> Class&lt;?&gt; findClass(String name) <span class="keyword">throws</span> ClassNotFoundException &#123;</span><br><span class="line">	<span class="keyword">throw</span> <span class="keyword">new</span> ClassNotFoundException(name);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<ul>
+<li>其实任何ClassLoader子类，都可以重写<code>loadClass</code>与<code>findClass</code>。一般如果你不想使用双亲委托，则重写<code>loadClass</code>修改其实现。</li>
+<li>而重写<code>findClass</code>则表示在双亲委托下，父ClassLoader都找不到Class的情况下，定义自己如何去查找一个Class。我们的<code>PathClassLoader</code>会自己负责加载<code>MainActivity</code>这样的程序中自己编写的类，利用</li>
+<li>双亲委托父ClassLoader加载Framework中的<code>Activity</code>。说明<code>PathClassLoader</code>并没有重写<code>loadClass</code>，因此我们可以来看看PathClassLoader中的 <code>findClass</code> 是如何实现的。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * private final DexPathList pathList;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">BaseDexClassLoader</span><span class="params">(String dexPath, File optimizedDirectory,String 	</span></span></span><br><span class="line"><span class="function"><span class="params">						librarySearchPath, ClassLoader parent)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">super</span>(parent);</span><br><span class="line">	<span class="keyword">this</span>.pathList = <span class="keyword">new</span> DexPathList(<span class="keyword">this</span>, dexPath, librarySearchPath, 		</span><br><span class="line">                                    optimizedDirectory);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">protected</span> Class&lt;?&gt; findClass(String name) <span class="keyword">throws</span> ClassNotFoundException &#123;</span><br><span class="line">	List&lt;Throwable&gt; suppressedExceptions = <span class="keyword">new</span> ArrayList&lt;Throwable&gt;();</span><br><span class="line">    <span class="comment">//查找指定的class</span></span><br><span class="line">    Class c = pathList.findClass(name, suppressedExceptions);</span><br><span class="line">    <span class="keyword">if</span> (c == <span class="keyword">null</span>) &#123;</span><br><span class="line">		ClassNotFoundException cnfe = <span class="keyword">new</span> ClassNotFoundException(<span class="string">"Didn't find class \""</span> + 														name + <span class="string">"\" on path: "</span> + pathList);</span><br><span class="line">        <span class="keyword">for</span> (Throwable t : suppressedExceptions) &#123;</span><br><span class="line">			cnfe.addSuppressed(t);</span><br><span class="line">        &#125;</span><br><span class="line">            <span class="keyword">throw</span> cnfe;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> c;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>实现非常简单，从<code>pathList</code>中查找class。继续查看<code>DexPathList</code></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// dexElements是一个Element数组，Element中包含一个DexFile,即一个dex文件，里面的native(c/c++)来进行dex的加载工作</span></span><br><span class="line"><span class="comment">//private Element[] dexElements;</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">DexPathList</span><span class="params">(ClassLoader definingContext, String dexPath,</span></span></span><br><span class="line"><span class="function"><span class="params">            String librarySearchPath, File optimizedDirectory)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>(definingContext, dexPath, librarySearchPath, optimizedDirectory, <span class="keyword">false</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> Class&lt;?&gt; findClass(String name, List&lt;Throwable&gt; suppressed) &#123;</span><br><span class="line">        <span class="keyword">for</span> (Element element : dexElements) &#123;</span><br><span class="line">            Class&lt;?&gt; clazz = element.findClass(name, definingContext, suppressed);</span><br><span class="line">            <span class="keyword">if</span> (clazz != <span class="keyword">null</span>) &#123;</span><br><span class="line">                <span class="keyword">return</span> clazz;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (dexElementsSuppressedExceptions != <span class="keyword">null</span>) &#123;</span><br><span class="line">            suppressed.addAll(Arrays.asList(dexElementsSuppressedExceptions));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br></pre></td></tr></table></figure>
+
+<h4 id="类加载流程图"><a href="#类加载流程图" class="headerlink" title="类加载流程图"></a>类加载流程图</h4><p><img src="/" class="lazyload" data-src="/2020/04/22/%E7%83%AD%E4%BF%AE%E5%A4%8D%E3%80%81%E7%B1%BB%E5%8A%A0%E8%BD%BD%E4%B8%8E%E4%BF%AE%E5%A4%8D%E5%8E%9F%E7%90%86/img4.png"  alt></p>
+<p>系统启动的时候由BootClassLoader去加载系统相关类，由PathClassLoader加载自己写的类</p>
+<h3 id="热修复"><a href="#热修复" class="headerlink" title="热修复"></a>热修复</h3><h4 id="修复实现"><a href="#修复实现" class="headerlink" title="修复实现"></a>修复实现</h4><p>了解了类的加载原理，我们知道，类加载的时候其实就是加载的一个一个的dex文件，据此我们是不是可以根据类加载的原理将要修复的bug生成dex文件，在类加载的时候去加载修复后的dex文件呢。是的，没错，我们当然可以这么做了。接下来我们就讲一讲具体该怎么实现呢。<br>思想就是要在应用启动的时候就去加载要修复的dex文件。这里我们放到Application文件里面去操作</p>
+<p>直接上代码吧</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public class App extends Application &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public void onCreate() &#123;</span><br><span class="line">        super.onCreate();</span><br><span class="line">        try &#123;</span><br><span class="line">            PatchUtil.loadPatch(getApplicationContext(), &quot;&#x2F;sdcard&#x2F;patch.dex&quot;);</span><br><span class="line">        &#125; catch (NoSuchFieldException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125; catch (IllegalAccessException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>PatchUtil.java</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PatchUtil</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">loadPatch</span><span class="params">(Context context, String patch)</span> <span class="keyword">throws</span> NoSuchFieldException,</span></span><br><span class="line"><span class="function">            IllegalAccessException </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//如果patch不存在，直接返回</span></span><br><span class="line">        File patchFile = <span class="keyword">new</span> File(patch);</span><br><span class="line">        <span class="keyword">if</span> (!patchFile.exists()) &#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//因为要修复的是自己写的文件，直接用PathClassLoader就行，获取系统的PathClassLoader</span></span><br><span class="line">        PathClassLoader pathClassLoader = (PathClassLoader) context.getClassLoader();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//通过反射获取BaseDexClassLoader中DexPathList类型的属性:pathList</span></span><br><span class="line">        Field pathListField = pathClassLoader.getClass().getSuperclass().getDeclaredField(</span><br><span class="line">                <span class="string">"pathList"</span>);</span><br><span class="line">        pathListField.setAccessible(<span class="keyword">true</span>);</span><br><span class="line">        Object pathListObject = pathListField.get(pathClassLoader);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//获取DexPathList中Element[]类型的dexElements</span></span><br><span class="line">        Field dexElementsField = pathListObject.getClass().getDeclaredField(<span class="string">"dexElements"</span>);</span><br><span class="line">        dexElementsField.setAccessible(<span class="keyword">true</span>);</span><br><span class="line">        Object dexElementsObject = dexElementsField.get(pathListObject);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//设置optimizedDirectory</span></span><br><span class="line">        File odex = context.getDir(<span class="string">"odex"</span>, Context.MODE_PRIVATE);</span><br><span class="line">        <span class="comment">//创建自定义的DexClassLoader</span></span><br><span class="line">        DexClassLoader dexClassLoader = <span class="keyword">new</span> DexClassLoader(patch, odex.getAbsolutePath(), <span class="keyword">null</span>,</span><br><span class="line">                context.getClassLoader());</span><br><span class="line">        <span class="comment">//获取BaseDexClassLoader中DexPathList类型的属性:pathList</span></span><br><span class="line">        Field patchPathListField = dexClassLoader.getClass().getSuperclass().getDeclaredField(</span><br><span class="line">                <span class="string">"pathList"</span>);</span><br><span class="line">        patchPathListField.setAccessible(<span class="keyword">true</span>);</span><br><span class="line">        Object patchPathListObject = patchPathListField.get(dexClassLoader);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//获取DexPathList中Element[]类型的dexElements</span></span><br><span class="line">        Field patchDexElementsField = patchPathListObject.getClass().getDeclaredField(</span><br><span class="line">                <span class="string">"dexElements"</span>);</span><br><span class="line">        patchDexElementsField.setAccessible(<span class="keyword">true</span>);</span><br><span class="line">        Object patchDexElementsObject = patchDexElementsField.get(patchPathListObject);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//合并数组，一定要讲修复的dex文件放到前面，因为加载的时候同名文件只会加载一次</span></span><br><span class="line">        Class&lt;?&gt; elementClazz = dexElementsObject.getClass().getComponentType();</span><br><span class="line">        <span class="keyword">int</span> dexElementsSize = Array.getLength(dexElementsObject);</span><br><span class="line">        <span class="keyword">int</span> patchDexElementsSize = Array.getLength(patchDexElementsObject);</span><br><span class="line">        <span class="keyword">int</span> newDexElementsSize = dexElementsSize + patchDexElementsSize;</span><br><span class="line">        Object newDexElements = Array.newInstance(elementClazz, newDexElementsSize);</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; newDexElementsSize; i++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (i &lt; patchDexElementsSize) &#123;</span><br><span class="line">                Array.set(newDexElements, i, Array.get(patchDexElementsObject, i));</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                Array.set(newDexElements, i, Array.get(dexElementsObject,</span><br><span class="line">                        i - patchDexElementsSize));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//替换原来的dexElements</span></span><br><span class="line">        dexElementsField.set(pathListObject, newDexElements);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="发布有bug版本"><a href="#发布有bug版本" class="headerlink" title="发布有bug版本"></a>发布有bug版本</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">AppCompatActivity</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.activity_main);</span><br><span class="line">        Toast.makeText(<span class="keyword">this</span>,<span class="string">"oh,my god 出错了"</span>,Toast.LENGTH_LONG).show();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/" class="lazyload" data-src="/2020/04/22/%E7%83%AD%E4%BF%AE%E5%A4%8D%E3%80%81%E7%B1%BB%E5%8A%A0%E8%BD%BD%E4%B8%8E%E4%BF%AE%E5%A4%8D%E5%8E%9F%E7%90%86/wrong.jpg"  alt></p>
+<h4 id="修复bug，生成dex文件"><a href="#修复bug，生成dex文件" class="headerlink" title="修复bug，生成dex文件"></a>修复bug，生成dex文件</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">AppCompatActivity</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.activity_main);</span><br><span class="line"><span class="comment">//      Toast.makeText(this,"oh,my god 出错了",Toast.LENGTH_LONG).show();</span></span><br><span class="line"></span><br><span class="line">        Toast.makeText(<span class="keyword">this</span>,<span class="string">"wa! 好了"</span>,Toast.LENGTH_SHORT).show();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>将bug修复后，执行build clean 命令，完成后执行命令Rebuild Project,成功后在在目录<br>.\app\build\intermediates\javac\debug\classes\下生成对应的.class文件,我这里修复的是MainActivity.class文件<br><img src="/" class="lazyload" data-src="/2020/04/22/%E7%83%AD%E4%BF%AE%E5%A4%8D%E3%80%81%E7%B1%BB%E5%8A%A0%E8%BD%BD%E4%B8%8E%E4%BF%AE%E5%A4%8D%E5%8E%9F%E7%90%86/changeCode.png"  alt></p>
+<p>将刚生成的MainActivity.class文件复制到一个空目录下，记得一定要在此空目录下创建于这个类同名的目录，我的结构如下<br>E:\patchClass\com\aa\classloadertest\MainActivity.class</p>
+<blockquote>
+<p>接下来打开cmd 运行命令生成dex文件：<br>dx –dex –output  需要生成dex的目录和名称   class文件所在的目录</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">dx --dex --output E:\patchDex\patch.dex E:\patchClass</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>dx命令在android安装目录build-tools下面，如果没有将此命令放入环境变量，需要到build-tools目录下面执行此命令</li>
+</ul>
+<p>这时查看E:\patchDex 目录<br><img src="/" class="lazyload" data-src="/2020/04/22/%E7%83%AD%E4%BF%AE%E5%A4%8D%E3%80%81%E7%B1%BB%E5%8A%A0%E8%BD%BD%E4%B8%8E%E4%BF%AE%E5%A4%8D%E5%8E%9F%E7%90%86/seeDex.png"  alt></p>
+<h4 id="文件上传"><a href="#文件上传" class="headerlink" title="文件上传"></a>文件上传</h4><p>目前测试我先把此dex文件放到手机sdcard目录下面测试，正式环境下应该放到服务器，接口获取然后加载<br>命令将此dex文件放到sdcard下面</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">执行adb push E:\patchDex\patch.dex &#x2F;sdcard</span><br></pre></td></tr></table></figure>
+
+
+<h4 id="查看修复效果"><a href="#查看修复效果" class="headerlink" title="查看修复效果"></a>查看修复效果</h4><p>重启应用</p>
+<p><img src="/" class="lazyload" data-src="/2020/04/22/%E7%83%AD%E4%BF%AE%E5%A4%8D%E3%80%81%E7%B1%BB%E5%8A%A0%E8%BD%BD%E4%B8%8E%E4%BF%AE%E5%A4%8D%E5%8E%9F%E7%90%86/changeok.jpg"  alt></p>
+<p>热修复框架：</p>
+<p><img src="/" class="lazyload" data-src="/2020/04/22/%E7%83%AD%E4%BF%AE%E5%A4%8D%E3%80%81%E7%B1%BB%E5%8A%A0%E8%BD%BD%E4%B8%8E%E4%BF%AE%E5%A4%8D%E5%8E%9F%E7%90%86/hotFrame.png"  alt></p>
 ]]></content>
   </entry>
 </search>
