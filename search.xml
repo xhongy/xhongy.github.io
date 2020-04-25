@@ -22,47 +22,6 @@
       </tags>
   </entry>
   <entry>
-    <title>断点续传</title>
-    <url>/2020/04/19/%E6%96%AD%E7%82%B9%E7%BB%AD%E4%BC%A0/</url>
-    <content><![CDATA[<h3 id="什么是断点续传："><a href="#什么是断点续传：" class="headerlink" title="什么是断点续传："></a>什么是断点续传：</h3><blockquote>
-<p>说得白一点，<em>其实也</em>就是下载文件时，不必重头开始下载，而是从指定的位置继续下载，这样的功能就叫做断点续传。<br>既然如此，那么要实现断点续传的关键点其实也就是两点：</p>
-</blockquote>
-<ul>
-<li>如何告知服务端，从指定的位置下载</li>
-<li>如何知道客户端想要的指定位置是多少</li>
-</ul>
-<p>其实，很简单，并不需要我们自己去写一些什么，HTTP 协议本身就支持断点续传，<br>而且文件是下载到客户端设备上的，那么只要获取到这份下载到一半的文件，<br>看一下它目前的大小，也就知道需要让服务端从哪开始继续下载了。</p>
-<p>那么，下面就介绍一下涉及到的相关理论</p>
-<h3 id="Range-amp-Content-Length-amp-Content-Range-amp-If-Range"><a href="#Range-amp-Content-Length-amp-Content-Range-amp-If-Range" class="headerlink" title="Range &amp; Content-Length &amp; Content-Range &amp; If-Range"></a>Range &amp; Content-Length &amp; Content-Range &amp; If-Range</h3><p>这些都是 HTTP 包中 Header 头部的一些字段信息，其中 Range 和 If-Range 是请求头中<br>其中 Range 和 If-Range 是请求头中的字段，Content-Length 和 Content-Range 是响应头中的字段。</p>
-<h4 id="Range"><a href="#Range" class="headerlink" title="Range"></a>Range</h4><p>当请求头中出现 Range 字段时，表示告知服务端，客户端下载该文件想要从指定的位置开始下载，至于 Range 字段属性值的格式有以下几种：</p>
-<p>格式</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Range:bytes&#x3D;0-500  表示下载从0到500字节的文件，即头500个字节</span><br><span class="line"></span><br><span class="line">Range:bytes&#x3D;501-1000  表示下载从500到1000这部分的文件，单位字节</span><br><span class="line"></span><br><span class="line">Range:bytes&#x3D;-500   表示下载最后的500个字节</span><br><span class="line"></span><br><span class="line">Range:bytes&#x3D;500-   表示下载从500开始到文件结束这部分的内容</span><br></pre></td></tr></table></figure>
-<p>如果 app 想实现断点续传，文件下载到一半被迫中断，下次启动还可以继续接着上次<br>进度下载时，那么此时可以使用 Range:bytes=500- 这种格式了，只要先获取本地那<br>份文件目前的大小，通过在请求头中加入 Range 字段信息即可</p>
-<h4 id="Content-Length"><a href="#Content-Length" class="headerlink" title="Content-Length"></a>Content-Length</h4><p>Content-Length 字段出现在响应头中，用于告知客户端此次下载的文件大小。</p>
-<p>一般，如果客户端需要实现下载进度实时更新时，就需要知道文件的总大小和目前下载的大小，后者可以通过对本地文件的操作得知，前者一般就是通过响应头中的 Content-Length 字段得知。</p>
-<p>另外，如果想要实现多线程同时分段下载大文件功能时，显然在下载前，客户端需要先知道文件总大小，才可以做到动态进行分段，因此一般在下载前都会先发送一个不需要携带 body 信息请求，用于先获取响应头中的 Content-Length 字段来得知文件总大小。</p>
-<p>但有一点需要注意：Content-Length 只表示此链接中下载的文件大小</p>
-<p>什么意思，也就是说，如果这条链接是一次性将整个文件下载下来的，那么 Content-Length 就表示这个文件的总大小。</p>
-<p>但，如果这条链接指定了 Range，表明了只是下载文件的指定部分的内容，那么此时 Content-Length 表示的就只是这一部分的大小。</p>
-<p>所以，如果客户端实现了下载进度实时更新功能时，需要注意一下。因为如果文件是断点续传的，那么进度条的分母就不能用每次 HTTP 链接中的 Content-Length。要么下载前先发一条获取用于文件总大小的请求，然后一直维护着这个数据，要么就使用 Content-Range 字段。</p>
-<h4 id="Content-Range"><a href="#Content-Range" class="headerlink" title="Content-Range"></a>Content-Range</h4><p>Content-Range 字段也是出现在响应头中，用于告知客户端此链接下载的文件是哪个部分的，以及文件的总大小。<br>比如，当客户端在请求头中指定了 Range:bayes=501-1000 来下载一个总大小为 2000 字节文件的中间一部分内容时，此时，响应头中的 Content-Range 字段信息如下：<br>Content-Range:bytes 501-1000/2000<br>斜杠前表示此链接下载的文件是哪一部分，斜杠后表示文件的总大小。</p>
-<h4 id="If-Range"><a href="#If-Range" class="headerlink" title="If-Range"></a>If-Range</h4><p>断点续传，说白点也就是分多次下载，既然不是一次性下载，那么就无法保证多次下载的间隔。<br>也就是说，有可能出现这种场景，这次由于某些原因只下载的一部分，而下次重启继续下载，但可能等到过了很多天后才重启去继续下载，如果在这期间，服务端的这份文件更新了怎么办？<br>只要不是一次性下载的，那么就有可能会出现这种场景，显然，这时候，就不希望断点续传了，而是要让客户端直接重头开始下载，毕竟文件都已经发生更新了，不是同一份了，再继续恢复下载也没有什么意义。<br>那么，客户端要如何知道服务端的文件是否发生变化，要重头下载呢？<br>这时就可以结合 If-Range 字段来实现了，这个也是在请求头中的字段，跟 Range 字段一起使用，它的作用是给 Range<br>字段生效设置了一些条件，只有满足这些条件，Range 才能生效。<br>也就是说，只有先满足 If-Range，那么才能通过 Range 来实现断点续传。<br>那它的条件值可以设置为哪些呢？有两种，Last-Modified 或者 ETag，这两个也都是响应头中。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">response.header(&quot;Content-Length&quot;) &#x2F;&#x2F; 文件长度</span><br><span class="line">response.header(&quot;Last-Modified&quot;)  &#x2F;&#x2F; 修改时间</span><br><span class="line">response.header(&quot;ETag&quot;)      &#x2F;&#x2F;ETag标识</span><br></pre></td></tr></table></figure>
-
-<h3 id="代码查看"><a href="#代码查看" class="headerlink" title="代码查看"></a>代码查看</h3><p>本人已采用okhttp框架实现了此功能，代码已上传至github，地址：</p>
-<p><a href="https://github.com/xhongy/OkHttpLib" target="_blank" rel="noopener">https://github.com/xhongy/OkHttpLib</a></p>
-<p>同时插件也上传了jcenter，想使用此插件的友友们，可以访问一下地址查看详情</p>
-<p><a href="https://bintray.com/beta/#/xhongy/maven/OkHttpPlugin" target="_blank" rel="noopener">https://bintray.com/beta/#/xhongy/maven/OkHttpPlugin</a></p>
-]]></content>
-      <categories>
-        <category>android</category>
-      </categories>
-      <tags>
-        <tag>断点续传</tag>
-        <tag>okhttp</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>通过bintray-release，发布库到Jcenter</title>
     <url>/2020/04/19/%E9%80%9A%E8%BF%87bintray-release%EF%BC%8C%E5%8F%91%E5%B8%83%E5%BA%93%E5%88%B0Jcenter/</url>
     <content><![CDATA[<blockquote>
@@ -140,6 +99,47 @@
       </tags>
   </entry>
   <entry>
+    <title>断点续传</title>
+    <url>/2020/04/19/%E6%96%AD%E7%82%B9%E7%BB%AD%E4%BC%A0/</url>
+    <content><![CDATA[<h3 id="什么是断点续传："><a href="#什么是断点续传：" class="headerlink" title="什么是断点续传："></a>什么是断点续传：</h3><blockquote>
+<p>说得白一点，<em>其实也</em>就是下载文件时，不必重头开始下载，而是从指定的位置继续下载，这样的功能就叫做断点续传。<br>既然如此，那么要实现断点续传的关键点其实也就是两点：</p>
+</blockquote>
+<ul>
+<li>如何告知服务端，从指定的位置下载</li>
+<li>如何知道客户端想要的指定位置是多少</li>
+</ul>
+<p>其实，很简单，并不需要我们自己去写一些什么，HTTP 协议本身就支持断点续传，<br>而且文件是下载到客户端设备上的，那么只要获取到这份下载到一半的文件，<br>看一下它目前的大小，也就知道需要让服务端从哪开始继续下载了。</p>
+<p>那么，下面就介绍一下涉及到的相关理论</p>
+<h3 id="Range-amp-Content-Length-amp-Content-Range-amp-If-Range"><a href="#Range-amp-Content-Length-amp-Content-Range-amp-If-Range" class="headerlink" title="Range &amp; Content-Length &amp; Content-Range &amp; If-Range"></a>Range &amp; Content-Length &amp; Content-Range &amp; If-Range</h3><p>这些都是 HTTP 包中 Header 头部的一些字段信息，其中 Range 和 If-Range 是请求头中<br>其中 Range 和 If-Range 是请求头中的字段，Content-Length 和 Content-Range 是响应头中的字段。</p>
+<h4 id="Range"><a href="#Range" class="headerlink" title="Range"></a>Range</h4><p>当请求头中出现 Range 字段时，表示告知服务端，客户端下载该文件想要从指定的位置开始下载，至于 Range 字段属性值的格式有以下几种：</p>
+<p>格式</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Range:bytes&#x3D;0-500  表示下载从0到500字节的文件，即头500个字节</span><br><span class="line"></span><br><span class="line">Range:bytes&#x3D;501-1000  表示下载从500到1000这部分的文件，单位字节</span><br><span class="line"></span><br><span class="line">Range:bytes&#x3D;-500   表示下载最后的500个字节</span><br><span class="line"></span><br><span class="line">Range:bytes&#x3D;500-   表示下载从500开始到文件结束这部分的内容</span><br></pre></td></tr></table></figure>
+<p>如果 app 想实现断点续传，文件下载到一半被迫中断，下次启动还可以继续接着上次<br>进度下载时，那么此时可以使用 Range:bytes=500- 这种格式了，只要先获取本地那<br>份文件目前的大小，通过在请求头中加入 Range 字段信息即可</p>
+<h4 id="Content-Length"><a href="#Content-Length" class="headerlink" title="Content-Length"></a>Content-Length</h4><p>Content-Length 字段出现在响应头中，用于告知客户端此次下载的文件大小。</p>
+<p>一般，如果客户端需要实现下载进度实时更新时，就需要知道文件的总大小和目前下载的大小，后者可以通过对本地文件的操作得知，前者一般就是通过响应头中的 Content-Length 字段得知。</p>
+<p>另外，如果想要实现多线程同时分段下载大文件功能时，显然在下载前，客户端需要先知道文件总大小，才可以做到动态进行分段，因此一般在下载前都会先发送一个不需要携带 body 信息请求，用于先获取响应头中的 Content-Length 字段来得知文件总大小。</p>
+<p>但有一点需要注意：Content-Length 只表示此链接中下载的文件大小</p>
+<p>什么意思，也就是说，如果这条链接是一次性将整个文件下载下来的，那么 Content-Length 就表示这个文件的总大小。</p>
+<p>但，如果这条链接指定了 Range，表明了只是下载文件的指定部分的内容，那么此时 Content-Length 表示的就只是这一部分的大小。</p>
+<p>所以，如果客户端实现了下载进度实时更新功能时，需要注意一下。因为如果文件是断点续传的，那么进度条的分母就不能用每次 HTTP 链接中的 Content-Length。要么下载前先发一条获取用于文件总大小的请求，然后一直维护着这个数据，要么就使用 Content-Range 字段。</p>
+<h4 id="Content-Range"><a href="#Content-Range" class="headerlink" title="Content-Range"></a>Content-Range</h4><p>Content-Range 字段也是出现在响应头中，用于告知客户端此链接下载的文件是哪个部分的，以及文件的总大小。<br>比如，当客户端在请求头中指定了 Range:bayes=501-1000 来下载一个总大小为 2000 字节文件的中间一部分内容时，此时，响应头中的 Content-Range 字段信息如下：<br>Content-Range:bytes 501-1000/2000<br>斜杠前表示此链接下载的文件是哪一部分，斜杠后表示文件的总大小。</p>
+<h4 id="If-Range"><a href="#If-Range" class="headerlink" title="If-Range"></a>If-Range</h4><p>断点续传，说白点也就是分多次下载，既然不是一次性下载，那么就无法保证多次下载的间隔。<br>也就是说，有可能出现这种场景，这次由于某些原因只下载的一部分，而下次重启继续下载，但可能等到过了很多天后才重启去继续下载，如果在这期间，服务端的这份文件更新了怎么办？<br>只要不是一次性下载的，那么就有可能会出现这种场景，显然，这时候，就不希望断点续传了，而是要让客户端直接重头开始下载，毕竟文件都已经发生更新了，不是同一份了，再继续恢复下载也没有什么意义。<br>那么，客户端要如何知道服务端的文件是否发生变化，要重头下载呢？<br>这时就可以结合 If-Range 字段来实现了，这个也是在请求头中的字段，跟 Range 字段一起使用，它的作用是给 Range<br>字段生效设置了一些条件，只有满足这些条件，Range 才能生效。<br>也就是说，只有先满足 If-Range，那么才能通过 Range 来实现断点续传。<br>那它的条件值可以设置为哪些呢？有两种，Last-Modified 或者 ETag，这两个也都是响应头中。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">response.header(&quot;Content-Length&quot;) &#x2F;&#x2F; 文件长度</span><br><span class="line">response.header(&quot;Last-Modified&quot;)  &#x2F;&#x2F; 修改时间</span><br><span class="line">response.header(&quot;ETag&quot;)      &#x2F;&#x2F;ETag标识</span><br></pre></td></tr></table></figure>
+
+<h3 id="代码查看"><a href="#代码查看" class="headerlink" title="代码查看"></a>代码查看</h3><p>本人已采用okhttp框架实现了此功能，代码已上传至github，地址：</p>
+<p><a href="https://github.com/xhongy/OkHttpLib" target="_blank" rel="noopener">https://github.com/xhongy/OkHttpLib</a></p>
+<p>同时插件也上传了jcenter，想使用此插件的友友们，可以访问一下地址查看详情</p>
+<p><a href="https://bintray.com/beta/#/xhongy/maven/OkHttpPlugin" target="_blank" rel="noopener">https://bintray.com/beta/#/xhongy/maven/OkHttpPlugin</a></p>
+]]></content>
+      <categories>
+        <category>android</category>
+      </categories>
+      <tags>
+        <tag>断点续传</tag>
+        <tag>okhttp</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>组件化</title>
     <url>/2020/04/21/%E7%BB%84%E4%BB%B6%E5%8C%96/</url>
     <content><![CDATA[<p>组件化： gradle 开发中<br>插件化： 动态化：反射、类加载 运行中</p>
@@ -154,33 +154,21 @@
       </tags>
   </entry>
   <entry>
-    <title>上传文件到github</title>
-    <url>/2020/04/19/%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E5%88%B0github/</url>
-    <content><![CDATA[<h3 id="注册账号"><a href="#注册账号" class="headerlink" title="注册账号"></a>注册账号</h3><p>首先先去  <a href="https://github.com/" target="_blank" rel="noopener">github官网</a>  注册一个账号。</p>
-<p>我们使用git需要先安装git工具，<a href="https://git-for-windows.github.io/" target="_blank" rel="noopener">下载地址</a></p>
-<p>接下来进入正题</p>
-<h4 id="创建仓库"><a href="#创建仓库" class="headerlink" title="创建仓库"></a>创建仓库</h4><p>进入Github首页，点击New repository</p>
-<p><img src="/" class="lazyload" data-src="/2020/04/19/%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E5%88%B0github/new-rep.png"  alt></p>
-<p>填写相应信息后点击create即可</p>
-<blockquote>
-<p>Repository name: 仓库名称<br>Description(可选): 仓库描述介绍<br>Public：仓库权限（公开共享，私有或指定合作者）<br>Initialize this repository with a README: 添加一个README.mdgitignore: 不需要进行版本管理的仓库类型，对应生成文件.gitignorelicense: </p>
-</blockquote>
-<p><img src="/" class="lazyload" data-src="/2020/04/19/%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E5%88%B0github/rep-info.png"  alt></p>
-<h4 id="仓库代码复制到本地"><a href="#仓库代码复制到本地" class="headerlink" title="仓库代码复制到本地"></a>仓库代码复制到本地</h4><p>执行相关命令将新建的仓库clone到本地</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> 仓库地址</span><br></pre></td></tr></table></figure>
-<p><img src="/" class="lazyload" data-src="/2020/04/19/%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E5%88%B0github/git-add.png"  alt></p>
-<h4 id="上传代码"><a href="#上传代码" class="headerlink" title="上传代码"></a>上传代码</h4><p>将本地要上传的代码放入刚clone下来的目录里面，cd 存放代码的路径,执行以下命令上传:</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git add . </span><br><span class="line">git commit -m <span class="string">"提交描述"</span></span><br><span class="line">git push -u origin master  （注：此操作目的是把本地仓库push到github上面，此步骤需要你输入 帐号和密码）</span><br></pre></td></tr></table></figure>
-
-<h4 id="查看上传是否成功"><a href="#查看上传是否成功" class="headerlink" title="查看上传是否成功"></a>查看上传是否成功</h4><p>此时就可以去github查看上传的代码，如下，上传成功</p>
-<p><img src="/" class="lazyload" data-src="/2020/04/19/%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E5%88%B0github/upload-suc.png"  alt></p>
-<h3 id="END"><a href="#END" class="headerlink" title="END"></a>END</h3><p>本文是针对有计算机基础的，不是每个步骤都说的太详尽，有不明白的可在自行百度。</p>
+    <title>前端开发问题汇总</title>
+    <url>/2020/04/24/%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91%E9%97%AE%E9%A2%98%E6%B1%87%E6%80%BB/</url>
+    <content><![CDATA[<p>今天在集成融云的时候报了个问题，gradle 不能同步相关包<br><strong>ERROR: Unable to resolve dependency for ‘:app@debugAndroidTest/compileClasspath..</strong><br>一看感觉应该是同步失败，查资料说是 gradle 的 offline work 放开就好了，但是近如gradle也没看到offline按钮在哪<br><img src="/" class="lazyload" data-src="/2020/04/24/%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91%E9%97%AE%E9%A2%98%E6%B1%87%E6%80%BB/gradle.png"  alt></p>
+<p>废了好大劲才发现原来androidstudio3.6版本把这个功能移动到别的位置了<br><img src="/" class="lazyload" data-src="/2020/04/24/%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91%E9%97%AE%E9%A2%98%E6%B1%87%E6%80%BB/gradle-new.png"  alt><br>在这里关闭offline功能，完美解决问题</p>
 ]]></content>
+  </entry>
+  <entry>
+    <title>java进阶</title>
+    <url>/2020/04/22/java%E8%BF%9B%E9%98%B6/</url>
+    <content><![CDATA[]]></content>
       <categories>
-        <category>工具</category>
+        <category>java</category>
       </categories>
       <tags>
-        <tag>github</tag>
+        <tag>java泛型</tag>
       </tags>
   </entry>
   <entry>
@@ -295,20 +283,39 @@
         <category>工具</category>
       </categories>
       <tags>
-        <tag>github</tag>
         <tag>hexo</tag>
+        <tag>github</tag>
         <tag>博客</tag>
       </tags>
   </entry>
   <entry>
-    <title>java进阶</title>
-    <url>/2020/04/22/java%E8%BF%9B%E9%98%B6/</url>
-    <content><![CDATA[]]></content>
+    <title>上传文件到github</title>
+    <url>/2020/04/19/%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E5%88%B0github/</url>
+    <content><![CDATA[<h3 id="注册账号"><a href="#注册账号" class="headerlink" title="注册账号"></a>注册账号</h3><p>首先先去  <a href="https://github.com/" target="_blank" rel="noopener">github官网</a>  注册一个账号。</p>
+<p>我们使用git需要先安装git工具，<a href="https://git-for-windows.github.io/" target="_blank" rel="noopener">下载地址</a></p>
+<p>接下来进入正题</p>
+<h4 id="创建仓库"><a href="#创建仓库" class="headerlink" title="创建仓库"></a>创建仓库</h4><p>进入Github首页，点击New repository</p>
+<p><img src="/" class="lazyload" data-src="/2020/04/19/%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E5%88%B0github/new-rep.png"  alt></p>
+<p>填写相应信息后点击create即可</p>
+<blockquote>
+<p>Repository name: 仓库名称<br>Description(可选): 仓库描述介绍<br>Public：仓库权限（公开共享，私有或指定合作者）<br>Initialize this repository with a README: 添加一个README.mdgitignore: 不需要进行版本管理的仓库类型，对应生成文件.gitignorelicense: </p>
+</blockquote>
+<p><img src="/" class="lazyload" data-src="/2020/04/19/%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E5%88%B0github/rep-info.png"  alt></p>
+<h4 id="仓库代码复制到本地"><a href="#仓库代码复制到本地" class="headerlink" title="仓库代码复制到本地"></a>仓库代码复制到本地</h4><p>执行相关命令将新建的仓库clone到本地</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> 仓库地址</span><br></pre></td></tr></table></figure>
+<p><img src="/" class="lazyload" data-src="/2020/04/19/%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E5%88%B0github/git-add.png"  alt></p>
+<h4 id="上传代码"><a href="#上传代码" class="headerlink" title="上传代码"></a>上传代码</h4><p>将本地要上传的代码放入刚clone下来的目录里面，cd 存放代码的路径,执行以下命令上传:</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git add . </span><br><span class="line">git commit -m <span class="string">"提交描述"</span></span><br><span class="line">git push -u origin master  （注：此操作目的是把本地仓库push到github上面，此步骤需要你输入 帐号和密码）</span><br></pre></td></tr></table></figure>
+
+<h4 id="查看上传是否成功"><a href="#查看上传是否成功" class="headerlink" title="查看上传是否成功"></a>查看上传是否成功</h4><p>此时就可以去github查看上传的代码，如下，上传成功</p>
+<p><img src="/" class="lazyload" data-src="/2020/04/19/%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E5%88%B0github/upload-suc.png"  alt></p>
+<h3 id="END"><a href="#END" class="headerlink" title="END"></a>END</h3><p>本文是针对有计算机基础的，不是每个步骤都说的太详尽，有不明白的可在自行百度。</p>
+]]></content>
       <categories>
-        <category>java</category>
+        <category>工具</category>
       </categories>
       <tags>
-        <tag>java泛型</tag>
+        <tag>github</tag>
       </tags>
   </entry>
   <entry>
@@ -419,13 +426,18 @@
 <p><strong>PatchUtil.java</strong><br>这里只做了api&gt;23的适配，别的版本适配，后续添加<code>todo</code></p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PatchUtil</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">loadPatch</span><span class="params">(Context context, String patch)</span> <span class="keyword">throws</span> NoSuchFieldException,</span></span><br><span class="line"><span class="function">            IllegalAccessException </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//如果patch不存在，直接返回</span></span><br><span class="line">        File patchFile = <span class="keyword">new</span> File(patch);</span><br><span class="line">        <span class="keyword">if</span> (!patchFile.exists()) &#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//因为要修复的是自己写的文件，直接用PathClassLoader就行，获取系统的PathClassLoader</span></span><br><span class="line">        PathClassLoader pathClassLoader = (PathClassLoader) context.getClassLoader();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//通过反射获取BaseDexClassLoader中DexPathList类型的属性:pathList</span></span><br><span class="line">        Field pathListField = pathClassLoader.getClass().getSuperclass().getDeclaredField(</span><br><span class="line">                <span class="string">"pathList"</span>);</span><br><span class="line">        pathListField.setAccessible(<span class="keyword">true</span>);</span><br><span class="line">        Object pathListObject = pathListField.get(pathClassLoader);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//获取DexPathList中Element[]类型的dexElements</span></span><br><span class="line">        Field dexElementsField = pathListObject.getClass().getDeclaredField(<span class="string">"dexElements"</span>);</span><br><span class="line">        dexElementsField.setAccessible(<span class="keyword">true</span>);</span><br><span class="line">        Object dexElementsObject = dexElementsField.get(pathListObject);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//设置optimizedDirectory</span></span><br><span class="line">        File odex = context.getDir(<span class="string">"odex"</span>, Context.MODE_PRIVATE);</span><br><span class="line">        <span class="comment">//创建自定义的DexClassLoader</span></span><br><span class="line">        DexClassLoader dexClassLoader = <span class="keyword">new</span> DexClassLoader(patch, odex.getAbsolutePath(), <span class="keyword">null</span>,</span><br><span class="line">                context.getClassLoader());</span><br><span class="line">        <span class="comment">//获取BaseDexClassLoader中DexPathList类型的属性:pathList</span></span><br><span class="line">        Field patchPathListField = dexClassLoader.getClass().getSuperclass().getDeclaredField(</span><br><span class="line">                <span class="string">"pathList"</span>);</span><br><span class="line">        patchPathListField.setAccessible(<span class="keyword">true</span>);</span><br><span class="line">        Object patchPathListObject = patchPathListField.get(dexClassLoader);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//获取DexPathList中Element[]类型的dexElements</span></span><br><span class="line">        Field patchDexElementsField = patchPathListObject.getClass().getDeclaredField(</span><br><span class="line">                <span class="string">"dexElements"</span>);</span><br><span class="line">        patchDexElementsField.setAccessible(<span class="keyword">true</span>);</span><br><span class="line">        Object patchDexElementsObject = patchDexElementsField.get(patchPathListObject);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//合并数组，一定要讲修复的dex文件放到前面，因为加载的时候同名文件只会加载一次</span></span><br><span class="line">        Class&lt;?&gt; elementClazz = dexElementsObject.getClass().getComponentType();</span><br><span class="line">        <span class="keyword">int</span> dexElementsSize = Array.getLength(dexElementsObject);</span><br><span class="line">        <span class="keyword">int</span> patchDexElementsSize = Array.getLength(patchDexElementsObject);</span><br><span class="line">        <span class="keyword">int</span> newDexElementsSize = dexElementsSize + patchDexElementsSize;</span><br><span class="line">        Object newDexElements = Array.newInstance(elementClazz, newDexElementsSize);</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; newDexElementsSize; i++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (i &lt; patchDexElementsSize) &#123;</span><br><span class="line">                Array.set(newDexElements, i, Array.get(patchDexElementsObject, i));</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                Array.set(newDexElements, i, Array.get(dexElementsObject,</span><br><span class="line">                        i - patchDexElementsSize));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//替换原来的dexElements</span></span><br><span class="line">        dexElementsField.set(pathListObject, newDexElements);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h4 id="发布有bug版本"><a href="#发布有bug版本" class="headerlink" title="发布有bug版本"></a>发布有bug版本</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">AppCompatActivity</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.activity_main);</span><br><span class="line">        Toast.makeText(<span class="keyword">this</span>,<span class="string">"oh,my god 出错了"</span>,Toast.LENGTH_LONG).show();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="发布有bug版本"><a href="#发布有bug版本" class="headerlink" title="发布有bug版本"></a>发布有bug版本</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> com.aa.classloadertest;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">AppCompatActivity</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.activity_main);</span><br><span class="line">		MyClass.ShowLog(MainActivity.<span class="keyword">this</span>,<span class="string">"oh,my god 出错了"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> com.aa.patchlib;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyClass</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> String test = <span class="string">"bug 前"</span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">ShowLog</span><span class="params">(Context c, String info)</span></span>&#123;</span><br><span class="line">        Toast.makeText(c,info +<span class="string">" now myclass is "</span>+test,Toast.LENGTH_SHORT).show() ;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p><img src="/" class="lazyload" data-src="/2020/04/22/%E7%83%AD%E4%BF%AE%E5%A4%8D%E3%80%81%E7%B1%BB%E5%8A%A0%E8%BD%BD%E4%B8%8E%E4%BF%AE%E5%A4%8D%E5%8E%9F%E7%90%86/wrong.jpg"  alt></p>
-<h4 id="修复bug，生成dex文件"><a href="#修复bug，生成dex文件" class="headerlink" title="修复bug，生成dex文件"></a>修复bug，生成dex文件</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">AppCompatActivity</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.activity_main);</span><br><span class="line"><span class="comment">//      Toast.makeText(this,"oh,my god 出错了",Toast.LENGTH_LONG).show();</span></span><br><span class="line"></span><br><span class="line">        Toast.makeText(<span class="keyword">this</span>,<span class="string">"wa! 好了"</span>,Toast.LENGTH_SHORT).show();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="修复bug，生成dex文件"><a href="#修复bug，生成dex文件" class="headerlink" title="修复bug，生成dex文件"></a>修复bug，生成dex文件</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> com.aa.classloadertest;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">AppCompatActivity</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.activity_main);</span><br><span class="line">		MyClass.ShowLog(MainActivity.<span class="keyword">this</span>,<span class="string">"wa! 好了"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>将bug修复后，执行build clean 命令，完成后执行命令Rebuild Project,成功后在在目录<br>.\app\build\intermediates\javac\debug\classes\下生成对应的.class文件,我这里修复的是MainActivity.class文件<br><img src="/" class="lazyload" data-src="/2020/04/22/%E7%83%AD%E4%BF%AE%E5%A4%8D%E3%80%81%E7%B1%BB%E5%8A%A0%E8%BD%BD%E4%B8%8E%E4%BF%AE%E5%A4%8D%E5%8E%9F%E7%90%86/changeCode.png"  alt></p>
-<p>将刚生成的MainActivity.class文件复制到一个空目录下，记得一定要在此空目录下创建于这个类同名的目录，我的结构如下<br>E:\patchClass\com\aa\classloadertest\MainActivity.class</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> com.aa.patchlib;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyClass</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> String test = <span class="string">"bug 修复了"</span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">ShowLog</span><span class="params">(Context c, String info)</span></span>&#123;</span><br><span class="line">        Toast.makeText(c,info +<span class="string">" now myclass is "</span>+test,Toast.LENGTH_SHORT).show() ;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>将bug修复后，执行build clean 命令，完成后执行命令Rebuild Project,成功后在在相关目录下找到要修复的类<br>.\app\build\intermediates\javac\debug\classes\下生成对应的.class文件,我这里修复的是MainActivity.class文件<br><img src="/" class="lazyload" data-src="/2020/04/22/%E7%83%AD%E4%BF%AE%E5%A4%8D%E3%80%81%E7%B1%BB%E5%8A%A0%E8%BD%BD%E4%B8%8E%E4%BF%AE%E5%A4%8D%E5%8E%9F%E7%90%86/changeCode.png"  alt></p>
+<p>MyClass文件在依赖包下面，就到依赖包下相关路径查找，这里我的路径是：<br>.\patchlib\build\intermediates\javac\debug\classes\com\aa\patchlib<br><img src="/" class="lazyload" data-src="/2020/04/22/%E7%83%AD%E4%BF%AE%E5%A4%8D%E3%80%81%E7%B1%BB%E5%8A%A0%E8%BD%BD%E4%B8%8E%E4%BF%AE%E5%A4%8D%E5%8E%9F%E7%90%86/libChangeCode.png"  alt></p>
+<p>将刚生成的MainActivity.class与MyClass.class文件复制到一个空目录下，记得一定要在此空目录下创建于这个类同名的目录，我的结构如下<br><img src="/" class="lazyload" data-src="/2020/04/22/%E7%83%AD%E4%BF%AE%E5%A4%8D%E3%80%81%E7%B1%BB%E5%8A%A0%E8%BD%BD%E4%B8%8E%E4%BF%AE%E5%A4%8D%E5%8E%9F%E7%90%86/patchPath.png"  alt></p>
 <blockquote>
 <p>接下来打开cmd 运行命令生成dex文件：<br>dx –dex –output  需要生成dex的目录和名称   class文件所在的目录</p>
 </blockquote>
@@ -435,12 +447,13 @@
 <li>dx命令在android安装目录build-tools下面，如果没有将此命令放入环境变量，需要到build-tools目录下面执行此命令</li>
 </ul>
 <p>这时查看E:\patchDex 目录<br><img src="/" class="lazyload" data-src="/2020/04/22/%E7%83%AD%E4%BF%AE%E5%A4%8D%E3%80%81%E7%B1%BB%E5%8A%A0%E8%BD%BD%E4%B8%8E%E4%BF%AE%E5%A4%8D%E5%8E%9F%E7%90%86/seeDex.png"  alt></p>
-<h4 id="补丁文件上传"><a href="#补丁文件上传" class="headerlink" title="补丁文件上传"></a>补丁文件上传</h4><p>目前测试我先把此dex文件放到手机sdcard目录下面测试，正式环境下应该放到服务器，接口获取然后加载<br>命令将此dex文件放到sdcard下面</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">执行adb push E:\patchDex\patch.dex &#x2F;sdcard</span><br></pre></td></tr></table></figure>
+<h4 id="补丁文件上传"><a href="#补丁文件上传" class="headerlink" title="补丁文件上传"></a>补丁文件上传</h4><p>目前测试我先把此dex文件放到手机sdcard目录下面测试，正式环境下应该放到服务器，接口获取然后加载<br><strong>执行以下命令将此dex文件放到sdcard下面</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">adb push E:\patchDex\patch.dex &#x2F;sdcard</span><br></pre></td></tr></table></figure>
 
 
 <h4 id="查看修复效果"><a href="#查看修复效果" class="headerlink" title="查看修复效果"></a>查看修复效果</h4><p>重启应用</p>
 <p><img src="/" class="lazyload" data-src="/2020/04/22/%E7%83%AD%E4%BF%AE%E5%A4%8D%E3%80%81%E7%B1%BB%E5%8A%A0%E8%BD%BD%E4%B8%8E%E4%BF%AE%E5%A4%8D%E5%8E%9F%E7%90%86/changeok.jpg"  alt></p>
+<h3 id="热修复demo-code"><a href="#热修复demo-code" class="headerlink" title="热修复demo code"></a>热修复demo code</h3><p>关于此热修复方法，code已上传github<br><a href="https://github.com/xhongy/Samples" target="_blank" rel="noopener">https://github.com/xhongy/Samples</a></p>
 <h3 id="热修复框架："><a href="#热修复框架：" class="headerlink" title="热修复框架："></a>热修复框架：</h3><p><img src="/" class="lazyload" data-src="/2020/04/22/%E7%83%AD%E4%BF%AE%E5%A4%8D%E3%80%81%E7%B1%BB%E5%8A%A0%E8%BD%BD%E4%B8%8E%E4%BF%AE%E5%A4%8D%E5%8E%9F%E7%90%86/hotFrame.png"  alt></p>
 ]]></content>
       <categories>
