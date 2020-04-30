@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>java进阶</title>
+    <url>/2020/04/22/java%E8%BF%9B%E9%98%B6/</url>
+    <content><![CDATA[]]></content>
+      <categories>
+        <category>java</category>
+      </categories>
+      <tags>
+        <tag>java泛型</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>通过bintray-release，发布库到Jcenter</title>
     <url>/2020/04/19/%E9%80%9A%E8%BF%87bintray-release%EF%BC%8C%E5%8F%91%E5%B8%83%E5%BA%93%E5%88%B0Jcenter/</url>
     <content><![CDATA[<blockquote>
@@ -141,14 +152,33 @@
 ]]></content>
   </entry>
   <entry>
-    <title>java进阶</title>
-    <url>/2020/04/22/java%E8%BF%9B%E9%98%B6/</url>
-    <content><![CDATA[]]></content>
+    <title>上传文件到github</title>
+    <url>/2020/04/19/%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E5%88%B0github/</url>
+    <content><![CDATA[<h3 id="注册账号"><a href="#注册账号" class="headerlink" title="注册账号"></a>注册账号</h3><p>首先先去  <a href="https://github.com/" target="_blank" rel="noopener">github官网</a>  注册一个账号。</p>
+<p>我们使用git需要先安装git工具，<a href="https://git-for-windows.github.io/" target="_blank" rel="noopener">下载地址</a></p>
+<p>接下来进入正题</p>
+<h4 id="创建仓库"><a href="#创建仓库" class="headerlink" title="创建仓库"></a>创建仓库</h4><p>进入Github首页，点击New repository</p>
+<p><img src="/" class="lazyload" data-src="/2020/04/19/%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E5%88%B0github/new-rep.png"  alt></p>
+<p>填写相应信息后点击create即可</p>
+<blockquote>
+<p>Repository name: 仓库名称<br>Description(可选): 仓库描述介绍<br>Public：仓库权限（公开共享，私有或指定合作者）<br>Initialize this repository with a README: 添加一个README.mdgitignore: 不需要进行版本管理的仓库类型，对应生成文件.gitignorelicense: </p>
+</blockquote>
+<p><img src="/" class="lazyload" data-src="/2020/04/19/%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E5%88%B0github/rep-info.png"  alt></p>
+<h4 id="仓库代码复制到本地"><a href="#仓库代码复制到本地" class="headerlink" title="仓库代码复制到本地"></a>仓库代码复制到本地</h4><p>执行相关命令将新建的仓库clone到本地</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> 仓库地址</span><br></pre></td></tr></table></figure>
+<p><img src="/" class="lazyload" data-src="/2020/04/19/%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E5%88%B0github/git-add.png"  alt></p>
+<h4 id="上传代码"><a href="#上传代码" class="headerlink" title="上传代码"></a>上传代码</h4><p>将本地要上传的代码放入刚clone下来的目录里面，cd 存放代码的路径,执行以下命令上传:</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git add . </span><br><span class="line">git commit -m <span class="string">"提交描述"</span></span><br><span class="line">git push -u origin master  （注：此操作目的是把本地仓库push到github上面，此步骤需要你输入 帐号和密码）</span><br></pre></td></tr></table></figure>
+
+<h4 id="查看上传是否成功"><a href="#查看上传是否成功" class="headerlink" title="查看上传是否成功"></a>查看上传是否成功</h4><p>此时就可以去github查看上传的代码，如下，上传成功</p>
+<p><img src="/" class="lazyload" data-src="/2020/04/19/%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E5%88%B0github/upload-suc.png"  alt></p>
+<h3 id="END"><a href="#END" class="headerlink" title="END"></a>END</h3><p>本文是针对有计算机基础的，不是每个步骤都说的太详尽，有不明白的可在自行百度。</p>
+]]></content>
       <categories>
-        <category>java</category>
+        <category>工具</category>
       </categories>
       <tags>
-        <tag>java泛型</tag>
+        <tag>github</tag>
       </tags>
   </entry>
   <entry>
@@ -263,39 +293,9 @@
         <category>工具</category>
       </categories>
       <tags>
+        <tag>github</tag>
         <tag>hexo</tag>
-        <tag>github</tag>
         <tag>博客</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>上传文件到github</title>
-    <url>/2020/04/19/%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E5%88%B0github/</url>
-    <content><![CDATA[<h3 id="注册账号"><a href="#注册账号" class="headerlink" title="注册账号"></a>注册账号</h3><p>首先先去  <a href="https://github.com/" target="_blank" rel="noopener">github官网</a>  注册一个账号。</p>
-<p>我们使用git需要先安装git工具，<a href="https://git-for-windows.github.io/" target="_blank" rel="noopener">下载地址</a></p>
-<p>接下来进入正题</p>
-<h4 id="创建仓库"><a href="#创建仓库" class="headerlink" title="创建仓库"></a>创建仓库</h4><p>进入Github首页，点击New repository</p>
-<p><img src="/" class="lazyload" data-src="/2020/04/19/%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E5%88%B0github/new-rep.png"  alt></p>
-<p>填写相应信息后点击create即可</p>
-<blockquote>
-<p>Repository name: 仓库名称<br>Description(可选): 仓库描述介绍<br>Public：仓库权限（公开共享，私有或指定合作者）<br>Initialize this repository with a README: 添加一个README.mdgitignore: 不需要进行版本管理的仓库类型，对应生成文件.gitignorelicense: </p>
-</blockquote>
-<p><img src="/" class="lazyload" data-src="/2020/04/19/%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E5%88%B0github/rep-info.png"  alt></p>
-<h4 id="仓库代码复制到本地"><a href="#仓库代码复制到本地" class="headerlink" title="仓库代码复制到本地"></a>仓库代码复制到本地</h4><p>执行相关命令将新建的仓库clone到本地</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> 仓库地址</span><br></pre></td></tr></table></figure>
-<p><img src="/" class="lazyload" data-src="/2020/04/19/%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E5%88%B0github/git-add.png"  alt></p>
-<h4 id="上传代码"><a href="#上传代码" class="headerlink" title="上传代码"></a>上传代码</h4><p>将本地要上传的代码放入刚clone下来的目录里面，cd 存放代码的路径,执行以下命令上传:</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git add . </span><br><span class="line">git commit -m <span class="string">"提交描述"</span></span><br><span class="line">git push -u origin master  （注：此操作目的是把本地仓库push到github上面，此步骤需要你输入 帐号和密码）</span><br></pre></td></tr></table></figure>
-
-<h4 id="查看上传是否成功"><a href="#查看上传是否成功" class="headerlink" title="查看上传是否成功"></a>查看上传是否成功</h4><p>此时就可以去github查看上传的代码，如下，上传成功</p>
-<p><img src="/" class="lazyload" data-src="/2020/04/19/%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E5%88%B0github/upload-suc.png"  alt></p>
-<h3 id="END"><a href="#END" class="headerlink" title="END"></a>END</h3><p>本文是针对有计算机基础的，不是每个步骤都说的太详尽，有不明白的可在自行百度。</p>
-]]></content>
-      <categories>
-        <category>工具</category>
-      </categories>
-      <tags>
-        <tag>github</tag>
       </tags>
   </entry>
   <entry>
@@ -337,7 +337,7 @@
 <h5 id="以监测函数运行时间为例"><a href="#以监测函数运行时间为例" class="headerlink" title="以监测函数运行时间为例"></a>以监测函数运行时间为例</h5><p>首先定义一个接口类</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">package ...;</span><br><span class="line"></span><br><span class="line">import java.lang.annotation.ElementType;</span><br><span class="line">import java.lang.annotation.Retention;</span><br><span class="line">import java.lang.annotation.RetentionPolicy;</span><br><span class="line">import java.lang.annotation.Target;</span><br><span class="line"></span><br><span class="line">@Retention(RetentionPolicy.RUNTIME)</span><br><span class="line">@Target(&#123;ElementType.METHOD&#125;)</span><br><span class="line">public @interface TimeSpend &#123;</span><br><span class="line">    String value() default &quot;&quot;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>定义获取运行时间切面类</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">package ...;</span><br><span class="line"></span><br><span class="line">import android.util.Log;</span><br><span class="line"></span><br><span class="line">import org.aspectj.lang.ProceedingJoinPoint;</span><br><span class="line">import org.aspectj.lang.annotation.Around;</span><br><span class="line">import org.aspectj.lang.annotation.Aspect;</span><br><span class="line">import org.aspectj.lang.annotation.Pointcut;</span><br><span class="line">import org.aspectj.lang.reflect.MethodSignature;</span><br><span class="line"></span><br><span class="line">@Aspect</span><br><span class="line">public class MethodSpendTimeAspect &#123;</span><br><span class="line">    private static final String TAG &#x3D; &quot;TIME&quot;;</span><br><span class="line">    @Pointcut(&quot;call(@com.unicom.aoplib.TimeSpend * *(..))&quot;)</span><br><span class="line">    public void methodTime() &#123;&#125;</span><br><span class="line"></span><br><span class="line">    @Around(&quot;methodTime()&quot;)</span><br><span class="line">    public Object weaveJoinPoint(ProceedingJoinPoint joinPoint) throws Throwable &#123;</span><br><span class="line">        MethodSignature methodSignature &#x3D; (MethodSignature) joinPoint.getSignature();</span><br><span class="line">        String className &#x3D; methodSignature.getDeclaringType().getSimpleName();</span><br><span class="line">        String methodName &#x3D; methodSignature.getName();</span><br><span class="line">        String funName &#x3D; methodSignature.getMethod().getAnnotation(TimeSpend.class).value();</span><br><span class="line">        &#x2F;&#x2F;统计时间</span><br><span class="line">        long begin &#x3D; System.currentTimeMillis();</span><br><span class="line">        Object result &#x3D; joinPoint.proceed();</span><br><span class="line">        long duration &#x3D; System.currentTimeMillis() - begin;</span><br><span class="line">        Log.e(&quot;coco&quot;, String.format(&quot;功能：%s,%s类的%s方法执行了，用时%d ms&quot;, funName, className, methodName, duration));</span><br><span class="line">        AopUtil.saveInfo(AopUtil.getContext(joinPoint.getThis()),TAG, String.format(&quot;功能：%s,%s类的%s方法执行了，用时%d ms&quot;, funName, className, methodName, duration));</span><br><span class="line">        return result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">package ...;</span><br><span class="line"></span><br><span class="line">import android.util.Log;</span><br><span class="line"></span><br><span class="line">import org.aspectj.lang.ProceedingJoinPoint;</span><br><span class="line">import org.aspectj.lang.annotation.Around;</span><br><span class="line">import org.aspectj.lang.annotation.Aspect;</span><br><span class="line">import org.aspectj.lang.annotation.Pointcut;</span><br><span class="line">import org.aspectj.lang.reflect.MethodSignature;</span><br><span class="line"></span><br><span class="line">@Aspect</span><br><span class="line">public class MethodSpendTimeAspect &#123;</span><br><span class="line">    private static final String TAG &#x3D; &quot;TIME&quot;;</span><br><span class="line">    @Pointcut(&quot;call(@com.coco.aoplib.TimeSpend * *(..))&quot;)</span><br><span class="line">    public void methodTime() &#123;&#125;</span><br><span class="line"></span><br><span class="line">    @Around(&quot;methodTime()&quot;)</span><br><span class="line">    public Object weaveJoinPoint(ProceedingJoinPoint joinPoint) throws Throwable &#123;</span><br><span class="line">        MethodSignature methodSignature &#x3D; (MethodSignature) joinPoint.getSignature();</span><br><span class="line">        String className &#x3D; methodSignature.getDeclaringType().getSimpleName();</span><br><span class="line">        String methodName &#x3D; methodSignature.getName();</span><br><span class="line">        String funName &#x3D; methodSignature.getMethod().getAnnotation(TimeSpend.class).value();</span><br><span class="line">        &#x2F;&#x2F;统计时间</span><br><span class="line">        long begin &#x3D; System.currentTimeMillis();</span><br><span class="line">        Object result &#x3D; joinPoint.proceed();</span><br><span class="line">        long duration &#x3D; System.currentTimeMillis() - begin;</span><br><span class="line">        Log.e(&quot;coco&quot;, String.format(&quot;功能：%s,%s类的%s方法执行了，用时%d ms&quot;, funName, className, methodName, duration));</span><br><span class="line">        AopUtil.saveInfo(AopUtil.getContext(joinPoint.getThis()),TAG, String.format(&quot;功能：%s,%s类的%s方法执行了，用时%d ms&quot;, funName, className, methodName, duration));</span><br><span class="line">        return result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>最后在要统计运行时间的函数上加上注解<strong>@TimeSpend</strong></p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">@TimeSpend</span><br><span class="line">public void test()&#123;&#125;</span><br></pre></td></tr></table></figure>
 
