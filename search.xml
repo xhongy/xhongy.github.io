@@ -3,7 +3,13 @@
   <entry>
     <title>java进阶</title>
     <url>/2020/04/22/java%E8%BF%9B%E9%98%B6/</url>
-    <content><![CDATA[]]></content>
+    <content><![CDATA[<p>元注解： 注解上的注解<br>Target ，如不知名Targer，注解可以作用在任何地方</p>
+<blockquote>
+<p>Element.TYPE  作用在类</p>
+</blockquote>
+<p>APT  Annotition Processor Tools 注解处理器,运行在编译阶段</p>
+<p>.java由javac编译成-》.class</p>
+]]></content>
       <categories>
         <category>java</category>
       </categories>
@@ -12,144 +18,88 @@
       </tags>
   </entry>
   <entry>
-    <title>通过bintray-release，发布库到Jcenter</title>
-    <url>/2020/04/19/%E9%80%9A%E8%BF%87bintray-release%EF%BC%8C%E5%8F%91%E5%B8%83%E5%BA%93%E5%88%B0Jcenter/</url>
+    <title>Uni-微信小程序</title>
+    <url>/2020/05/08/Uni-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/</url>
     <content><![CDATA[<blockquote>
-<p>android开发时有时候需要用到一些第三方的库，只需要<strong>implementation ‘com.orhanobut:logger:2.2.0’</strong>,简单的一条语句引入即可，是不是感觉好神奇。<br>现在很多时候开发都是组件化的模式，如果能把公共部分做成开源库供大家使用那就方便多了，加下来我就以上传android的一个moudule为例一步一步教大家如何来操作。</p>
+<p>今天来讲一讲uni-app开发微信小程序的流程。要开发微信小程序首先要安装微信开发者工具，然后开发小程序代码，接着上传微信平台进行发布。</p>
 </blockquote>
-<p>本文是通过bintray-release 来操作的，先了解一下bintray-release是什么？</p>
-<ul>
-<li>bintray-release是github上的一个开源工程库。</li>
-<li>bintray-release提供了将您的Android或者其他作品推送到Bintray的简便方案。</li>
-<li>bintray-release是帮助将类库推送到bintray的助手。 它用来帮助配置与maven和bintray建立联系。 目前它用于Android Library工程，Java项目以及Groovy项目，但其重点主要是用来支持Android项目。</li>
+<p><code>先从微信端入手，搭建微信小程序开发环境</code></p>
+<h2 id="微信接入流程"><a href="#微信接入流程" class="headerlink" title="微信接入流程"></a>微信接入流程</h2><p><img src="/" class="lazyload" data-src="/2020/05/08/Uni-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/wx-in.png"  alt></p>
+<h3 id="申请账号"><a href="#申请账号" class="headerlink" title="申请账号"></a>申请账号</h3><ul>
+<li>进入<a href="https://mp.weixin.qq.com/" target="_blank" rel="noopener">小程序注册页</a> 根据指引填写信息和提交相应的资料，就可以拥有自己的<code>小程序帐号</code>。</li>
 </ul>
-<p><strong>接下来开始美妙的编程时刻吧！LET’S GO!!</strong></p>
-<h3 id="创建一个项目"><a href="#创建一个项目" class="headerlink" title="创建一个项目"></a>创建一个项目</h3><p>在AndroidStudio上建android Project，然后新建一个module，结果如下<br><img src="/" class="lazyload" data-src="/2020/04/19/%E9%80%9A%E8%BF%87bintray-release%EF%BC%8C%E5%8F%91%E5%B8%83%E5%BA%93%E5%88%B0Jcenter/new-pro-suc.png"  alt></p>
-<h3 id="调试module"><a href="#调试module" class="headerlink" title="调试module"></a>调试module</h3><p>接下来编写新建的module块代码，并将此module作为app模块的依赖，调试成功。<br>这里仅仅添加一条打印日志</p>
-<p><img src="/" class="lazyload" data-src="/2020/04/19/%E9%80%9A%E8%BF%87bintray-release%EF%BC%8C%E5%8F%91%E5%B8%83%E5%BA%93%E5%88%B0Jcenter/module-class.png"  alt></p>
-<h3 id="module代码上传github"><a href="#module代码上传github" class="headerlink" title="module代码上传github"></a>module代码上传github</h3><p> 将调试成功的module块代码上传到github仓库(代码中转库)<br>此步骤可参考另一篇相关帖子,</p>
-<blockquote>
-<p><a href="https://xhongy.github.io/2020/04/19/%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E5%88%B0github/">github上传文件</a></p>
-</blockquote>
-<h3 id="module上传jcenter"><a href="#module上传jcenter" class="headerlink" title="module上传jcenter"></a>module上传jcenter</h3><p><strong>关键步骤，要放大招了</strong></p>
-<h4 id="注册bintray账号"><a href="#注册bintray账号" class="headerlink" title="注册bintray账号"></a>注册bintray账号</h4><p>这里是通过bintray-release中转站，没有bintray账号的先注册一个账号</p>
-<blockquote>
-<p><a href="https://bintray.com/signup/oss" target="_blank" rel="noopener">注册地址</a><br>可以直接注册或者通过Github帐号注册。具体步骤自行操作，不做过多讲述了。</p>
-</blockquote>
-<h4 id="bintray新建仓库"><a href="#bintray新建仓库" class="headerlink" title="bintray新建仓库"></a>bintray新建仓库</h4><p><img src="/" class="lazyload" data-src="/2020/04/19/%E9%80%9A%E8%BF%87bintray-release%EF%BC%8C%E5%8F%91%E5%B8%83%E5%BA%93%E5%88%B0Jcenter/new-repository.png"  alt></p>
-<p>点击<strong>Add New Repository</strong>，进入新建仓库配置页面</p>
-<p><img src="/" class="lazyload" data-src="/2020/04/19/%E9%80%9A%E8%BF%87bintray-release%EF%BC%8C%E5%8F%91%E5%B8%83%E5%BA%93%E5%88%B0Jcenter/info-repository.png"  alt></p>
-<h3 id="获取API-KEY"><a href="#获取API-KEY" class="headerlink" title="获取API-KEY"></a>获取API-KEY</h3><p>获取API KEY，在头像下选择 Edit Profile 进入新页面可以看到API KEY然后复制保存备用；</p>
-<p>可以点击show查看key或者直接点击右侧的复制按钮复制</p>
-<p><img src="/" class="lazyload" data-src="/2020/04/19/%E9%80%9A%E8%BF%87bintray-release%EF%BC%8C%E5%8F%91%E5%B8%83%E5%BA%93%E5%88%B0Jcenter/get-api-key.png"  alt></p>
-<p>到此，所有的准备功能已经准备完毕！接下来就要进入到ANDROID STUDIO 中进行代码的一些配置；</p>
-<h3 id="AndroidStudio代码配置"><a href="#AndroidStudio代码配置" class="headerlink" title="AndroidStudio代码配置"></a>AndroidStudio代码配置</h3><h4 id="工程-根目录-build-gradle中添加"><a href="#工程-根目录-build-gradle中添加" class="headerlink" title="工程(根目录)build.gradle中添加"></a>工程(根目录)build.gradle中添加</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">repositories &#123;</span><br><span class="line">        ...</span><br><span class="line">        jcenter()</span><br><span class="line">&#125;</span><br><span class="line">dependencies &#123;</span><br><span class="line">        ...</span><br><span class="line">        classpath <span class="string">'com.novoda:bintray-release:0.8.1'</span> // 添加</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<h4 id="在待发布的module中的build-gradle添加"><a href="#在待发布的module中的build-gradle添加" class="headerlink" title="在待发布的module中的build.gradle添加"></a>在待发布的module中的build.gradle添加</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">apply plugin: <span class="string">'com.novoda.bintray-release'</span></span><br><span class="line">publish &#123;</span><br><span class="line">    userOrg = <span class="string">'yourUserName'</span>                 //bintray注册的用户名</span><br><span class="line">    groupId = <span class="string">'com.github.sunrise'</span>           //compile引用时的第1部分</span><br><span class="line">    artifactId = <span class="string">'Test'</span>                      //compile引用时的第2部分                                     </span><br><span class="line">    publishVersion = <span class="string">'1.0.0'</span>                 //版本号</span><br><span class="line">    repoName = yourRepositoryName         //你要上传至bintray仓库的名称，如果仓库名称是maven可忽略</span><br><span class="line">    desc = <span class="string">'anything you want'</span>               //描述</span><br><span class="line">    website = <span class="string">'anything you want'</span>            //网站</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="上传到bintray"><a href="#上传到bintray" class="headerlink" title="上传到bintray"></a>上传到bintray</h4><p> 在androidStudio的Terminal中输入以下命令</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">./gradlew clean build bintrayUpload -PbintrayUser=yourUserName -PbintrayKey=yourAPIKEY -PdryRun=<span class="literal">false</span></span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>文中的yourUserName替换为你注册binary的用户名，yourAPIKEY替换为你的key.</p>
-</blockquote>
-<p>稍后出现BUILD SUCCESSFUL即上传成功<br><img src="/" class="lazyload" data-src="/2020/04/19/%E9%80%9A%E8%BF%87bintray-release%EF%BC%8C%E5%8F%91%E5%B8%83%E5%BA%93%E5%88%B0Jcenter/gradlew-suc.png"  alt></p>
-<p>截止到此时，我们已经成功的把module 上传到了 bintray 的 Respository中。</p>
-<p><img src="/" class="lazyload" data-src="/2020/04/19/%E9%80%9A%E8%BF%87bintray-release%EF%BC%8C%E5%8F%91%E5%B8%83%E5%BA%93%E5%88%B0Jcenter/bintray-new-rep.png"  alt></p>
-<h4 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h4><p>此时若要引用此库，需要在项目根build.gradle文件下加入想要的maven库依赖</p>
-<p><img src="/" class="lazyload" data-src="/2020/04/19/%E9%80%9A%E8%BF%87bintray-release%EF%BC%8C%E5%8F%91%E5%B8%83%E5%BA%93%E5%88%B0Jcenter/lib-use.png"  alt></p>
-<p>在需要引用的库里添加想要的implenmention</p>
-<h3 id="最后一步"><a href="#最后一步" class="headerlink" title="最后一步"></a>最后一步</h3><p>若开放给别人使用每次都添加maven依赖是不是太麻烦，那就需要同步到Jcenter，操作如下图，耐心等待审核(注：版本升级不用再次同步到Jcenter)</p>
-<p><img src="/" class="lazyload" data-src="/2020/04/19/%E9%80%9A%E8%BF%87bintray-release%EF%BC%8C%E5%8F%91%E5%B8%83%E5%BA%93%E5%88%B0Jcenter/add-to-jcenter.png"  alt></p>
-<p>等待审核通过，就ok了！！</p>
-<p><img src="/" class="lazyload" data-src="/2020/04/19/%E9%80%9A%E8%BF%87bintray-release%EF%BC%8C%E5%8F%91%E5%B8%83%E5%BA%93%E5%88%B0Jcenter/end.png"  alt><br>这是在项目中只通过implemention来使用就ok</p>
-<h3 id="问题总结"><a href="#问题总结" class="headerlink" title="问题总结"></a>问题总结</h3><h4 id="错误-编码GBK的不可映射字符。"><a href="#错误-编码GBK的不可映射字符。" class="headerlink" title="错误: 编码GBK的不可映射字符。"></a>错误: 编码GBK的不可映射字符。</h4><p>解决办法：在项目根build.gradle中添加如下代码：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">allprojects &#123;</span><br><span class="line">    &#x2F;&#x2F;编译时报注释GBK编码错误解决</span><br><span class="line">    tasks.withType(Javadoc) &#123;</span><br><span class="line">        options.addStringOption(&#39;encoding&#39;, &#39;UTF-8&#39;)</span><br><span class="line">        options.addStringOption(&#39;charSet&#39;, &#39;UTF-8&#39;)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="return或-param不能为空"><a href="#return或-param不能为空" class="headerlink" title="@return或@param不能为空"></a>@return或@param不能为空</h4><p>解决办法：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">allprojects &#123;</span><br><span class="line">    &#x2F;&#x2F;编译时报注释GBK编码错误解决</span><br><span class="line">    tasks.withType(Javadoc) &#123;</span><br><span class="line">        &#x2F;&#x2F;方法上忽略@return和@param注解未添加说明注释</span><br><span class="line">        options.addStringOption(&#39;Xdoclint:none&#39;, &#39;-quiet&#39;)</span><br><span class="line">        &#x2F;&#x2F;解决GBK编码错误提示</span><br><span class="line">        options.addStringOption(&#39;encoding&#39;, &#39;UTF-8&#39;)</span><br><span class="line">        options.addStringOption(&#39;charSet&#39;, &#39;UTF-8&#39;)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="版本更新"><a href="#版本更新" class="headerlink" title="版本更新"></a>版本更新</h3><p>如果需要更新升级的时候，更新完代码只需要把module里面的publishVersion更新到自己的版本<br>如1.0.0 —-&gt;1.0.1<br>然后在次执行:</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">./gradlew clean build bintrayUpload -PbintrayUser=xxx -PbintrayKey=xxx -PdryRun=<span class="literal">false</span></span><br></pre></td></tr></table></figure>
-<p>那么在引入的时候改变版本号即可使用最新代码。</p>
-<blockquote>
-<p>注意：第一次上传的时候需要add to jcenter, 后面更新只需要在命令行提交到bintary即可。</p>
-</blockquote>
-<h3 id="番外"><a href="#番外" class="headerlink" title="番外"></a>番外</h3><p>在使用中有可能会出现各种问题，可参考<br><a href="https://www.jianshu.com/p/6b272fe9bd28" target="_blank" rel="noopener">转载</a></p>
-]]></content>
-      <categories>
-        <category>android</category>
-      </categories>
-      <tags>
-        <tag>jcenter</tag>
-        <tag>marven</tag>
-        <tag>bintray</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>断点续传</title>
-    <url>/2020/04/19/%E6%96%AD%E7%82%B9%E7%BB%AD%E4%BC%A0/</url>
-    <content><![CDATA[<h3 id="什么是断点续传："><a href="#什么是断点续传：" class="headerlink" title="什么是断点续传："></a>什么是断点续传：</h3><blockquote>
-<p>说得白一点，<em>其实也</em>就是下载文件时，不必重头开始下载，而是从指定的位置继续下载，这样的功能就叫做断点续传。<br>既然如此，那么要实现断点续传的关键点其实也就是两点：</p>
-</blockquote>
+<p><img src="/" class="lazyload" data-src="/2020/05/08/Uni-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/wx-register.png"  alt></p>
 <ul>
-<li>如何告知服务端，从指定的位置下载</li>
-<li>如何知道客户端想要的指定位置是多少</li>
+<li><p>注册成功后会向注册邮箱发送激活信息,登录邮箱进行激活<br><img src="/" class="lazyload" data-src="/2020/05/08/Uni-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/wx-jihuo.png"  alt></p>
+</li>
+<li><p>激活之后就可以登录小程序管理平台，你可以管理你的小程序的权限，查看数据报表，发布小程序等操作。</p>
+</li>
 </ul>
-<p>其实，很简单，并不需要我们自己去写一些什么，HTTP 协议本身就支持断点续传，<br>而且文件是下载到客户端设备上的，那么只要获取到这份下载到一半的文件，<br>看一下它目前的大小，也就知道需要让服务端从哪开始继续下载了。</p>
-<p>那么，下面就介绍一下涉及到的相关理论</p>
-<h3 id="Range-amp-Content-Length-amp-Content-Range-amp-If-Range"><a href="#Range-amp-Content-Length-amp-Content-Range-amp-If-Range" class="headerlink" title="Range &amp; Content-Length &amp; Content-Range &amp; If-Range"></a>Range &amp; Content-Length &amp; Content-Range &amp; If-Range</h3><p>这些都是 HTTP 包中 Header 头部的一些字段信息，其中 Range 和 If-Range 是请求头中<br>其中 Range 和 If-Range 是请求头中的字段，Content-Length 和 Content-Range 是响应头中的字段。</p>
-<h4 id="Range"><a href="#Range" class="headerlink" title="Range"></a>Range</h4><p>当请求头中出现 Range 字段时，表示告知服务端，客户端下载该文件想要从指定的位置开始下载，至于 Range 字段属性值的格式有以下几种：</p>
-<p>格式</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Range:bytes&#x3D;0-500  表示下载从0到500字节的文件，即头500个字节</span><br><span class="line"></span><br><span class="line">Range:bytes&#x3D;501-1000  表示下载从500到1000这部分的文件，单位字节</span><br><span class="line"></span><br><span class="line">Range:bytes&#x3D;-500   表示下载最后的500个字节</span><br><span class="line"></span><br><span class="line">Range:bytes&#x3D;500-   表示下载从500开始到文件结束这部分的内容</span><br></pre></td></tr></table></figure>
-<p>如果 app 想实现断点续传，文件下载到一半被迫中断，下次启动还可以继续接着上次<br>进度下载时，那么此时可以使用 Range:bytes=500- 这种格式了，只要先获取本地那<br>份文件目前的大小，通过在请求头中加入 Range 字段信息即可</p>
-<h4 id="Content-Length"><a href="#Content-Length" class="headerlink" title="Content-Length"></a>Content-Length</h4><p>Content-Length 字段出现在响应头中，用于告知客户端此次下载的文件大小。</p>
-<p>一般，如果客户端需要实现下载进度实时更新时，就需要知道文件的总大小和目前下载的大小，后者可以通过对本地文件的操作得知，前者一般就是通过响应头中的 Content-Length 字段得知。</p>
-<p>另外，如果想要实现多线程同时分段下载大文件功能时，显然在下载前，客户端需要先知道文件总大小，才可以做到动态进行分段，因此一般在下载前都会先发送一个不需要携带 body 信息请求，用于先获取响应头中的 Content-Length 字段来得知文件总大小。</p>
-<p>但有一点需要注意：Content-Length 只表示此链接中下载的文件大小</p>
-<p>什么意思，也就是说，如果这条链接是一次性将整个文件下载下来的，那么 Content-Length 就表示这个文件的总大小。</p>
-<p>但，如果这条链接指定了 Range，表明了只是下载文件的指定部分的内容，那么此时 Content-Length 表示的就只是这一部分的大小。</p>
-<p>所以，如果客户端实现了下载进度实时更新功能时，需要注意一下。因为如果文件是断点续传的，那么进度条的分母就不能用每次 HTTP 链接中的 Content-Length。要么下载前先发一条获取用于文件总大小的请求，然后一直维护着这个数据，要么就使用 Content-Range 字段。</p>
-<h4 id="Content-Range"><a href="#Content-Range" class="headerlink" title="Content-Range"></a>Content-Range</h4><p>Content-Range 字段也是出现在响应头中，用于告知客户端此链接下载的文件是哪个部分的，以及文件的总大小。<br>比如，当客户端在请求头中指定了 Range:bayes=501-1000 来下载一个总大小为 2000 字节文件的中间一部分内容时，此时，响应头中的 Content-Range 字段信息如下：<br>Content-Range:bytes 501-1000/2000<br>斜杠前表示此链接下载的文件是哪一部分，斜杠后表示文件的总大小。</p>
-<h4 id="If-Range"><a href="#If-Range" class="headerlink" title="If-Range"></a>If-Range</h4><p>断点续传，说白点也就是分多次下载，既然不是一次性下载，那么就无法保证多次下载的间隔。<br>也就是说，有可能出现这种场景，这次由于某些原因只下载的一部分，而下次重启继续下载，但可能等到过了很多天后才重启去继续下载，如果在这期间，服务端的这份文件更新了怎么办？<br>只要不是一次性下载的，那么就有可能会出现这种场景，显然，这时候，就不希望断点续传了，而是要让客户端直接重头开始下载，毕竟文件都已经发生更新了，不是同一份了，再继续恢复下载也没有什么意义。<br>那么，客户端要如何知道服务端的文件是否发生变化，要重头下载呢？<br>这时就可以结合 If-Range 字段来实现了，这个也是在请求头中的字段，跟 Range 字段一起使用，它的作用是给 Range<br>字段生效设置了一些条件，只有满足这些条件，Range 才能生效。<br>也就是说，只有先满足 If-Range，那么才能通过 Range 来实现断点续传。<br>那它的条件值可以设置为哪些呢？有两种，Last-Modified 或者 ETag，这两个也都是响应头中。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">response.header(&quot;Content-Length&quot;) &#x2F;&#x2F; 文件长度</span><br><span class="line">response.header(&quot;Last-Modified&quot;)  &#x2F;&#x2F; 修改时间</span><br><span class="line">response.header(&quot;ETag&quot;)      &#x2F;&#x2F;ETag标识</span><br></pre></td></tr></table></figure>
-
-<h3 id="代码查看"><a href="#代码查看" class="headerlink" title="代码查看"></a>代码查看</h3><p>本人已采用okhttp框架实现了此功能，代码已上传至github，地址：</p>
-<p><a href="https://github.com/xhongy/OkHttpLib" target="_blank" rel="noopener">https://github.com/xhongy/OkHttpLib</a></p>
-<p>同时插件也上传了jcenter，想使用此插件的友友们，可以访问一下地址查看详情</p>
-<p><a href="https://bintray.com/beta/#/xhongy/maven/OkHttpPlugin" target="_blank" rel="noopener">https://bintray.com/beta/#/xhongy/maven/OkHttpPlugin</a></p>
-]]></content>
-      <categories>
-        <category>android</category>
-      </categories>
-      <tags>
-        <tag>断点续传</tag>
-        <tag>okhttp</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>组件化</title>
-    <url>/2020/04/21/%E7%BB%84%E4%BB%B6%E5%8C%96/</url>
-    <content><![CDATA[<p>组件化： gradle 开发中<br>插件化： 动态化：反射、类加载 运行中</p>
+<h3 id="获取小程序AppID"><a href="#获取小程序AppID" class="headerlink" title="获取小程序AppID"></a>获取小程序AppID</h3><p>登录 小程序后台 ，我们可以在菜单 “开发”-“开发设置” 看到小程序的 AppID 了 。<br><img src="/" class="lazyload" data-src="/2020/05/08/Uni-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/wx-setting.png"  alt></p>
 <blockquote>
+<p>小程序的 AppID 相当于小程序平台的一个身份证，后续你会在很多地方要用到 AppID （注意这里要区别于服务号或订阅号的 AppID）。</p>
 </blockquote>
+<p>有了小程序帐号之后，我们需要一个工具来开发小程序。</p>
+<h3 id="安装开发工具"><a href="#安装开发工具" class="headerlink" title="安装开发工具"></a>安装开发工具</h3><p>前往 <a href="https://developers.weixin.qq.com/miniprogram/dev/devtools/download.html" target="_blank" rel="noopener">开发者工具下载</a>页面 ，根据自己的操作系统下载对应的安装包进行安装，有关开发者工具更详细的介绍可以查看 《开发者工具介绍》 。</p>
+<p>打开小程序开发者工具，用微信扫码登录开发者工具，准备开发你的第一个小程序吧！</p>
+<h3 id="你的第一个小程序"><a href="#你的第一个小程序" class="headerlink" title="你的第一个小程序"></a>你的第一个小程序</h3><p>新建项目选择小程序项目，选择代码存放的硬盘路径，填入刚刚申请到的小程序的 AppID，给你的项目起一个好听的名字，勾选 “不使用云服务”<br>（注意: 你要选择一个空的目录才可以创建项目），点击新建，你就得到了你的第一个小程序了，点击顶部菜单编译就可以在微信开发者工具中预览你的第<br>一个小程序。</p>
+<p><img src="/" class="lazyload" data-src="/2020/05/08/Uni-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/wx-new.png"  alt></p>
+<p><img src="/" class="lazyload" data-src="/2020/05/08/Uni-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/wx-new-info.png"  alt></p>
+<h2 id="开启uniapp小程序"><a href="#开启uniapp小程序" class="headerlink" title="开启uniapp小程序"></a>开启uniapp小程序</h2><h3 id="创建一个uni-app项目"><a href="#创建一个uni-app项目" class="headerlink" title="创建一个uni-app项目"></a>创建一个uni-app项目</h3><p><img src="/" class="lazyload" data-src="/2020/05/08/Uni-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/uni-start.png"  alt><br><img src="/" class="lazyload" data-src="/2020/05/08/Uni-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/uni-new.png"  alt></p>
+<h3 id="开发相关配置"><a href="#开发相关配置" class="headerlink" title="开发相关配置"></a>开发相关配置</h3><h4 id="uni端配置"><a href="#uni端配置" class="headerlink" title="uni端配置"></a>uni端配置</h4><ul>
+<li><p>点击工具下面的设置<br><img src="/" class="lazyload" data-src="/2020/05/08/Uni-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/uni-set1.png"  alt></p>
+</li>
+<li><p>然后在运行配置里面设置微信开发者工具的路径<br><img src="/" class="lazyload" data-src="/2020/05/08/Uni-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/uni-set2.png"  alt></p>
+</li>
+</ul>
+<h4 id="微信开发者工具配置"><a href="#微信开发者工具配置" class="headerlink" title="微信开发者工具配置"></a>微信开发者工具配置</h4><ul>
+<li><p>登录微信开发者工具,点击设置下面的安全设置<br><img src="/" class="lazyload" data-src="/2020/05/08/Uni-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/wx-set1.png"  alt></p>
+</li>
+<li><p>然后开启服务端口<br><img src="/" class="lazyload" data-src="/2020/05/08/Uni-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/wx-set2.png"  alt></p>
+</li>
+<li><p>接着在运行配置中填写web服务调用URL<br><img src="/" class="lazyload" data-src="/2020/05/08/Uni-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/uni-set3.png"  alt></p>
+</li>
+</ul>
+<h3 id="运行小程序"><a href="#运行小程序" class="headerlink" title="运行小程序"></a>运行小程序</h3><ul>
+<li><p>点击”运行”下面的运行到小程序模拟器<br><img src="/" class="lazyload" data-src="/2020/05/08/Uni-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/uni-run.png"  alt></p>
+</li>
+<li><p>Hbuilder就自动将创建的小程序更新到微信开发者工具了<br><img src="/" class="lazyload" data-src="/2020/05/08/Uni-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/wx-run.png"  alt></p>
+</li>
+<li><p>点击开发者工具”预览”按钮，或者微信扫一扫生成的二维码真机查看效果<br><img src="/" class="lazyload" data-src="/2020/05/08/Uni-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/wx-run1.png"  alt></p>
+</li>
+</ul>
+<h2 id="开发项目配置"><a href="#开发项目配置" class="headerlink" title="开发项目配置"></a>开发项目配置</h2><ul>
+<li><p>项目目录的manifest.json ，配置小程序AppID等。<br><img src="/" class="lazyload" data-src="/2020/05/08/Uni-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/uni-set-appid.png"  alt></p>
+</li>
+<li><p>项目目录的pages.json，配置页面路由（pages数组），配置应用的状态栏、导航条、标题、窗口背景色（globalStyle对象）， 配置 tabBar 内容。<br>这个开发过小程序的朋友来说是差不多的。不过uni-app的每个页面是没有自己对应json文件的，都在公共的page.json中设置。</p>
+</li>
+</ul>
+<h2 id="微信小程序代码上传"><a href="#微信小程序代码上传" class="headerlink" title="微信小程序代码上传"></a>微信小程序代码上传</h2><p><img src="/" class="lazyload" data-src="/2020/05/08/Uni-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/wx-upload1.png"  alt></p>
+<ul>
+<li>完善相关信息，点击”上传”即可将代码上传到微信小程序服务器。<br><img src="/" class="lazyload" data-src="/2020/05/08/Uni-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/wx-upload2.png"  alt></li>
+</ul>
+<h2 id="发布微信小程序"><a href="#发布微信小程序" class="headerlink" title="发布微信小程序"></a>发布微信小程序</h2><ul>
+<li><p>登录微信公众平台并访问小程序首页，按要求完成第1步<br><img src="/" class="lazyload" data-src="/2020/05/08/Uni-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/wx-public1.png"  alt></p>
+</li>
+<li><p>完善小程序信息<br><img src="/" class="lazyload" data-src="/2020/05/08/Uni-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/wx-info1.png"  alt></p>
+</li>
+<li><p>添加开发者与体验者<br><img src="/" class="lazyload" data-src="/2020/05/08/Uni-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/wx-info2.png"  alt></p>
+</li>
+<li><p>点击第2步“前往发布”按钮，按要求填写小程序相关信息及版本信息即可提交审核。<br><img src="/" class="lazyload" data-src="/2020/05/08/Uni-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/wx-info3.png"  alt></p>
+</li>
+<li><p>点击”提交审核按钮”，完善相关信息，<br><img src="/" class="lazyload" data-src="/2020/05/08/Uni-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/wx-info4.png"  alt><br><img src="/" class="lazyload" data-src="/2020/05/08/Uni-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/wx-info5.png"  alt></p>
+</li>
+<li><p>点击”提交审核”，等待审核成功<br><img src="/" class="lazyload" data-src="/2020/05/08/Uni-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/wx-info6.png"  alt></p>
+</li>
+</ul>
+<h2 id="END"><a href="#END" class="headerlink" title="END"></a>END</h2><p><a href="https://developers.weixin.qq.com/miniprogram/dev/framework/quickstart/#%E5%B0%8F%E7%A8%8B%E5%BA%8F%E7%AE%80%E4%BB%8B" target="_blank" rel="noopener">参考</a></p>
 ]]></content>
       <categories>
-        <category>android</category>
+        <category>uni-app</category>
       </categories>
       <tags>
-        <tag>组件化</tag>
+        <tag>uni-app小程序</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>前端开发问题汇总</title>
-    <url>/2020/04/24/%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91%E9%97%AE%E9%A2%98%E6%B1%87%E6%80%BB/</url>
-    <content><![CDATA[<h2 id="gradle-不能同步相关包"><a href="#gradle-不能同步相关包" class="headerlink" title="gradle 不能同步相关包"></a>gradle 不能同步相关包</h2><p><strong>ERROR: Unable to resolve dependency for ‘:app@debugAndroidTest/compileClasspath..</strong><br>一看感觉应该是同步失败，查资料说是 gradle 的 offline work 放开就好了，但是近如gradle也没看到offline按钮在哪<br><img src="/" class="lazyload" data-src="/2020/04/24/%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91%E9%97%AE%E9%A2%98%E6%B1%87%E6%80%BB/gradle.png"  alt></p>
-<p>废了好大劲才发现原来androidstudio3.6版本把这个功能移动到别的位置了<br><img src="/" class="lazyload" data-src="/2020/04/24/%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91%E9%97%AE%E9%A2%98%E6%B1%87%E6%80%BB/gradle-new.png"  alt><br>在这里关闭offline功能，完美解决问题</p>
-<h2 id="Android-studio-3-0之后，打包后的apk都是安装失败"><a href="#Android-studio-3-0之后，打包后的apk都是安装失败" class="headerlink" title="Android studio 3.0之后，打包后的apk都是安装失败"></a>Android studio 3.0之后，打包后的apk都是安装失败</h2><p>我遇到的情况是这样的，AS2.3升级为3.0之后，改了些配置，然后能够直接通过通过绿色小箭头run到手机上没问题，后来将生成的apk包拷出来之后7.0系统的手机提示安装包损坏，找了好多解决方法，包括所说的签名问题，和回复的关闭instant run功能等，结果发现都是无法解决的，当时找到instant run马上回复了也没试试抱歉，因为自己刚好确实打开了这个设置项，所以不知道为啥，后来的解决方法是通过右边的Gradle project目录中选中Task/install/install_Debug打包成功apk并安装成功<br><img src="/" class="lazyload" data-src="https://upload-images.jianshu.io/upload_images/2019993-ff18dff02aedf43a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"  alt="VBQ{DZDX}2()LUVI`LT`$_N.png"></p>
-]]></content>
   </entry>
   <entry>
     <title>上传文件到github</title>
@@ -299,6 +249,156 @@
       </tags>
   </entry>
   <entry>
+    <title>通过bintray-release，发布库到Jcenter</title>
+    <url>/2020/04/19/%E9%80%9A%E8%BF%87bintray-release%EF%BC%8C%E5%8F%91%E5%B8%83%E5%BA%93%E5%88%B0Jcenter/</url>
+    <content><![CDATA[<blockquote>
+<p>android开发时有时候需要用到一些第三方的库，只需要<strong>implementation ‘com.orhanobut:logger:2.2.0’</strong>,简单的一条语句引入即可，是不是感觉好神奇。<br>现在很多时候开发都是组件化的模式，如果能把公共部分做成开源库供大家使用那就方便多了，加下来我就以上传android的一个moudule为例一步一步教大家如何来操作。</p>
+</blockquote>
+<p>本文是通过bintray-release 来操作的，先了解一下bintray-release是什么？</p>
+<ul>
+<li>bintray-release是github上的一个开源工程库。</li>
+<li>bintray-release提供了将您的Android或者其他作品推送到Bintray的简便方案。</li>
+<li>bintray-release是帮助将类库推送到bintray的助手。 它用来帮助配置与maven和bintray建立联系。 目前它用于Android Library工程，Java项目以及Groovy项目，但其重点主要是用来支持Android项目。</li>
+</ul>
+<p><strong>接下来开始美妙的编程时刻吧！LET’S GO!!</strong></p>
+<h3 id="创建一个项目"><a href="#创建一个项目" class="headerlink" title="创建一个项目"></a>创建一个项目</h3><p>在AndroidStudio上建android Project，然后新建一个module，结果如下<br><img src="/" class="lazyload" data-src="/2020/04/19/%E9%80%9A%E8%BF%87bintray-release%EF%BC%8C%E5%8F%91%E5%B8%83%E5%BA%93%E5%88%B0Jcenter/new-pro-suc.png"  alt></p>
+<h3 id="调试module"><a href="#调试module" class="headerlink" title="调试module"></a>调试module</h3><p>接下来编写新建的module块代码，并将此module作为app模块的依赖，调试成功。<br>这里仅仅添加一条打印日志</p>
+<p><img src="/" class="lazyload" data-src="/2020/04/19/%E9%80%9A%E8%BF%87bintray-release%EF%BC%8C%E5%8F%91%E5%B8%83%E5%BA%93%E5%88%B0Jcenter/module-class.png"  alt></p>
+<h3 id="module代码上传github"><a href="#module代码上传github" class="headerlink" title="module代码上传github"></a>module代码上传github</h3><p> 将调试成功的module块代码上传到github仓库(代码中转库)<br>此步骤可参考另一篇相关帖子,</p>
+<blockquote>
+<p><a href="https://xhongy.github.io/2020/04/19/%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E5%88%B0github/">github上传文件</a></p>
+</blockquote>
+<h3 id="module上传jcenter"><a href="#module上传jcenter" class="headerlink" title="module上传jcenter"></a>module上传jcenter</h3><p><strong>关键步骤，要放大招了</strong></p>
+<h4 id="注册bintray账号"><a href="#注册bintray账号" class="headerlink" title="注册bintray账号"></a>注册bintray账号</h4><p>这里是通过bintray-release中转站，没有bintray账号的先注册一个账号</p>
+<blockquote>
+<p><a href="https://bintray.com/signup/oss" target="_blank" rel="noopener">注册地址</a><br>可以直接注册或者通过Github帐号注册。具体步骤自行操作，不做过多讲述了。</p>
+</blockquote>
+<h4 id="bintray新建仓库"><a href="#bintray新建仓库" class="headerlink" title="bintray新建仓库"></a>bintray新建仓库</h4><p><img src="/" class="lazyload" data-src="/2020/04/19/%E9%80%9A%E8%BF%87bintray-release%EF%BC%8C%E5%8F%91%E5%B8%83%E5%BA%93%E5%88%B0Jcenter/new-repository.png"  alt></p>
+<p>点击<strong>Add New Repository</strong>，进入新建仓库配置页面</p>
+<p><img src="/" class="lazyload" data-src="/2020/04/19/%E9%80%9A%E8%BF%87bintray-release%EF%BC%8C%E5%8F%91%E5%B8%83%E5%BA%93%E5%88%B0Jcenter/info-repository.png"  alt></p>
+<h3 id="获取API-KEY"><a href="#获取API-KEY" class="headerlink" title="获取API-KEY"></a>获取API-KEY</h3><p>获取API KEY，在头像下选择 Edit Profile 进入新页面可以看到API KEY然后复制保存备用；</p>
+<p>可以点击show查看key或者直接点击右侧的复制按钮复制</p>
+<p><img src="/" class="lazyload" data-src="/2020/04/19/%E9%80%9A%E8%BF%87bintray-release%EF%BC%8C%E5%8F%91%E5%B8%83%E5%BA%93%E5%88%B0Jcenter/get-api-key.png"  alt></p>
+<p>到此，所有的准备功能已经准备完毕！接下来就要进入到ANDROID STUDIO 中进行代码的一些配置；</p>
+<h3 id="AndroidStudio代码配置"><a href="#AndroidStudio代码配置" class="headerlink" title="AndroidStudio代码配置"></a>AndroidStudio代码配置</h3><h4 id="工程-根目录-build-gradle中添加"><a href="#工程-根目录-build-gradle中添加" class="headerlink" title="工程(根目录)build.gradle中添加"></a>工程(根目录)build.gradle中添加</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">repositories &#123;</span><br><span class="line">        ...</span><br><span class="line">        jcenter()</span><br><span class="line">&#125;</span><br><span class="line">dependencies &#123;</span><br><span class="line">        ...</span><br><span class="line">        classpath <span class="string">'com.novoda:bintray-release:0.8.1'</span> // 添加</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="在待发布的module中的build-gradle添加"><a href="#在待发布的module中的build-gradle添加" class="headerlink" title="在待发布的module中的build.gradle添加"></a>在待发布的module中的build.gradle添加</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">apply plugin: <span class="string">'com.novoda.bintray-release'</span></span><br><span class="line">publish &#123;</span><br><span class="line">    userOrg = <span class="string">'yourUserName'</span>                 //bintray注册的用户名</span><br><span class="line">    groupId = <span class="string">'com.github.sunrise'</span>           //compile引用时的第1部分</span><br><span class="line">    artifactId = <span class="string">'Test'</span>                      //compile引用时的第2部分                                     </span><br><span class="line">    publishVersion = <span class="string">'1.0.0'</span>                 //版本号</span><br><span class="line">    repoName = yourRepositoryName         //你要上传至bintray仓库的名称，如果仓库名称是maven可忽略</span><br><span class="line">    desc = <span class="string">'anything you want'</span>               //描述</span><br><span class="line">    website = <span class="string">'anything you want'</span>            //网站</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="上传到bintray"><a href="#上传到bintray" class="headerlink" title="上传到bintray"></a>上传到bintray</h4><p> 在androidStudio的Terminal中输入以下命令</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">./gradlew clean build bintrayUpload -PbintrayUser=yourUserName -PbintrayKey=yourAPIKEY -PdryRun=<span class="literal">false</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>文中的yourUserName替换为你注册binary的用户名，yourAPIKEY替换为你的key.</p>
+</blockquote>
+<p>稍后出现BUILD SUCCESSFUL即上传成功<br><img src="/" class="lazyload" data-src="/2020/04/19/%E9%80%9A%E8%BF%87bintray-release%EF%BC%8C%E5%8F%91%E5%B8%83%E5%BA%93%E5%88%B0Jcenter/gradlew-suc.png"  alt></p>
+<p>截止到此时，我们已经成功的把module 上传到了 bintray 的 Respository中。</p>
+<p><img src="/" class="lazyload" data-src="/2020/04/19/%E9%80%9A%E8%BF%87bintray-release%EF%BC%8C%E5%8F%91%E5%B8%83%E5%BA%93%E5%88%B0Jcenter/bintray-new-rep.png"  alt></p>
+<h4 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h4><p>此时若要引用此库，需要在项目根build.gradle文件下加入想要的maven库依赖</p>
+<p><img src="/" class="lazyload" data-src="/2020/04/19/%E9%80%9A%E8%BF%87bintray-release%EF%BC%8C%E5%8F%91%E5%B8%83%E5%BA%93%E5%88%B0Jcenter/lib-use.png"  alt></p>
+<p>在需要引用的库里添加想要的implenmention</p>
+<h3 id="最后一步"><a href="#最后一步" class="headerlink" title="最后一步"></a>最后一步</h3><p>若开放给别人使用每次都添加maven依赖是不是太麻烦，那就需要同步到Jcenter，操作如下图，耐心等待审核(注：版本升级不用再次同步到Jcenter)</p>
+<p><img src="/" class="lazyload" data-src="/2020/04/19/%E9%80%9A%E8%BF%87bintray-release%EF%BC%8C%E5%8F%91%E5%B8%83%E5%BA%93%E5%88%B0Jcenter/add-to-jcenter.png"  alt></p>
+<p>等待审核通过，就ok了！！</p>
+<p><img src="/" class="lazyload" data-src="/2020/04/19/%E9%80%9A%E8%BF%87bintray-release%EF%BC%8C%E5%8F%91%E5%B8%83%E5%BA%93%E5%88%B0Jcenter/end.png"  alt><br>这是在项目中只通过implemention来使用就ok</p>
+<h3 id="问题总结"><a href="#问题总结" class="headerlink" title="问题总结"></a>问题总结</h3><h4 id="错误-编码GBK的不可映射字符。"><a href="#错误-编码GBK的不可映射字符。" class="headerlink" title="错误: 编码GBK的不可映射字符。"></a>错误: 编码GBK的不可映射字符。</h4><p>解决办法：在项目根build.gradle中添加如下代码：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">allprojects &#123;</span><br><span class="line">    &#x2F;&#x2F;编译时报注释GBK编码错误解决</span><br><span class="line">    tasks.withType(Javadoc) &#123;</span><br><span class="line">        options.addStringOption(&#39;encoding&#39;, &#39;UTF-8&#39;)</span><br><span class="line">        options.addStringOption(&#39;charSet&#39;, &#39;UTF-8&#39;)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="return或-param不能为空"><a href="#return或-param不能为空" class="headerlink" title="@return或@param不能为空"></a>@return或@param不能为空</h4><p>解决办法：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">allprojects &#123;</span><br><span class="line">    &#x2F;&#x2F;编译时报注释GBK编码错误解决</span><br><span class="line">    tasks.withType(Javadoc) &#123;</span><br><span class="line">        &#x2F;&#x2F;方法上忽略@return和@param注解未添加说明注释</span><br><span class="line">        options.addStringOption(&#39;Xdoclint:none&#39;, &#39;-quiet&#39;)</span><br><span class="line">        &#x2F;&#x2F;解决GBK编码错误提示</span><br><span class="line">        options.addStringOption(&#39;encoding&#39;, &#39;UTF-8&#39;)</span><br><span class="line">        options.addStringOption(&#39;charSet&#39;, &#39;UTF-8&#39;)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="版本更新"><a href="#版本更新" class="headerlink" title="版本更新"></a>版本更新</h3><p>如果需要更新升级的时候，更新完代码只需要把module里面的publishVersion更新到自己的版本<br>如1.0.0 —-&gt;1.0.1<br>然后在次执行:</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">./gradlew clean build bintrayUpload -PbintrayUser=xxx -PbintrayKey=xxx -PdryRun=<span class="literal">false</span></span><br></pre></td></tr></table></figure>
+<p>那么在引入的时候改变版本号即可使用最新代码。</p>
+<blockquote>
+<p>注意：第一次上传的时候需要add to jcenter, 后面更新只需要在命令行提交到bintary即可。</p>
+</blockquote>
+<h3 id="番外"><a href="#番外" class="headerlink" title="番外"></a>番外</h3><p>在使用中有可能会出现各种问题，可参考<br><a href="https://www.jianshu.com/p/6b272fe9bd28" target="_blank" rel="noopener">转载</a></p>
+]]></content>
+      <categories>
+        <category>android</category>
+      </categories>
+      <tags>
+        <tag>jcenter</tag>
+        <tag>marven</tag>
+        <tag>bintray</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>组件化</title>
+    <url>/2020/04/21/%E7%BB%84%E4%BB%B6%E5%8C%96/</url>
+    <content><![CDATA[<p>组件化： gradle 开发中<br>插件化： 动态化：反射、类加载 运行中</p>
+<blockquote>
+</blockquote>
+]]></content>
+      <categories>
+        <category>android</category>
+      </categories>
+      <tags>
+        <tag>组件化</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>前端开发问题汇总</title>
+    <url>/2020/04/24/%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91%E9%97%AE%E9%A2%98%E6%B1%87%E6%80%BB/</url>
+    <content><![CDATA[<h2 id="gradle-不能同步相关包"><a href="#gradle-不能同步相关包" class="headerlink" title="gradle 不能同步相关包"></a>gradle 不能同步相关包</h2><p><strong>ERROR: Unable to resolve dependency for ‘:app@debugAndroidTest/compileClasspath..</strong><br>一看感觉应该是同步失败，查资料说是 gradle 的 offline work 放开就好了，但是近如gradle也没看到offline按钮在哪<br><img src="/" class="lazyload" data-src="/2020/04/24/%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91%E9%97%AE%E9%A2%98%E6%B1%87%E6%80%BB/gradle.png"  alt></p>
+<p>废了好大劲才发现原来androidstudio3.6版本把这个功能移动到别的位置了<br><img src="/" class="lazyload" data-src="/2020/04/24/%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91%E9%97%AE%E9%A2%98%E6%B1%87%E6%80%BB/gradle-new.png"  alt><br>在这里关闭offline功能，完美解决问题</p>
+<h2 id="Android-studio-3-0之后，打包后的apk都是安装失败"><a href="#Android-studio-3-0之后，打包后的apk都是安装失败" class="headerlink" title="Android studio 3.0之后，打包后的apk都是安装失败"></a>Android studio 3.0之后，打包后的apk都是安装失败</h2><p>我遇到的情况是这样的，AS2.3升级为3.0之后，改了些配置，然后能够直接通过通过绿色小箭头run到手机上没问题，后来将生成的apk包拷出来之后7.0系统的手机提示安装包损坏，找了好多解决方法，包括所说的签名问题，和回复的关闭instant run功能等，结果发现都是无法解决的，当时找到instant run马上回复了也没试试抱歉，因为自己刚好确实打开了这个设置项，所以不知道为啥，后来的解决方法是通过右边的Gradle project目录中选中Task/install/install_Debug打包成功apk并安装成功<br><img src="/" class="lazyload" data-src="https://upload-images.jianshu.io/upload_images/2019993-ff18dff02aedf43a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"  alt="VBQ{DZDX}2()LUVI`LT`$_N.png"></p>
+<h2 id="androidstudio-logcat打印乱码"><a href="#androidstudio-logcat打印乱码" class="headerlink" title="androidstudio logcat打印乱码"></a>androidstudio logcat打印乱码</h2><h3 id="在Android-Studio中点击Help—-gt-Edit-Custom-VM-Options"><a href="#在Android-Studio中点击Help—-gt-Edit-Custom-VM-Options" class="headerlink" title="在Android Studio中点击Help—&gt;Edit Custom VM Options"></a>在Android Studio中点击Help—&gt;Edit Custom VM Options</h3><h3 id="然后在打开的文件中添加一句"><a href="#然后在打开的文件中添加一句" class="headerlink" title="然后在打开的文件中添加一句"></a>然后在打开的文件中添加一句</h3><p>-Dfile.encoding=UTF-8</p>
+<h3 id="然后重启Android-Studio"><a href="#然后重启Android-Studio" class="headerlink" title="然后重启Android Studio"></a>然后重启Android Studio</h3><h2 id="You-need-to-use-a-Theme-AppCompat-theme-or-descendant-with-this-activity"><a href="#You-need-to-use-a-Theme-AppCompat-theme-or-descendant-with-this-activity" class="headerlink" title="You need to use a Theme.AppCompat theme (or descendant) with this activity."></a>You need to use a Theme.AppCompat theme (or descendant) with this activity.</h2><h3 id="方法1："><a href="#方法1：" class="headerlink" title="方法1："></a>方法1：</h3><p>创建的activity时，就直接继承Activity。</p>
+<p>public class MainActivity extends Activity</p>
+<h3 id="方法2："><a href="#方法2：" class="headerlink" title="方法2："></a>方法2：</h3><p>想继承自AppCompatActivity，那么根据提示来使用AppCompat的theme，即将AndroidManifest.xml文件中关于Activity的主题配置改成：</p>
+<p>android:theme=”@style/Theme.AppCompat.Light.NoActionBar”</p>
+<p>设置透明Activity：<br>在你的AndroidManifest里的Activity标签里配置透明主题：</p>
+<p>android:theme=”@android:style/Theme.Translucent”<br>android:theme=”@android:style/Theme.Translucent.NoTitleBar”<br>android:theme=”@android:style/Theme.Translucent.NoTitleBar.Fullscreen”</p>
+<p>第一种保留标题和状态栏，其他为透明色<br>第二种保留状态栏，其他为透明色<br>第三种全屏透明</p>
+<p>以上三种选一种即可。</p>
+<p>一般情况下当一个Activity被其他Activity覆盖时,被覆盖的Activity都会调用onStop（）方法,但是有两种情况除外,一个是上层Activity是Dialog风格时,<br>另外一个是上层Activity是透明时;这两种情况只会调用onPause（）方法,但不会调用onStop方法.</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>断点续传</title>
+    <url>/2020/04/19/%E6%96%AD%E7%82%B9%E7%BB%AD%E4%BC%A0/</url>
+    <content><![CDATA[<h3 id="什么是断点续传："><a href="#什么是断点续传：" class="headerlink" title="什么是断点续传："></a>什么是断点续传：</h3><blockquote>
+<p>说得白一点，<em>其实也</em>就是下载文件时，不必重头开始下载，而是从指定的位置继续下载，这样的功能就叫做断点续传。<br>既然如此，那么要实现断点续传的关键点其实也就是两点：</p>
+</blockquote>
+<ul>
+<li>如何告知服务端，从指定的位置下载</li>
+<li>如何知道客户端想要的指定位置是多少</li>
+</ul>
+<p>其实，很简单，并不需要我们自己去写一些什么，HTTP 协议本身就支持断点续传，<br>而且文件是下载到客户端设备上的，那么只要获取到这份下载到一半的文件，<br>看一下它目前的大小，也就知道需要让服务端从哪开始继续下载了。</p>
+<p>那么，下面就介绍一下涉及到的相关理论</p>
+<h3 id="Range-amp-Content-Length-amp-Content-Range-amp-If-Range"><a href="#Range-amp-Content-Length-amp-Content-Range-amp-If-Range" class="headerlink" title="Range &amp; Content-Length &amp; Content-Range &amp; If-Range"></a>Range &amp; Content-Length &amp; Content-Range &amp; If-Range</h3><p>这些都是 HTTP 包中 Header 头部的一些字段信息，其中 Range 和 If-Range 是请求头中<br>其中 Range 和 If-Range 是请求头中的字段，Content-Length 和 Content-Range 是响应头中的字段。</p>
+<h4 id="Range"><a href="#Range" class="headerlink" title="Range"></a>Range</h4><p>当请求头中出现 Range 字段时，表示告知服务端，客户端下载该文件想要从指定的位置开始下载，至于 Range 字段属性值的格式有以下几种：</p>
+<p>格式</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Range:bytes&#x3D;0-500  表示下载从0到500字节的文件，即头500个字节</span><br><span class="line"></span><br><span class="line">Range:bytes&#x3D;501-1000  表示下载从500到1000这部分的文件，单位字节</span><br><span class="line"></span><br><span class="line">Range:bytes&#x3D;-500   表示下载最后的500个字节</span><br><span class="line"></span><br><span class="line">Range:bytes&#x3D;500-   表示下载从500开始到文件结束这部分的内容</span><br></pre></td></tr></table></figure>
+<p>如果 app 想实现断点续传，文件下载到一半被迫中断，下次启动还可以继续接着上次<br>进度下载时，那么此时可以使用 Range:bytes=500- 这种格式了，只要先获取本地那<br>份文件目前的大小，通过在请求头中加入 Range 字段信息即可</p>
+<h4 id="Content-Length"><a href="#Content-Length" class="headerlink" title="Content-Length"></a>Content-Length</h4><p>Content-Length 字段出现在响应头中，用于告知客户端此次下载的文件大小。</p>
+<p>一般，如果客户端需要实现下载进度实时更新时，就需要知道文件的总大小和目前下载的大小，后者可以通过对本地文件的操作得知，前者一般就是通过响应头中的 Content-Length 字段得知。</p>
+<p>另外，如果想要实现多线程同时分段下载大文件功能时，显然在下载前，客户端需要先知道文件总大小，才可以做到动态进行分段，因此一般在下载前都会先发送一个不需要携带 body 信息请求，用于先获取响应头中的 Content-Length 字段来得知文件总大小。</p>
+<p>但有一点需要注意：Content-Length 只表示此链接中下载的文件大小</p>
+<p>什么意思，也就是说，如果这条链接是一次性将整个文件下载下来的，那么 Content-Length 就表示这个文件的总大小。</p>
+<p>但，如果这条链接指定了 Range，表明了只是下载文件的指定部分的内容，那么此时 Content-Length 表示的就只是这一部分的大小。</p>
+<p>所以，如果客户端实现了下载进度实时更新功能时，需要注意一下。因为如果文件是断点续传的，那么进度条的分母就不能用每次 HTTP 链接中的 Content-Length。要么下载前先发一条获取用于文件总大小的请求，然后一直维护着这个数据，要么就使用 Content-Range 字段。</p>
+<h4 id="Content-Range"><a href="#Content-Range" class="headerlink" title="Content-Range"></a>Content-Range</h4><p>Content-Range 字段也是出现在响应头中，用于告知客户端此链接下载的文件是哪个部分的，以及文件的总大小。<br>比如，当客户端在请求头中指定了 Range:bayes=501-1000 来下载一个总大小为 2000 字节文件的中间一部分内容时，此时，响应头中的 Content-Range 字段信息如下：<br>Content-Range:bytes 501-1000/2000<br>斜杠前表示此链接下载的文件是哪一部分，斜杠后表示文件的总大小。</p>
+<h4 id="If-Range"><a href="#If-Range" class="headerlink" title="If-Range"></a>If-Range</h4><p>断点续传，说白点也就是分多次下载，既然不是一次性下载，那么就无法保证多次下载的间隔。<br>也就是说，有可能出现这种场景，这次由于某些原因只下载的一部分，而下次重启继续下载，但可能等到过了很多天后才重启去继续下载，如果在这期间，服务端的这份文件更新了怎么办？<br>只要不是一次性下载的，那么就有可能会出现这种场景，显然，这时候，就不希望断点续传了，而是要让客户端直接重头开始下载，毕竟文件都已经发生更新了，不是同一份了，再继续恢复下载也没有什么意义。<br>那么，客户端要如何知道服务端的文件是否发生变化，要重头下载呢？<br>这时就可以结合 If-Range 字段来实现了，这个也是在请求头中的字段，跟 Range 字段一起使用，它的作用是给 Range<br>字段生效设置了一些条件，只有满足这些条件，Range 才能生效。<br>也就是说，只有先满足 If-Range，那么才能通过 Range 来实现断点续传。<br>那它的条件值可以设置为哪些呢？有两种，Last-Modified 或者 ETag，这两个也都是响应头中。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">response.header(&quot;Content-Length&quot;) &#x2F;&#x2F; 文件长度</span><br><span class="line">response.header(&quot;Last-Modified&quot;)  &#x2F;&#x2F; 修改时间</span><br><span class="line">response.header(&quot;ETag&quot;)      &#x2F;&#x2F;ETag标识</span><br></pre></td></tr></table></figure>
+
+<h3 id="代码查看"><a href="#代码查看" class="headerlink" title="代码查看"></a>代码查看</h3><p>本人已采用okhttp框架实现了此功能，代码已上传至github，地址：</p>
+<p><a href="https://github.com/xhongy/OkHttpLib" target="_blank" rel="noopener">https://github.com/xhongy/OkHttpLib</a></p>
+<p>同时插件也上传了jcenter，想使用此插件的友友们，可以访问一下地址查看详情</p>
+<p><a href="https://bintray.com/beta/#/xhongy/maven/OkHttpPlugin" target="_blank" rel="noopener">https://bintray.com/beta/#/xhongy/maven/OkHttpPlugin</a></p>
+]]></content>
+      <categories>
+        <category>android</category>
+      </categories>
+      <tags>
+        <tag>断点续传</tag>
+        <tag>okhttp</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>切面编程</title>
     <url>/2020/04/21/%E5%88%87%E9%9D%A2%E7%BC%96%E7%A8%8B/</url>
     <content><![CDATA[<h3 id="AOP是什么"><a href="#AOP是什么" class="headerlink" title="AOP是什么"></a>AOP是什么</h3><p>AOP(Aspect-Oriented Pragramming),面向切面编程，是一种编程思想。Aop以切面（aspect）为基础，切面是一种新的模块化机制，用来描述分散在对象、类、或函数中的横切关点。</p>
@@ -399,7 +499,8 @@
 
 <h4 id="类加载流程图"><a href="#类加载流程图" class="headerlink" title="类加载流程图"></a>类加载流程图</h4><p><img src="/" class="lazyload" data-src="/2020/04/22/%E7%83%AD%E4%BF%AE%E5%A4%8D%E3%80%81%E7%B1%BB%E5%8A%A0%E8%BD%BD%E4%B8%8E%E4%BF%AE%E5%A4%8D%E5%8E%9F%E7%90%86/img4.png"  alt></p>
 <p>系统启动的时候由BootClassLoader去加载系统相关类，由PathClassLoader加载自己写的类</p>
-<h3 id="热修复"><a href="#热修复" class="headerlink" title="热修复"></a>热修复</h3><h4 id="修复实现"><a href="#修复实现" class="headerlink" title="修复实现"></a>修复实现</h4><p>了解了类的加载原理，我们知道，类加载的时候其实就是加载的一个一个的dex文件，据此我们是不是可以根据类加载的原理将要修复的bug生成dex文件，在类加载的时候去加载修复后的dex文件呢。是的，没错，我们当然可以这么做了。接下来我们就讲一讲具体该怎么实现呢。<br>思想就是要在应用启动的时候就去加载要修复的dex文件。这里我们放到Application文件里面去操作</p>
+<h3 id="热修复"><a href="#热修复" class="headerlink" title="热修复"></a>热修复</h3><p>安卓的类加载器在加载一个类时会先从自身DexPathList对象中的Element数组中获取（Element[] dexElements）到对应的类，之后再加载。<br>采用的是数组遍历的方式，不过注意，遍历出来的是一个个的dex文件。在for循环中，首先遍历出来的是dex文件，然后再是从dex文件中获取class，所以，<br>我们只要让修复好的class打包成一个dex文件，放于Element数组的第一个元素，这样就能保证获取到的class是最新修复好的class了，如果找到类则返回，<br>如果找不到从下一个dex文件继续查找。热修复只需要向dexElements数组最前面插入一个包含了修复之后的类的dex文件，即可替换存在问题的类。<br>（当然，有bug的class也是存在的，不过是放在了Element数组的最后一个元素中，所以没有机会被拿到而已。</p>
+<h4 id="修复实现"><a href="#修复实现" class="headerlink" title="修复实现"></a>修复实现</h4><p>了解了类的加载原理，我们知道，类加载的时候其实就是加载的一个一个的dex文件，据此我们是不是可以根据类加载的原理将要修复的bug生成dex文件，在类加载的时候去加载修复后的dex文件呢。是的，没错，我们当然可以这么做了。接下来我们就讲一讲具体该怎么实现呢。<br>思想就是要在应用启动的时候就去加载要修复的dex文件。这里我们放到Application文件里面去操作</p>
 <p>直接上代码吧</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">App</span> <span class="keyword">extends</span> <span class="title">Application</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate();</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            PatchUtil.loadPatch(getApplicationContext(), <span class="string">"/sdcard/patch.dex"</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (NoSuchFieldException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IllegalAccessException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
