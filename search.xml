@@ -177,97 +177,6 @@
 ]]></content>
   </entry>
   <entry>
-    <title>Uni-微信小程序</title>
-    <url>/2020/05/08/Uni-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/</url>
-    <content><![CDATA[<blockquote>
-<p>今天来讲一讲uni-app开发微信小程序的流程。要开发微信小程序首先要安装微信开发者工具，然后开发小程序代码，接着上传微信平台进行发布。</p>
-</blockquote>
-<p><code>先从微信端入手，搭建微信小程序开发环境</code></p>
-<h2 id="微信接入流程"><a href="#微信接入流程" class="headerlink" title="微信接入流程"></a>微信接入流程</h2><p><img src="/" class="lazyload" data-src="/2020/05/08/Uni-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/wx-in.png"  alt></p>
-<h3 id="申请账号"><a href="#申请账号" class="headerlink" title="申请账号"></a>申请账号</h3><ul>
-<li>进入<a href="https://mp.weixin.qq.com/" target="_blank" rel="noopener">小程序注册页</a> 根据指引填写信息和提交相应的资料，就可以拥有自己的<code>小程序帐号</code>。</li>
-</ul>
-<p><img src="/" class="lazyload" data-src="/2020/05/08/Uni-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/wx-register.png"  alt></p>
-<ul>
-<li><p>注册成功后会向注册邮箱发送激活信息,登录邮箱进行激活<br><img src="/" class="lazyload" data-src="/2020/05/08/Uni-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/wx-jihuo.png"  alt></p>
-</li>
-<li><p>激活之后就可以登录小程序管理平台，你可以管理你的小程序的权限，查看数据报表，发布小程序等操作。</p>
-</li>
-</ul>
-<h3 id="获取小程序AppID"><a href="#获取小程序AppID" class="headerlink" title="获取小程序AppID"></a>获取小程序AppID</h3><p>登录 小程序后台 ，我们可以在菜单 “开发”-“开发设置” 看到小程序的 AppID 了 。<br><img src="/" class="lazyload" data-src="/2020/05/08/Uni-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/wx-setting.png"  alt></p>
-<blockquote>
-<p>小程序的 AppID 相当于小程序平台的一个身份证，后续你会在很多地方要用到 AppID （注意这里要区别于服务号或订阅号的 AppID）。</p>
-</blockquote>
-<p>有了小程序帐号之后，我们需要一个工具来开发小程序。</p>
-<h3 id="安装开发工具"><a href="#安装开发工具" class="headerlink" title="安装开发工具"></a>安装开发工具</h3><p>前往 <a href="https://developers.weixin.qq.com/miniprogram/dev/devtools/download.html" target="_blank" rel="noopener">开发者工具下载</a>页面 ，根据自己的操作系统下载对应的安装包进行安装，有关开发者工具更详细的介绍可以查看 《开发者工具介绍》 。</p>
-<p>打开小程序开发者工具，用微信扫码登录开发者工具，准备开发你的第一个小程序吧！</p>
-<!-- ### 你的第一个小程序
-新建项目选择小程序项目，选择代码存放的硬盘路径，填入刚刚申请到的小程序的 AppID，给你的项目起一个好听的名字，勾选 "不使用云服务" 
-（注意: 你要选择一个空的目录才可以创建项目），点击新建，你就得到了你的第一个小程序了，点击顶部菜单编译就可以在微信开发者工具中预览你的第
-一个小程序。
-
-![](wx-new.png)
-
-![](wx-new-info.png)
- -->
-
-<h2 id="开启uniapp小程序"><a href="#开启uniapp小程序" class="headerlink" title="开启uniapp小程序"></a>开启uniapp小程序</h2><h3 id="创建一个uni-app项目"><a href="#创建一个uni-app项目" class="headerlink" title="创建一个uni-app项目"></a>创建一个uni-app项目</h3><p><img src="/" class="lazyload" data-src="/2020/05/08/Uni-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/uni-start.png"  alt><br><img src="/" class="lazyload" data-src="/2020/05/08/Uni-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/uni-new.png"  alt></p>
-<h3 id="开发相关配置"><a href="#开发相关配置" class="headerlink" title="开发相关配置"></a>开发相关配置</h3><h4 id="uni端配置"><a href="#uni端配置" class="headerlink" title="uni端配置"></a>uni端配置</h4><ul>
-<li><p>点击工具下面的设置<br><img src="/" class="lazyload" data-src="/2020/05/08/Uni-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/uni-set1.png"  alt></p>
-</li>
-<li><p>然后在运行配置里面设置微信开发者工具的路径<br><img src="/" class="lazyload" data-src="/2020/05/08/Uni-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/uni-set2.png"  alt></p>
-</li>
-</ul>
-<h4 id="微信开发者工具配置"><a href="#微信开发者工具配置" class="headerlink" title="微信开发者工具配置"></a>微信开发者工具配置</h4><ul>
-<li><p>登录微信开发者工具,点击设置下面的安全设置<br><img src="/" class="lazyload" data-src="/2020/05/08/Uni-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/wx-set1.png"  alt></p>
-</li>
-<li><p>然后开启服务端口<br><img src="/" class="lazyload" data-src="/2020/05/08/Uni-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/wx-set2.png"  alt></p>
-</li>
-<li><p>接着在运行配置中填写web服务调用URL<br><img src="/" class="lazyload" data-src="/2020/05/08/Uni-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/uni-set3.png"  alt></p>
-</li>
-</ul>
-<h3 id="开发项目配置"><a href="#开发项目配置" class="headerlink" title="开发项目配置"></a>开发项目配置</h3><ul>
-<li><p>项目目录的manifest.json ，配置小程序AppID等。<br><img src="/" class="lazyload" data-src="/2020/05/08/Uni-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/uni-set-appid.png"  alt></p>
-</li>
-<li><p>项目目录的pages.json，配置页面路由（pages数组），配置应用的状态栏、导航条、标题、窗口背景色（globalStyle对象）， 配置 tabBar 内容。<br>这个开发过小程序的朋友来说是差不多的。不过uni-app的每个页面是没有自己对应json文件的，都在公共的page.json中设置。</p>
-</li>
-</ul>
-<h3 id="运行小程序"><a href="#运行小程序" class="headerlink" title="运行小程序"></a>运行小程序</h3><ul>
-<li><p>点击”运行”下面的运行到小程序模拟器<br><img src="/" class="lazyload" data-src="/2020/05/08/Uni-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/uni-run.png"  alt></p>
-</li>
-<li><p>Hbuilder就自动将创建的小程序更新到微信开发者工具了<br><img src="/" class="lazyload" data-src="/2020/05/08/Uni-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/wx-run.png"  alt></p>
-</li>
-<li><p>点击开发者工具”预览”按钮，或者微信扫一扫生成的二维码真机查看效果<br><img src="/" class="lazyload" data-src="/2020/05/08/Uni-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/wx-run1.png"  alt></p>
-</li>
-</ul>
-<h2 id="微信小程序代码上传"><a href="#微信小程序代码上传" class="headerlink" title="微信小程序代码上传"></a>微信小程序代码上传</h2><p><img src="/" class="lazyload" data-src="/2020/05/08/Uni-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/wx-upload1.png"  alt></p>
-<ul>
-<li>完善相关信息，点击”上传”即可将代码上传到微信小程序服务器。<br><img src="/" class="lazyload" data-src="/2020/05/08/Uni-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/wx-upload2.png"  alt></li>
-</ul>
-<h2 id="发布微信小程序"><a href="#发布微信小程序" class="headerlink" title="发布微信小程序"></a>发布微信小程序</h2><ul>
-<li><p>登录微信公众平台并访问小程序首页，按要求完成第1步<br><img src="/" class="lazyload" data-src="/2020/05/08/Uni-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/wx-public1.png"  alt></p>
-</li>
-<li><p>完善小程序信息<br><img src="/" class="lazyload" data-src="/2020/05/08/Uni-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/wx-info1.png"  alt></p>
-</li>
-<li><p>添加开发者与体验者<br><img src="/" class="lazyload" data-src="/2020/05/08/Uni-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/wx-info2.png"  alt></p>
-</li>
-<li><p>点击第2步“前往发布”按钮，按要求填写小程序相关信息及版本信息即可提交审核。<br><img src="/" class="lazyload" data-src="/2020/05/08/Uni-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/wx-info3.png"  alt></p>
-</li>
-<li><p>点击”提交审核按钮”，完善相关信息，<br><img src="/" class="lazyload" data-src="/2020/05/08/Uni-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/wx-info4.png"  alt><br><img src="/" class="lazyload" data-src="/2020/05/08/Uni-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/wx-info5.png"  alt></p>
-</li>
-<li><p>点击”提交审核”，等待审核成功<br><img src="/" class="lazyload" data-src="/2020/05/08/Uni-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/wx-info6.png"  alt></p>
-</li>
-</ul>
-<h2 id="END"><a href="#END" class="headerlink" title="END"></a>END</h2><p><a href="https://developers.weixin.qq.com/miniprogram/dev/framework/quickstart/#%E5%B0%8F%E7%A8%8B%E5%BA%8F%E7%AE%80%E4%BB%8B" target="_blank" rel="noopener">参考</a></p>
-]]></content>
-      <categories>
-        <category>uni-app</category>
-      </categories>
-      <tags>
-        <tag>uni-app小程序</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>hexo+github搭建个人博客</title>
     <url>/2020/04/19/hexo+github%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/</url>
     <content><![CDATA[<blockquote>
@@ -412,6 +321,97 @@
       </categories>
       <tags>
         <tag>github</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Uni-微信小程序</title>
+    <url>/2020/05/08/Uni-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/</url>
+    <content><![CDATA[<blockquote>
+<p>今天来讲一讲uni-app开发微信小程序的流程。要开发微信小程序首先要安装微信开发者工具，然后开发小程序代码，接着上传微信平台进行发布。</p>
+</blockquote>
+<p><code>先从微信端入手，搭建微信小程序开发环境</code></p>
+<h2 id="微信接入流程"><a href="#微信接入流程" class="headerlink" title="微信接入流程"></a>微信接入流程</h2><p><img src="/" class="lazyload" data-src="/2020/05/08/Uni-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/wx-in.png"  alt></p>
+<h3 id="申请账号"><a href="#申请账号" class="headerlink" title="申请账号"></a>申请账号</h3><ul>
+<li>进入<a href="https://mp.weixin.qq.com/" target="_blank" rel="noopener">小程序注册页</a> 根据指引填写信息和提交相应的资料，就可以拥有自己的<code>小程序帐号</code>。</li>
+</ul>
+<p><img src="/" class="lazyload" data-src="/2020/05/08/Uni-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/wx-register.png"  alt></p>
+<ul>
+<li><p>注册成功后会向注册邮箱发送激活信息,登录邮箱进行激活<br><img src="/" class="lazyload" data-src="/2020/05/08/Uni-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/wx-jihuo.png"  alt></p>
+</li>
+<li><p>激活之后就可以登录小程序管理平台，你可以管理你的小程序的权限，查看数据报表，发布小程序等操作。</p>
+</li>
+</ul>
+<h3 id="获取小程序AppID"><a href="#获取小程序AppID" class="headerlink" title="获取小程序AppID"></a>获取小程序AppID</h3><p>登录 小程序后台 ，我们可以在菜单 “开发”-“开发设置” 看到小程序的 AppID 了 。<br><img src="/" class="lazyload" data-src="/2020/05/08/Uni-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/wx-setting.png"  alt></p>
+<blockquote>
+<p>小程序的 AppID 相当于小程序平台的一个身份证，后续你会在很多地方要用到 AppID （注意这里要区别于服务号或订阅号的 AppID）。</p>
+</blockquote>
+<p>有了小程序帐号之后，我们需要一个工具来开发小程序。</p>
+<h3 id="安装开发工具"><a href="#安装开发工具" class="headerlink" title="安装开发工具"></a>安装开发工具</h3><p>前往 <a href="https://developers.weixin.qq.com/miniprogram/dev/devtools/download.html" target="_blank" rel="noopener">开发者工具下载</a>页面 ，根据自己的操作系统下载对应的安装包进行安装，有关开发者工具更详细的介绍可以查看 《开发者工具介绍》 。</p>
+<p>打开小程序开发者工具，用微信扫码登录开发者工具，准备开发你的第一个小程序吧！</p>
+<!-- ### 你的第一个小程序
+新建项目选择小程序项目，选择代码存放的硬盘路径，填入刚刚申请到的小程序的 AppID，给你的项目起一个好听的名字，勾选 "不使用云服务" 
+（注意: 你要选择一个空的目录才可以创建项目），点击新建，你就得到了你的第一个小程序了，点击顶部菜单编译就可以在微信开发者工具中预览你的第
+一个小程序。
+
+![](wx-new.png)
+
+![](wx-new-info.png)
+ -->
+
+<h2 id="开启uniapp小程序"><a href="#开启uniapp小程序" class="headerlink" title="开启uniapp小程序"></a>开启uniapp小程序</h2><h3 id="创建一个uni-app项目"><a href="#创建一个uni-app项目" class="headerlink" title="创建一个uni-app项目"></a>创建一个uni-app项目</h3><p><img src="/" class="lazyload" data-src="/2020/05/08/Uni-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/uni-start.png"  alt><br><img src="/" class="lazyload" data-src="/2020/05/08/Uni-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/uni-new.png"  alt></p>
+<h3 id="开发相关配置"><a href="#开发相关配置" class="headerlink" title="开发相关配置"></a>开发相关配置</h3><h4 id="uni端配置"><a href="#uni端配置" class="headerlink" title="uni端配置"></a>uni端配置</h4><ul>
+<li><p>点击工具下面的设置<br><img src="/" class="lazyload" data-src="/2020/05/08/Uni-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/uni-set1.png"  alt></p>
+</li>
+<li><p>然后在运行配置里面设置微信开发者工具的路径<br><img src="/" class="lazyload" data-src="/2020/05/08/Uni-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/uni-set2.png"  alt></p>
+</li>
+</ul>
+<h4 id="微信开发者工具配置"><a href="#微信开发者工具配置" class="headerlink" title="微信开发者工具配置"></a>微信开发者工具配置</h4><ul>
+<li><p>登录微信开发者工具,点击设置下面的安全设置<br><img src="/" class="lazyload" data-src="/2020/05/08/Uni-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/wx-set1.png"  alt></p>
+</li>
+<li><p>然后开启服务端口<br><img src="/" class="lazyload" data-src="/2020/05/08/Uni-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/wx-set2.png"  alt></p>
+</li>
+<li><p>接着在运行配置中填写web服务调用URL<br><img src="/" class="lazyload" data-src="/2020/05/08/Uni-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/uni-set3.png"  alt></p>
+</li>
+</ul>
+<h3 id="开发项目配置"><a href="#开发项目配置" class="headerlink" title="开发项目配置"></a>开发项目配置</h3><ul>
+<li><p>项目目录的manifest.json ，配置小程序AppID等。<br><img src="/" class="lazyload" data-src="/2020/05/08/Uni-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/uni-set-appid.png"  alt></p>
+</li>
+<li><p>项目目录的pages.json，配置页面路由（pages数组），配置应用的状态栏、导航条、标题、窗口背景色（globalStyle对象）， 配置 tabBar 内容。<br>这个开发过小程序的朋友来说是差不多的。不过uni-app的每个页面是没有自己对应json文件的，都在公共的page.json中设置。</p>
+</li>
+</ul>
+<h3 id="运行小程序"><a href="#运行小程序" class="headerlink" title="运行小程序"></a>运行小程序</h3><ul>
+<li><p>点击”运行”下面的运行到小程序模拟器<br><img src="/" class="lazyload" data-src="/2020/05/08/Uni-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/uni-run.png"  alt></p>
+</li>
+<li><p>Hbuilder就自动将创建的小程序更新到微信开发者工具了<br><img src="/" class="lazyload" data-src="/2020/05/08/Uni-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/wx-run.png"  alt></p>
+</li>
+<li><p>点击开发者工具”预览”按钮，或者微信扫一扫生成的二维码真机查看效果<br><img src="/" class="lazyload" data-src="/2020/05/08/Uni-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/wx-run1.png"  alt></p>
+</li>
+</ul>
+<h2 id="微信小程序代码上传"><a href="#微信小程序代码上传" class="headerlink" title="微信小程序代码上传"></a>微信小程序代码上传</h2><p><img src="/" class="lazyload" data-src="/2020/05/08/Uni-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/wx-upload1.png"  alt></p>
+<ul>
+<li>完善相关信息，点击”上传”即可将代码上传到微信小程序服务器。<br><img src="/" class="lazyload" data-src="/2020/05/08/Uni-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/wx-upload2.png"  alt></li>
+</ul>
+<h2 id="发布微信小程序"><a href="#发布微信小程序" class="headerlink" title="发布微信小程序"></a>发布微信小程序</h2><ul>
+<li><p>登录微信公众平台并访问小程序首页，按要求完成第1步<br><img src="/" class="lazyload" data-src="/2020/05/08/Uni-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/wx-public1.png"  alt></p>
+</li>
+<li><p>完善小程序信息<br><img src="/" class="lazyload" data-src="/2020/05/08/Uni-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/wx-info1.png"  alt></p>
+</li>
+<li><p>添加开发者与体验者<br><img src="/" class="lazyload" data-src="/2020/05/08/Uni-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/wx-info2.png"  alt></p>
+</li>
+<li><p>点击第2步“前往发布”按钮，按要求填写小程序相关信息及版本信息即可提交审核。<br><img src="/" class="lazyload" data-src="/2020/05/08/Uni-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/wx-info3.png"  alt></p>
+</li>
+<li><p>点击”提交审核按钮”，完善相关信息，<br><img src="/" class="lazyload" data-src="/2020/05/08/Uni-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/wx-info4.png"  alt><br><img src="/" class="lazyload" data-src="/2020/05/08/Uni-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/wx-info5.png"  alt></p>
+</li>
+<li><p>点击”提交审核”，等待审核成功<br><img src="/" class="lazyload" data-src="/2020/05/08/Uni-%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/wx-info6.png"  alt></p>
+</li>
+</ul>
+<h2 id="END"><a href="#END" class="headerlink" title="END"></a>END</h2><p><a href="https://developers.weixin.qq.com/miniprogram/dev/framework/quickstart/#%E5%B0%8F%E7%A8%8B%E5%BA%8F%E7%AE%80%E4%BB%8B" target="_blank" rel="noopener">参考</a></p>
+]]></content>
+      <categories>
+        <category>uni-app</category>
+      </categories>
+      <tags>
+        <tag>uni-app小程序</tag>
       </tags>
   </entry>
   <entry>
@@ -677,14 +677,21 @@
 
 </li>
 </ul>
-<h2 id="反射-注解Demo"><a href="#反射-注解Demo" class="headerlink" title="反射+注解Demo"></a>反射+注解Demo</h2><p>接下来以获取一个TextView的为例，讲解反射+注解的使用</p>
-<h3 id="编写注解类"><a href="#编写注解类" class="headerlink" title="编写注解类"></a>编写注解类</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.coco.annotationtest.Inject;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.ElementType;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.Retention;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.RetentionPolicy;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.Target;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> androidx.annotation.IdRes;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)</span><br><span class="line"><span class="meta">@Target</span>(ElementType.FIELD)</span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> InjectView &#123;</span><br><span class="line">    <span class="comment">// 指定传递参数类型为R.id.*</span></span><br><span class="line">    <span class="meta">@IdRes</span> <span class="function"><span class="keyword">int</span> <span class="title">value</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="反射-注解Demo"><a href="#反射-注解Demo" class="headerlink" title="反射+注解Demo"></a>反射+注解Demo</h2><p>接下来以获取一个TextView+参数传递的为例，讲解反射+注解的使用</p>
+<h3 id="编写注解类"><a href="#编写注解类" class="headerlink" title="编写注解类"></a>编写注解类</h3><figure class="highlight java"><figcaption><span>InjectView.java</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.coco.annotationtest.Inject;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.ElementType;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.Retention;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.RetentionPolicy;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.Target;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> androidx.annotation.IdRes;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)</span><br><span class="line"><span class="meta">@Target</span>(ElementType.FIELD)</span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> InjectView &#123;</span><br><span class="line">    <span class="comment">// 指定传递参数类型为R.id.*</span></span><br><span class="line">    <span class="meta">@IdRes</span> <span class="function"><span class="keyword">int</span> <span class="title">value</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h3 id="编写反射方法"><a href="#编写反射方法" class="headerlink" title="编写反射方法"></a>编写反射方法</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.coco.annotationtest.Inject;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> android.app.Activity;</span><br><span class="line"><span class="keyword">import</span> android.view.View;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.Field;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">InjectUtil</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">injectVie</span><span class="params">(Activity activity)</span></span>&#123;</span><br><span class="line">        Class&lt;? extends Activity&gt; cls = activity.getClass();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 获取此类的所有成员</span></span><br><span class="line">        Field[] declaredFields = cls.getDeclaredFields();</span><br><span class="line">        <span class="keyword">for</span>(Field filed:declaredFields)&#123;</span><br><span class="line">            <span class="comment">// 判断属性是否被InjectView注解</span></span><br><span class="line">            <span class="keyword">if</span>(filed.isAnnotationPresent(InjectView<span class="class">.<span class="keyword">class</span>))</span>&#123;</span><br><span class="line">                InjectView injectView = filed.getAnnotation(InjectView<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">                <span class="comment">//获取注解中设置的id</span></span><br><span class="line">                <span class="keyword">int</span> id = injectView.value();</span><br><span class="line">                View view = activity.findViewById(id);</span><br><span class="line">                <span class="comment">//反射设置属性的值</span></span><br><span class="line">                filed.setAccessible(<span class="keyword">true</span>); <span class="comment">//设置访问权限，允许操作private的属性</span></span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    <span class="comment">//反射赋值</span></span><br><span class="line">                    filed.set(activity,view);</span><br><span class="line">                &#125; <span class="keyword">catch</span> (IllegalAccessException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><figcaption><span>InjectData.java</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.coco.annotationtest.Inject;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.ElementType;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.Retention;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.RetentionPolicy;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.Target;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)</span><br><span class="line"><span class="meta">@Target</span>(ElementType.FIELD)</span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> InjectData &#123;</span><br><span class="line">    <span class="function">String <span class="title">value</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.coco.annotationtest;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> androidx.appcompat.app.AppCompatActivity;</span><br><span class="line"><span class="keyword">import</span> cn.coco.annotationtest.Inject.InjectUtil;</span><br><span class="line"><span class="keyword">import</span> cn.coco.annotationtest.Inject.InjectView;</span><br><span class="line"><span class="keyword">import</span> android.os.Bundle;</span><br><span class="line"><span class="keyword">import</span> android.widget.TextView;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">AppCompatActivity</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@InjectView</span>(R.id.tv)</span><br><span class="line">    TextView tv;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.activity_main);</span><br><span class="line">        InjectUtil.injectVie(<span class="keyword">this</span>);</span><br><span class="line">        tv.setText(<span class="string">"Coco 你好！！！"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="编写反射方法"><a href="#编写反射方法" class="headerlink" title="编写反射方法"></a>编写反射方法</h3><figure class="highlight java"><figcaption><span>InjectUtil.java</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.coco.annotationtest.Inject;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> android.app.Activity;</span><br><span class="line"><span class="keyword">import</span> android.view.View;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.Field;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">InjectUtil</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 反射获取view</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">injectView</span><span class="params">(Activity activity)</span></span>&#123;</span><br><span class="line">        Class&lt;? extends Activity&gt; cls = activity.getClass();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 获取此类的所有成员</span></span><br><span class="line">        Field[] declaredFields = cls.getDeclaredFields();</span><br><span class="line">        <span class="keyword">for</span>(Field filed:declaredFields)&#123;</span><br><span class="line">            <span class="comment">// 判断属性是否被InjectView注解</span></span><br><span class="line">            <span class="keyword">if</span>(filed.isAnnotationPresent(InjectView<span class="class">.<span class="keyword">class</span>))</span>&#123;</span><br><span class="line">                InjectView injectView = filed.getAnnotation(InjectView<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">                <span class="comment">//获取注解中设置的id</span></span><br><span class="line">                <span class="keyword">int</span> id = injectView.value();</span><br><span class="line">                View view = activity.findViewById(id);</span><br><span class="line">                <span class="comment">//反射设置属性的值</span></span><br><span class="line">                filed.setAccessible(<span class="keyword">true</span>); <span class="comment">//设置访问权限，允许操作private的属性</span></span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    <span class="comment">//反射赋值</span></span><br><span class="line">                    filed.set(activity,view);</span><br><span class="line">                &#125; <span class="keyword">catch</span> (IllegalAccessException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 反射获取传递的参数</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">injectData</span><span class="params">(Activity activity)</span></span>&#123;</span><br><span class="line">        Class&lt;? extends Activity&gt; cls = activity.getClass();</span><br><span class="line">        Field[] fields = cls.getDeclaredFields();</span><br><span class="line">        <span class="keyword">for</span>(Field filed:fields)&#123;</span><br><span class="line">            <span class="keyword">if</span>(filed.isAnnotationPresent(InjectData<span class="class">.<span class="keyword">class</span>))</span>&#123;</span><br><span class="line">                InjectData temp = filed.getAnnotation(InjectData<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">                String str = temp.value();</span><br><span class="line">                String value = activity.getIntent().getStringExtra(str);</span><br><span class="line">                <span class="comment">//反射设置属性的值</span></span><br><span class="line">                filed.setAccessible(<span class="keyword">true</span>); <span class="comment">//设置访问权限，允许操作private的属性</span></span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    <span class="comment">//反射赋值</span></span><br><span class="line">                    filed.set(activity,value);</span><br><span class="line">                &#125; <span class="keyword">catch</span> (IllegalAccessException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.coco.annotationtest;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> androidx.appcompat.app.AppCompatActivity;</span><br><span class="line"><span class="keyword">import</span> cn.coco.annotationtest.Inject.InjectUtil;</span><br><span class="line"><span class="keyword">import</span> cn.coco.annotationtest.Inject.InjectView;</span><br><span class="line"><span class="keyword">import</span> android.os.Bundle;</span><br><span class="line"><span class="keyword">import</span> android.widget.TextView;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">AppCompatActivity</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@InjectView</span>(R.id.tv)</span><br><span class="line">    TextView tv;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.activity_main);</span><br><span class="line">        InjectUtil.injectVie(<span class="keyword">this</span>);</span><br><span class="line">        tv.setText(<span class="string">"Coco 你好！！！"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">clicked</span><span class="params">(View v)</span></span>&#123;</span><br><span class="line">        Intent intent = <span class="keyword">new</span> Intent(<span class="keyword">this</span>, InjectTestActivity<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">        intent.putExtra(<span class="string">"name1"</span>,<span class="string">"coco1"</span>);</span><br><span class="line">        intent.putExtra(<span class="string">"name2"</span>,<span class="string">"coco2"</span>);</span><br><span class="line">        intent.putExtra(<span class="string">"name3"</span>,<span class="string">"coco3"</span>);</span><br><span class="line">        intent.putExtra(<span class="string">"name4"</span>,<span class="string">"coco4"</span>);</span><br><span class="line">        intent.putExtra(<span class="string">"name5"</span>,<span class="string">"coco5"</span>);</span><br><span class="line">        startActivity(intent);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.coco.annotationtest;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> android.os.Bundle;</span><br><span class="line"><span class="keyword">import</span> android.widget.TextView;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> androidx.appcompat.app.AppCompatActivity;</span><br><span class="line"><span class="keyword">import</span> cn.coco.annotationtest.Inject.InjectUtil;</span><br><span class="line"><span class="keyword">import</span> cn.coco.annotationtest.Inject.InjectView;</span><br><span class="line"><span class="keyword">import</span> cn.coco.annotationtest.Inject.InjectData;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">InjectTestActivity</span> <span class="keyword">extends</span> <span class="title">AppCompatActivity</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@InjectView</span>(R.id.tv)</span><br><span class="line">    TextView tv;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@InjectData</span>(<span class="string">"name1"</span>)</span><br><span class="line">    String name1;</span><br><span class="line">    <span class="meta">@InjectData</span>(<span class="string">"name2"</span>)</span><br><span class="line">    String name2;</span><br><span class="line">    <span class="meta">@InjectData</span>(<span class="string">"name3"</span>)</span><br><span class="line">    String name3;</span><br><span class="line">    <span class="meta">@InjectData</span>(<span class="string">"name4"</span>)</span><br><span class="line">    String name4;</span><br><span class="line">    <span class="meta">@InjectData</span>(<span class="string">"name5"</span>)</span><br><span class="line">    String name5;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.activity_test);</span><br><span class="line">        InjectUtil.injectView(<span class="keyword">this</span>);</span><br><span class="line">        InjectUtil.injectData(<span class="keyword">this</span>);</span><br><span class="line"></span><br><span class="line">        tv.setText(<span class="string">"name1="</span>+name1+<span class="string">"\n"</span>+<span class="string">"name2="</span>+name2+<span class="string">"\n"</span>+<span class="string">"name2="</span>+name2+<span class="string">"\n"</span>+<span class="string">"name2="</span>+name2+<span class="string">"\n"</span>+<span class="string">"name2="</span>+name2+<span class="string">"\n"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p><img src="/" class="lazyload" data-src="/2020/05/09/java-%E6%B3%A8%E8%A7%A3%E4%B8%8E%E5%8F%8D%E5%B0%84/suc.png"  alt></p>
+<blockquote>
+<p>相关code已上传github<br><a href="https://github.com/xhongy/Samples" target="_blank" rel="noopener">https://github.com/xhongy/Samples</a></p>
+</blockquote>
 <h2 id="androidstudio安装ASM插件"><a href="#androidstudio安装ASM插件" class="headerlink" title="androidstudio安装ASM插件"></a>androidstudio安装ASM插件</h2><p>打开设置，选择plugin，输入ASM关键词，选择”ASM Bytecode Viewer” 点击安装<br><img src="/" class="lazyload" data-src="/2020/05/09/java-%E6%B3%A8%E8%A7%A3%E4%B8%8E%E5%8F%8D%E5%B0%84/asm-install1.png"  alt></p>
 <p>安装成功后，重启IDE<br><img src="/" class="lazyload" data-src="/2020/05/09/java-%E6%B3%A8%E8%A7%A3%E4%B8%8E%E5%8F%8D%E5%B0%84/asm-install-ok.png"  alt></p>
 <p>androidstudio重启后在右侧就会看到ASM标识了<br><img src="/" class="lazyload" data-src="/2020/05/09/java-%E6%B3%A8%E8%A7%A3%E4%B8%8E%E5%8F%8D%E5%B0%84/asm-show.png"  alt></p>
