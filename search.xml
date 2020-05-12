@@ -119,6 +119,127 @@
       </tags>
   </entry>
   <entry>
+    <title>插件化</title>
+    <url>/2020/05/11/%E6%8F%92%E4%BB%B6%E5%8C%96/</url>
+    <content><![CDATA[<h2 id="插件化"><a href="#插件化" class="headerlink" title="插件化"></a>插件化</h2><p>插件化技术最初源于免安装运行apk的想法，这个免安装的apk就可以理解为<code>插件</code>，而支持插件的app我们一般叫<code>宿主</code></p>
+<h3 id="插件化解决的问题"><a href="#插件化解决的问题" class="headerlink" title="插件化解决的问题"></a>插件化解决的问题</h3><ul>
+<li>App的功能越来越多，体积越来越大</li>
+<li>模块之间的耦合度高，协同开发沟通成本越来越大</li>
+<li>方法数目可能超过65535，App占用内存过大</li>
+<li>应用之间的相互调用</li>
+</ul>
+<h3 id="组件化与插件化的区别"><a href="#组件化与插件化的区别" class="headerlink" title="组件化与插件化的区别"></a>组件化与插件化的区别</h3><p>组件化开发就是将一个app分成多个模块，每个模块都是一个组件，开发的过程中我们可以让这些组件相互依赖或者单独调试部分组件等，但是最终发布的时候是将这些组件合并成一个apk，这就是组件化开发。</p>
+<p>插件化开发与组件化开发略有不同，插件化开发是将整个app拆分成多个模块，这些模块包括一个宿主和多个插件，每个模块都是一个apk,最终打包的时候宿主apk与插件apk分开打包。</p>
+<h3 id="各大插件化的对比"><a href="#各大插件化的对比" class="headerlink" title="各大插件化的对比"></a>各大插件化的对比</h3><table>
+<thead>
+<tr>
+<th>特性</th>
+<th>dynamic-load-apk</th>
+<th>DynamicApk</th>
+<th>Small</th>
+<th>DroidPlugin</th>
+<th>VirtualAPK</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>作者</td>
+<td>APT</td>
+<td>任玉刚</td>
+<td>携程</td>
+<td>wequick</td>
+<td>360</td>
+</tr>
+<tr>
+<td>支持四大组件</td>
+<td>只支持Activity</td>
+<td>只支持Activity</td>
+<td>只支持Activity</td>
+<td>全支持</td>
+<td>全支持</td>
+</tr>
+<tr>
+<td>组件无需在宿主manifest中预注册</td>
+<td>√</td>
+<td>×</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+</tr>
+<tr>
+<td>插件可以依赖宿主</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+<td>×</td>
+<td>√</td>
+</tr>
+<tr>
+<td>支持PendingIntent</td>
+<td>×</td>
+<td>×</td>
+<td>×</td>
+<td>√</td>
+<td>√</td>
+</tr>
+<tr>
+<td>Android特性支持</td>
+<td>大部分</td>
+<td>大部分</td>
+<td>大部分</td>
+<td>几乎全部</td>
+<td>几乎全部</td>
+</tr>
+<tr>
+<td>兼容性适配</td>
+<td>一般</td>
+<td>一般</td>
+<td>中等</td>
+<td>高</td>
+<td>高</td>
+</tr>
+<tr>
+<td>插件构建</td>
+<td>无</td>
+<td>部署aapt</td>
+<td>Gradle插件</td>
+<td>无</td>
+<td>Gradle插件</td>
+</tr>
+</tbody></table>
+<h3 id="插件化实现思路"><a href="#插件化实现思路" class="headerlink" title="插件化实现思路"></a>插件化实现思路</h3><h4 id="如何加载插件的类"><a href="#如何加载插件的类" class="headerlink" title="如何加载插件的类"></a>如何加载插件的类</h4><p>ClassLoader的继承关系<br><img src="/" class="lazyload" data-src="/2020/05/11/%E6%8F%92%E4%BB%B6%E5%8C%96/classloader.png"  alt></p>
+]]></content>
+      <categories>
+        <category>android</category>
+      </categories>
+      <tags>
+        <tag>插件化</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>每日一练</title>
+    <url>/2020/05/12/%E6%AF%8F%E6%97%A5%E4%B8%80%E7%BB%83/</url>
+    <content><![CDATA[<h2 id="类加载替换实现热修复的核心原理是什么？"><a href="#类加载替换实现热修复的核心原理是什么？" class="headerlink" title="类加载替换实现热修复的核心原理是什么？"></a>类加载替换实现热修复的核心原理是什么？</h2><p><code>参考答案</code><br>多个dex文件排列成一个有序的数组dexElements，当找类的时候，会按顺序遍历dex文件，然后从当前遍历的dex文件中找类，如果找到类则返回，如果找不到从下一个dex文件继续查找。热修复只需要向dexElements数组最前面插入一个包含了修复之后的类的dex文件，即可替换存在问题的类。</p>
+<blockquote>
+<p>用到的技术主要是反射、类加载，如果要自动化打差分包，还需要会字节码插桩解决兼容性问题，如N版本混编、类加载校验问题 ，还需要Gradle插件辅助生成热修复主要是通过反射，得到DexPathList的pathList，修改Element[]，将patch.dex修复包放在最前头，达到修复效果<br>安卓的类加载器在加载一个类时会先从自身DexPathList对象中的Element数组中获取（Element[] dexElements）到对应的类，之后再加载。采用的是数组遍历的方式，不过注意，遍历出来的是一个个的dex文件。在for循环中，首先遍历出来的是dex文件，然后再是从dex文件中获取class，所以，我们只要让修复好的class打包成一个dex文件，放于Element数组的第一个元素，这样就能保证获取到的class是最新修复好的class了（当然，有bug的class也是存在的，不过是放在了Element数组的最后一个元素中，所以没有机会被拿到而已</p>
+</blockquote>
+<h2 id="在使用-HashMap-的时候，用-String-做-key-有什么好处？"><a href="#在使用-HashMap-的时候，用-String-做-key-有什么好处？" class="headerlink" title="在使用 HashMap 的时候，用 String 做 key 有什么好处？"></a>在使用 HashMap 的时候，用 String 做 key 有什么好处？</h2><p><code>参考答案</code><br>HashMap 内部实现是通过 key 的 hashcode 来确定 value 的存储位置，因为字符串是不可变的，所以当创建字符串时，它的 hashcode 被缓存下来，不需要再次计算，<br>所以相比于其他对象更快。</p>
+<h2 id="请说一说OkHttp与Retrofit-的区别与联系是怎样的？"><a href="#请说一说OkHttp与Retrofit-的区别与联系是怎样的？" class="headerlink" title="请说一说OkHttp与Retrofit 的区别与联系是怎样的？"></a>请说一说OkHttp与Retrofit 的区别与联系是怎样的？</h2><p><code>参考答案</code><br>OkHttp和Retrofit都是目前流行网络开源框架</p>
+<h3 id="封装不同："><a href="#封装不同：" class="headerlink" title="封装不同："></a>封装不同：</h3><ul>
+<li>Retrofit封装了具体的请求，线程切换以及数据转换。retrofit通过使用代理，外观，策略模式对okhttp进行了封装</li>
+<li>OkHttp 是基于Http协议封装的一套请求客户端</li>
+</ul>
+<h3 id="职责不同："><a href="#职责不同：" class="headerlink" title="职责不同："></a>职责不同：</h3><ul>
+<li>Retrofit主要负责应用层面的封装，面向开发者，方便使用，比如请求参数，响应数据的处理，错误处理等等。</li>
+<li>OkHttp主要负责socket部分的优化与封装，比如网络访问，多路复用，buffer缓存，数据压缩等等。</li>
+</ul>
+<h2 id="类的生命周期"><a href="#类的生命周期" class="headerlink" title="类的生命周期"></a>类的生命周期</h2><p><img src="/" class="lazyload" data-src="/2020/05/12/%E6%AF%8F%E6%97%A5%E4%B8%80%E7%BB%83/life-class.png"  alt></p>
+<p>谈谈你认为MVVM的一些特点？</p>
+]]></content>
+      <categories>
+        <category>android</category>
+      </categories>
+  </entry>
+  <entry>
     <title>组件化</title>
     <url>/2020/04/21/%E7%BB%84%E4%BB%B6%E5%8C%96/</url>
     <content><![CDATA[<p>组件化： gradle 开发中<br>插件化： 动态化：反射、类加载 运行中</p>
@@ -130,23 +251,6 @@
       </categories>
       <tags>
         <tag>组件化</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>java进阶</title>
-    <url>/2020/04/22/java%E8%BF%9B%E9%98%B6/</url>
-    <content><![CDATA[<p>元注解： 注解上的注解<br>Target ，如不知名Targer，注解可以作用在任何地方</p>
-<blockquote>
-<p>Element.TYPE  作用在类</p>
-</blockquote>
-<p>APT  Annotition Processor Tools 注解处理器,运行在编译阶段</p>
-<p>.java由javac编译成-》.class</p>
-]]></content>
-      <categories>
-        <category>java</category>
-      </categories>
-      <tags>
-        <tag>java泛型</tag>
       </tags>
   </entry>
   <entry>
@@ -175,6 +279,23 @@
 <p>以上三种选一种即可。</p>
 <p>一般情况下当一个Activity被其他Activity覆盖时,被覆盖的Activity都会调用onStop（）方法,但是有两种情况除外,一个是上层Activity是Dialog风格时,<br>另外一个是上层Activity是透明时;这两种情况只会调用onPause（）方法,但不会调用onStop方法.</p>
 ]]></content>
+  </entry>
+  <entry>
+    <title>java进阶</title>
+    <url>/2020/04/22/java%E8%BF%9B%E9%98%B6/</url>
+    <content><![CDATA[<p>元注解： 注解上的注解<br>Target ，如不知名Targer，注解可以作用在任何地方</p>
+<blockquote>
+<p>Element.TYPE  作用在类</p>
+</blockquote>
+<p>APT  Annotition Processor Tools 注解处理器,运行在编译阶段</p>
+<p>.java由javac编译成-》.class</p>
+]]></content>
+      <categories>
+        <category>java</category>
+      </categories>
+      <tags>
+        <tag>java泛型</tag>
+      </tags>
   </entry>
   <entry>
     <title>hexo+github搭建个人博客</title>
@@ -628,17 +749,17 @@
 </tr>
 </thead>
 <tbody><tr>
-<td>RetentionPolicy.SOURCE</td>
+<td>源码</td>
 <td>APT</td>
 <td>在编译期能够获取注解与注解声明的类，包括类中的所有成员信息，一般用于生产额外的辅助类。</td>
 </tr>
 <tr>
-<td>RetentionPolicy.CLASS</td>
+<td>字节码</td>
 <td>字节码增强</td>
 <td>在编译出Class后，通过修改Class数据以实现修改代码逻辑目的。</td>
 </tr>
 <tr>
-<td>RetentionPolicy.RUNTIME</td>
+<td>运行时</td>
 <td>反射</td>
 <td>在程序运行期间，通过反射技术动态获取注解与其元素，从而完成不同的逻辑判断。</td>
 </tr>
@@ -682,13 +803,13 @@
 
 <figure class="highlight java"><figcaption><span>InjectData.java</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.coco.annotationtest.Inject;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.ElementType;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.Retention;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.RetentionPolicy;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.Target;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)</span><br><span class="line"><span class="meta">@Target</span>(ElementType.FIELD)</span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> InjectData &#123;</span><br><span class="line">    <span class="function">String <span class="title">value</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h3 id="编写反射方法"><a href="#编写反射方法" class="headerlink" title="编写反射方法"></a>编写反射方法</h3><figure class="highlight java"><figcaption><span>InjectUtil.java</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.coco.annotationtest.Inject;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> android.app.Activity;</span><br><span class="line"><span class="keyword">import</span> android.view.View;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.Field;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">InjectUtil</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 反射获取view</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">injectView</span><span class="params">(Activity activity)</span></span>&#123;</span><br><span class="line">        Class&lt;? extends Activity&gt; cls = activity.getClass();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 获取此类的所有成员</span></span><br><span class="line">        Field[] declaredFields = cls.getDeclaredFields();</span><br><span class="line">        <span class="keyword">for</span>(Field filed:declaredFields)&#123;</span><br><span class="line">            <span class="comment">// 判断属性是否被InjectView注解</span></span><br><span class="line">            <span class="keyword">if</span>(filed.isAnnotationPresent(InjectView<span class="class">.<span class="keyword">class</span>))</span>&#123;</span><br><span class="line">                InjectView injectView = filed.getAnnotation(InjectView<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">                <span class="comment">//获取注解中设置的id</span></span><br><span class="line">                <span class="keyword">int</span> id = injectView.value();</span><br><span class="line">                View view = activity.findViewById(id);</span><br><span class="line">                <span class="comment">//反射设置属性的值</span></span><br><span class="line">                filed.setAccessible(<span class="keyword">true</span>); <span class="comment">//设置访问权限，允许操作private的属性</span></span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    <span class="comment">//反射赋值</span></span><br><span class="line">                    filed.set(activity,view);</span><br><span class="line">                &#125; <span class="keyword">catch</span> (IllegalAccessException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 反射获取传递的参数</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">injectData</span><span class="params">(Activity activity)</span></span>&#123;</span><br><span class="line">        Class&lt;? extends Activity&gt; cls = activity.getClass();</span><br><span class="line">        Field[] fields = cls.getDeclaredFields();</span><br><span class="line">        <span class="keyword">for</span>(Field filed:fields)&#123;</span><br><span class="line">            <span class="keyword">if</span>(filed.isAnnotationPresent(InjectData<span class="class">.<span class="keyword">class</span>))</span>&#123;</span><br><span class="line">                InjectData temp = filed.getAnnotation(InjectData<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">                String str = temp.value();</span><br><span class="line">                String value = activity.getIntent().getStringExtra(str);</span><br><span class="line">                <span class="comment">//反射设置属性的值</span></span><br><span class="line">                filed.setAccessible(<span class="keyword">true</span>); <span class="comment">//设置访问权限，允许操作private的属性</span></span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    <span class="comment">//反射赋值</span></span><br><span class="line">                    filed.set(activity,value);</span><br><span class="line">                &#125; <span class="keyword">catch</span> (IllegalAccessException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="编写反射方法"><a href="#编写反射方法" class="headerlink" title="编写反射方法"></a>编写反射方法</h3><figure class="highlight java"><figcaption><span>InjectUtil.java</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.coco.annotationtest.Inject;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> android.app.Activity;</span><br><span class="line"><span class="keyword">import</span> android.content.Intent;</span><br><span class="line"><span class="keyword">import</span> android.os.Bundle;</span><br><span class="line"><span class="keyword">import</span> android.os.Parcelable;</span><br><span class="line"><span class="keyword">import</span> android.text.TextUtils;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.Field;</span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.Method;</span><br><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">InjectUtil</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 反射获取view</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">injectView</span><span class="params">(Activity activity)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">null</span> == activity) <span class="keyword">return</span>;</span><br><span class="line">        Class&lt;? extends Activity&gt; cls = activity.getClass();</span><br><span class="line">        <span class="comment">// 获取此类的所有成员</span></span><br><span class="line">        Field[] declaredFields = cls.getDeclaredFields();</span><br><span class="line">        <span class="keyword">for</span>(Field field:declaredFields)&#123;<span class="comment">//获取Activity类里面声明的所有成员变量</span></span><br><span class="line">            <span class="comment">// 判断属性是否被InjectView注解</span></span><br><span class="line">            <span class="keyword">if</span>(field.isAnnotationPresent(InjectView<span class="class">.<span class="keyword">class</span>))</span>&#123;</span><br><span class="line">                InjectView injectView = field.getAnnotation(InjectView<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">                <span class="comment">//获取注解中设置的id</span></span><br><span class="line">                <span class="keyword">int</span> value = injectView.value();</span><br><span class="line">                <span class="keyword">try</span>&#123;</span><br><span class="line">                    <span class="comment">// 找到findViewById方法</span></span><br><span class="line">                    Method findViewById = cls.getMethod(<span class="string">"findViewById"</span>,<span class="keyword">int</span><span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">                    findViewById.setAccessible(<span class="keyword">true</span>);</span><br><span class="line">                    Object view = findViewById.invoke(activity,value);</span><br><span class="line">                    field.setAccessible(<span class="keyword">true</span>);</span><br><span class="line">                    field.set(activity,view);</span><br><span class="line">                &#125;<span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 反射获取传递的参数</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">injectData</span><span class="params">(Activity activity)</span></span>&#123;</span><br><span class="line">        Class&lt;? extends Activity&gt; cls = activity.getClass();</span><br><span class="line">        Intent intent = activity.getIntent();</span><br><span class="line">        Bundle extras = intent.getExtras();</span><br><span class="line">        <span class="keyword">if</span>(extras == <span class="keyword">null</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//获得此类所有的成员</span></span><br><span class="line">        Field[] fields = cls.getDeclaredFields();</span><br><span class="line">        <span class="keyword">for</span>(Field field:fields)&#123;</span><br><span class="line">            <span class="keyword">if</span>(field.isAnnotationPresent(InjectData<span class="class">.<span class="keyword">class</span>))</span>&#123;</span><br><span class="line">                InjectData temp = field.getAnnotation(InjectData<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">                <span class="comment">// 获取key</span></span><br><span class="line">                String key = TextUtils.isEmpty(temp.value()) ? field.getName() : temp.value();</span><br><span class="line">                <span class="keyword">if</span>(extras.containsKey(key))&#123;</span><br><span class="line">                    Object obj = extras.get(key);</span><br><span class="line">                    <span class="comment">// todo Parcelable数组类型不能直接设置，其他的都可以.</span></span><br><span class="line">                    <span class="comment">//获得数组单个元素类型</span></span><br><span class="line">                    Class&lt;?&gt; componentType = field.getType().getComponentType();</span><br><span class="line">                    <span class="comment">//当前属性是数组并且是 Parcelable（子类）数组</span></span><br><span class="line">                    <span class="keyword">if</span>(field.getType().isArray() &amp;&amp; Parcelable<span class="class">.<span class="keyword">class</span>.<span class="title">isAssignableFrom</span>(<span class="title">componentType</span>)) </span>&#123;</span><br><span class="line">                        Object[] objs = (Object[]) obj;</span><br><span class="line">                        <span class="comment">//创建对应类型的数组并由objs拷贝</span></span><br><span class="line">                        Object[] objects = Arrays.copyOf(objs, objs.length, (Class&lt;? extends Object[]&gt;) field.getType());</span><br><span class="line">                        obj = objects;</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="comment">//反射设置属性的值</span></span><br><span class="line">                    field.setAccessible(<span class="keyword">true</span>); <span class="comment">//设置访问权限，允许操作private的属性</span></span><br><span class="line">                    <span class="keyword">try</span> &#123;</span><br><span class="line">                        <span class="comment">//反射赋值</span></span><br><span class="line">                        field.set(activity,obj);</span><br><span class="line">                    &#125; <span class="keyword">catch</span> (IllegalAccessException e) &#123;</span><br><span class="line">                        e.printStackTrace();</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.coco.annotationtest;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> androidx.appcompat.app.AppCompatActivity;</span><br><span class="line"><span class="keyword">import</span> cn.coco.annotationtest.Inject.InjectUtil;</span><br><span class="line"><span class="keyword">import</span> cn.coco.annotationtest.Inject.InjectView;</span><br><span class="line"><span class="keyword">import</span> android.os.Bundle;</span><br><span class="line"><span class="keyword">import</span> android.widget.TextView;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">AppCompatActivity</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@InjectView</span>(R.id.tv)</span><br><span class="line">    TextView tv;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.activity_main);</span><br><span class="line">        InjectUtil.injectVie(<span class="keyword">this</span>);</span><br><span class="line">        tv.setText(<span class="string">"Coco 你好！！！"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">clicked</span><span class="params">(View v)</span></span>&#123;</span><br><span class="line">        Intent intent = <span class="keyword">new</span> Intent(<span class="keyword">this</span>, InjectTestActivity<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">        intent.putExtra(<span class="string">"name1"</span>,<span class="string">"coco1"</span>);</span><br><span class="line">        intent.putExtra(<span class="string">"name2"</span>,<span class="string">"coco2"</span>);</span><br><span class="line">        intent.putExtra(<span class="string">"name3"</span>,<span class="string">"coco3"</span>);</span><br><span class="line">        intent.putExtra(<span class="string">"name4"</span>,<span class="string">"coco4"</span>);</span><br><span class="line">        intent.putExtra(<span class="string">"name5"</span>,<span class="string">"coco5"</span>);</span><br><span class="line">        startActivity(intent);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.coco.annotationtest;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> androidx.appcompat.app.AppCompatActivity;</span><br><span class="line"><span class="keyword">import</span> cn.coco.annotationlib.AnnotationTest;</span><br><span class="line"><span class="keyword">import</span> cn.coco.annotationtest.Inject.InjectUtil;</span><br><span class="line"><span class="keyword">import</span> cn.coco.annotationtest.Inject.InjectView;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> android.content.Intent;</span><br><span class="line"><span class="keyword">import</span> android.os.Bundle;</span><br><span class="line"><span class="keyword">import</span> android.view.View;</span><br><span class="line"><span class="keyword">import</span> android.widget.TextView;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">AppCompatActivity</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@AnnotationTest</span>(<span class="string">"帅"</span>)</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span> num;</span><br><span class="line">    <span class="meta">@AnnotationTest</span>(value=<span class="string">"帅"</span>,age = <span class="number">2</span>)</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span> num2;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@InjectView</span>(R.id.tv)</span><br><span class="line">    TextView tv;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.activity_main);</span><br><span class="line">        InjectUtil.injectView(<span class="keyword">this</span>);</span><br><span class="line">        tv.setText(<span class="string">"Coco 你好！！！"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">clicked</span><span class="params">(View v)</span></span>&#123;</span><br><span class="line">        ArrayList&lt;CustomerParcelable&gt; parcelables = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        parcelables.add(<span class="keyword">new</span> CustomerParcelable(<span class="string">"lili"</span>,<span class="number">10</span>));</span><br><span class="line"></span><br><span class="line">        Intent intent = <span class="keyword">new</span> Intent(<span class="keyword">this</span>, InjectTestActivity<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">        intent.putExtra(<span class="string">"name"</span>,<span class="string">"coco"</span>)</span><br><span class="line">                .putExtra(<span class="string">"attr"</span>,<span class="string">"你好！"</span>)</span><br><span class="line">                .putExtra(<span class="string">"array"</span>,<span class="keyword">new</span> <span class="keyword">int</span>[]&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>&#125;)</span><br><span class="line">                .putExtra(<span class="string">"customerParcelable"</span>,<span class="keyword">new</span> CustomerParcelable(<span class="string">"Jact"</span>, <span class="number">13</span>))</span><br><span class="line">                .putExtra(<span class="string">"customerParcelables"</span>,<span class="keyword">new</span> CustomerParcelable[]&#123;<span class="keyword">new</span> CustomerParcelable(<span class="string">"曹"</span>, <span class="number">13</span>)&#125;)</span><br><span class="line">                .putExtra(<span class="string">"users"</span>,<span class="keyword">new</span> CustomerSericalizable[]&#123;<span class="keyword">new</span> CustomerSericalizable(<span class="string">"zhang"</span>, <span class="number">23</span>)&#125;)</span><br><span class="line">                .putExtra(<span class="string">"strs"</span>,<span class="keyword">new</span> String[]&#123;<span class="string">"test1"</span>,<span class="string">"test2"</span>&#125;)</span><br><span class="line">                .putParcelableArrayListExtra(<span class="string">"parcelables"</span>,parcelables);</span><br><span class="line">        startActivity(intent);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.coco.annotationtest;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> android.os.Bundle;</span><br><span class="line"><span class="keyword">import</span> android.widget.TextView;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> androidx.appcompat.app.AppCompatActivity;</span><br><span class="line"><span class="keyword">import</span> cn.coco.annotationtest.Inject.InjectUtil;</span><br><span class="line"><span class="keyword">import</span> cn.coco.annotationtest.Inject.InjectView;</span><br><span class="line"><span class="keyword">import</span> cn.coco.annotationtest.Inject.InjectData;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">InjectTestActivity</span> <span class="keyword">extends</span> <span class="title">AppCompatActivity</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@InjectView</span>(R.id.tv)</span><br><span class="line">    TextView tv;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@InjectData</span>(<span class="string">"name1"</span>)</span><br><span class="line">    String name1;</span><br><span class="line">    <span class="meta">@InjectData</span>(<span class="string">"name2"</span>)</span><br><span class="line">    String name2;</span><br><span class="line">    <span class="meta">@InjectData</span>(<span class="string">"name3"</span>)</span><br><span class="line">    String name3;</span><br><span class="line">    <span class="meta">@InjectData</span>(<span class="string">"name4"</span>)</span><br><span class="line">    String name4;</span><br><span class="line">    <span class="meta">@InjectData</span>(<span class="string">"name5"</span>)</span><br><span class="line">    String name5;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.activity_test);</span><br><span class="line">        InjectUtil.injectView(<span class="keyword">this</span>);</span><br><span class="line">        InjectUtil.injectData(<span class="keyword">this</span>);</span><br><span class="line"></span><br><span class="line">        tv.setText(<span class="string">"name1="</span>+name1+<span class="string">"\n"</span>+<span class="string">"name2="</span>+name2+<span class="string">"\n"</span>+<span class="string">"name2="</span>+name2+<span class="string">"\n"</span>+<span class="string">"name2="</span>+name2+<span class="string">"\n"</span>+<span class="string">"name2="</span>+name2+<span class="string">"\n"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.coco.annotationtest;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> android.os.Bundle;</span><br><span class="line"><span class="keyword">import</span> android.widget.TextView;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> androidx.appcompat.app.AppCompatActivity;</span><br><span class="line"><span class="keyword">import</span> cn.coco.annotationtest.Inject.InjectUtil;</span><br><span class="line"><span class="keyword">import</span> cn.coco.annotationtest.Inject.InjectView;</span><br><span class="line"><span class="keyword">import</span> cn.coco.annotationtest.Inject.InjectData;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">InjectTestActivity</span> <span class="keyword">extends</span> <span class="title">AppCompatActivity</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@InjectView</span>(R.id.tv)</span><br><span class="line">    TextView tv;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@InjectData</span></span><br><span class="line">    String name;</span><br><span class="line">    <span class="meta">@InjectData</span>(<span class="string">"attr"</span>)</span><br><span class="line">    String attr;</span><br><span class="line">    <span class="meta">@InjectData</span></span><br><span class="line">    <span class="keyword">int</span>[] array;</span><br><span class="line">    <span class="meta">@InjectData</span></span><br><span class="line">    CustomerParcelable customerParcelable;</span><br><span class="line">    <span class="meta">@InjectData</span></span><br><span class="line">    CustomerParcelable[] customerParcelables;</span><br><span class="line">    <span class="meta">@InjectData</span></span><br><span class="line">    List&lt;CustomerParcelable&gt; parcelables;</span><br><span class="line">    <span class="meta">@InjectData</span>(<span class="string">"users"</span>)</span><br><span class="line">    CustomerSericalizable[] customerSericalizables;</span><br><span class="line">    <span class="meta">@InjectData</span>(<span class="string">"strs"</span>)</span><br><span class="line">    String[] strs;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.activity_test);</span><br><span class="line">        InjectUtil.injectView(<span class="keyword">this</span>);</span><br><span class="line">        InjectUtil.injectData(<span class="keyword">this</span>);</span><br><span class="line">         String temp =<span class="string">""</span>;</span><br><span class="line">         temp = <span class="string">"name="</span>+name+<span class="string">"\n"</span> +</span><br><span class="line">                 <span class="string">"attr="</span>+attr+<span class="string">"\n"</span>+</span><br><span class="line">                 <span class="string">"array="</span>+ Arrays.toString(array)+<span class="string">"\n"</span>+</span><br><span class="line">                 <span class="string">"customerParcelable="</span>+customerParcelable.getName()+<span class="string">"  "</span>+customerParcelable.getAge()+<span class="string">"\n"</span>+</span><br><span class="line">                 <span class="string">"customerParcelables="</span>+customerParcelables[<span class="number">0</span>].getName()+<span class="string">"\n"</span>+</span><br><span class="line">                 <span class="string">"parcelables="</span>+parcelables.get(<span class="number">0</span>).getName()+<span class="string">"  "</span>+parcelables.get(<span class="number">0</span>).getAge()+<span class="string">"\n"</span>+</span><br><span class="line">                 <span class="string">"customerSericalizables="</span>+customerSericalizables[<span class="number">0</span>].getName()+<span class="string">"\n"</span>+</span><br><span class="line">                 <span class="string">"strs="</span>+Arrays.toString(strs);</span><br><span class="line"></span><br><span class="line">        tv.setText(temp);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p><img src="/" class="lazyload" data-src="/2020/05/09/java-%E6%B3%A8%E8%A7%A3%E4%B8%8E%E5%8F%8D%E5%B0%84/suc.png"  alt></p>
+<p><img src="/" class="lazyload" data-src="/2020/05/09/java-%E6%B3%A8%E8%A7%A3%E4%B8%8E%E5%8F%8D%E5%B0%84/suc.jpg"  alt></p>
 <blockquote>
 <p>相关code已上传github<br><a href="https://github.com/xhongy/Samples" target="_blank" rel="noopener">https://github.com/xhongy/Samples</a></p>
 </blockquote>
