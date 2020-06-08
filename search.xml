@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>java进阶</title>
+    <url>/2020/04/22/java%E8%BF%9B%E9%98%B6/</url>
+    <content><![CDATA[<p>元注解： 注解上的注解<br>Target ，如不知名Targer，注解可以作用在任何地方</p>
+<blockquote>
+<p>Element.TYPE  作用在类</p>
+</blockquote>
+<p>APT  Annotition Processor Tools 注解处理器,运行在编译阶段</p>
+<p>.java由javac编译成-》.class</p>
+]]></content>
+      <categories>
+        <category>java</category>
+      </categories>
+      <tags>
+        <tag>java泛型</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>通过bintray-release，发布库到Jcenter</title>
     <url>/2020/04/19/%E9%80%9A%E8%BF%87bintray-release%EF%BC%8C%E5%8F%91%E5%B8%83%E5%BA%93%E5%88%B0Jcenter/</url>
     <content><![CDATA[<blockquote>
@@ -151,8 +168,10 @@
     <title>组件化</title>
     <url>/2020/04/21/%E7%BB%84%E4%BB%B6%E5%8C%96/</url>
     <content><![CDATA[<p>组件化： gradle 开发中<br>插件化： 动态化：反射、类加载 运行中</p>
-<blockquote>
-</blockquote>
+<p>uni底层c++与java不开源，开源了上层js</p>
+<p>Android平台5+App/uni-app开源，如果开发者要修改本工程源码，请注意“引擎”和“插件”的分界线。 “引擎”是对5+/uni-app规范的实现，修改引擎源码可以优化<br>对规范的实现，但不是提供规范外的功能。规范外的功能，应该做成“插件”。如需公开，则放到插件市场。 比如扫码，5+/uni-app的规范已经存在，但开发者对<br>扫码效率不满意，提供自己更好的实现，则可以改动本源码，重新Build引擎。 而如果是想新增一个ar功能，则应该做成插件，而不是加入到本工程中。<br>即，开发者不能自主新增5+/uni-app的js API规范。()[<a href="https://github.com/dcloudio/H5P.Android]" target="_blank" rel="noopener">https://github.com/dcloudio/H5P.Android]</a></p>
+<h2 id="扩展原生能力："><a href="#扩展原生能力：" class="headerlink" title="扩展原生能力："></a>扩展原生能力：</h2><p>当HBuilderX中提供的能力无法满足App功能需求，需要通过使用Andorid/iOS原生开发实现时，可使用App离线SDK开发原生插件来扩展原生能力。</p>
+<p>uni-app项目扩展原生能力需开发uni原生插件，支持云端打包，有完善的开发者生态插件市场<br>5+ App项目扩展原生能力需开发5+原生插件，仅支持本地离线打包</p>
 ]]></content>
       <categories>
         <category>android</category>
@@ -187,53 +206,6 @@
 <p>以上三种选一种即可。</p>
 <p>一般情况下当一个Activity被其他Activity覆盖时,被覆盖的Activity都会调用onStop（）方法,但是有两种情况除外,一个是上层Activity是Dialog风格时,<br>另外一个是上层Activity是透明时;这两种情况只会调用onPause（）方法,但不会调用onStop方法.</p>
 ]]></content>
-  </entry>
-  <entry>
-    <title>java进阶</title>
-    <url>/2020/04/22/java%E8%BF%9B%E9%98%B6/</url>
-    <content><![CDATA[<p>元注解： 注解上的注解<br>Target ，如不知名Targer，注解可以作用在任何地方</p>
-<blockquote>
-<p>Element.TYPE  作用在类</p>
-</blockquote>
-<p>APT  Annotition Processor Tools 注解处理器,运行在编译阶段</p>
-<p>.java由javac编译成-》.class</p>
-]]></content>
-      <categories>
-        <category>java</category>
-      </categories>
-      <tags>
-        <tag>java泛型</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>上传文件到github</title>
-    <url>/2020/04/19/%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E5%88%B0github/</url>
-    <content><![CDATA[<h3 id="注册账号"><a href="#注册账号" class="headerlink" title="注册账号"></a>注册账号</h3><p>首先先去  <a href="https://github.com/" target="_blank" rel="noopener">github官网</a>  注册一个账号。</p>
-<p>我们使用git需要先安装git工具，<a href="https://git-for-windows.github.io/" target="_blank" rel="noopener">下载地址</a></p>
-<p>接下来进入正题</p>
-<h4 id="创建仓库"><a href="#创建仓库" class="headerlink" title="创建仓库"></a>创建仓库</h4><p>进入Github首页，点击New repository</p>
-<p><img src="/" class="lazyload" data-src="/2020/04/19/%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E5%88%B0github/new-rep.png"  alt></p>
-<p>填写相应信息后点击create即可</p>
-<blockquote>
-<p>Repository name: 仓库名称<br>Description(可选): 仓库描述介绍<br>Public：仓库权限（公开共享，私有或指定合作者）<br>Initialize this repository with a README: 添加一个README.mdgitignore: 不需要进行版本管理的仓库类型，对应生成文件.gitignorelicense: </p>
-</blockquote>
-<p><img src="/" class="lazyload" data-src="/2020/04/19/%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E5%88%B0github/rep-info.png"  alt></p>
-<h4 id="仓库代码复制到本地"><a href="#仓库代码复制到本地" class="headerlink" title="仓库代码复制到本地"></a>仓库代码复制到本地</h4><p>执行相关命令将新建的仓库clone到本地</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> 仓库地址</span><br></pre></td></tr></table></figure>
-<p><img src="/" class="lazyload" data-src="/2020/04/19/%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E5%88%B0github/git-add.png"  alt></p>
-<h4 id="上传代码"><a href="#上传代码" class="headerlink" title="上传代码"></a>上传代码</h4><p>将本地要上传的代码放入刚clone下来的目录里面，cd 存放代码的路径,执行以下命令上传:</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git add . </span><br><span class="line">git commit -m <span class="string">"提交描述"</span></span><br><span class="line">git push -u origin master  （注：此操作目的是把本地仓库push到github上面，此步骤需要你输入 帐号和密码）</span><br></pre></td></tr></table></figure>
-
-<h4 id="查看上传是否成功"><a href="#查看上传是否成功" class="headerlink" title="查看上传是否成功"></a>查看上传是否成功</h4><p>此时就可以去github查看上传的代码，如下，上传成功</p>
-<p><img src="/" class="lazyload" data-src="/2020/04/19/%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E5%88%B0github/upload-suc.png"  alt></p>
-<h3 id="END"><a href="#END" class="headerlink" title="END"></a>END</h3><p>本文是针对有计算机基础的，不是每个步骤都说的太详尽，有不明白的可在自行百度。</p>
-]]></content>
-      <categories>
-        <category>工具</category>
-      </categories>
-      <tags>
-        <tag>github</tag>
-      </tags>
   </entry>
   <entry>
     <title>hexo+github搭建个人博客</title>
@@ -347,10 +319,54 @@
         <category>工具</category>
       </categories>
       <tags>
-        <tag>github</tag>
         <tag>hexo</tag>
+        <tag>github</tag>
         <tag>博客</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>上传文件到github</title>
+    <url>/2020/04/19/%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E5%88%B0github/</url>
+    <content><![CDATA[<h3 id="注册账号"><a href="#注册账号" class="headerlink" title="注册账号"></a>注册账号</h3><p>首先先去  <a href="https://github.com/" target="_blank" rel="noopener">github官网</a>  注册一个账号。</p>
+<p>我们使用git需要先安装git工具，<a href="https://git-for-windows.github.io/" target="_blank" rel="noopener">下载地址</a></p>
+<p>接下来进入正题</p>
+<h4 id="创建仓库"><a href="#创建仓库" class="headerlink" title="创建仓库"></a>创建仓库</h4><p>进入Github首页，点击New repository</p>
+<p><img src="/" class="lazyload" data-src="/2020/04/19/%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E5%88%B0github/new-rep.png"  alt></p>
+<p>填写相应信息后点击create即可</p>
+<blockquote>
+<p>Repository name: 仓库名称<br>Description(可选): 仓库描述介绍<br>Public：仓库权限（公开共享，私有或指定合作者）<br>Initialize this repository with a README: 添加一个README.mdgitignore: 不需要进行版本管理的仓库类型，对应生成文件.gitignorelicense: </p>
+</blockquote>
+<p><img src="/" class="lazyload" data-src="/2020/04/19/%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E5%88%B0github/rep-info.png"  alt></p>
+<h4 id="仓库代码复制到本地"><a href="#仓库代码复制到本地" class="headerlink" title="仓库代码复制到本地"></a>仓库代码复制到本地</h4><p>执行相关命令将新建的仓库clone到本地</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> 仓库地址</span><br></pre></td></tr></table></figure>
+<p><img src="/" class="lazyload" data-src="/2020/04/19/%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E5%88%B0github/git-add.png"  alt></p>
+<h4 id="上传代码"><a href="#上传代码" class="headerlink" title="上传代码"></a>上传代码</h4><p>将本地要上传的代码放入刚clone下来的目录里面，cd 存放代码的路径,执行以下命令上传:</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git add . </span><br><span class="line">git commit -m <span class="string">"提交描述"</span></span><br><span class="line">git push -u origin master  （注：此操作目的是把本地仓库push到github上面，此步骤需要你输入 帐号和密码）</span><br></pre></td></tr></table></figure>
+
+<h4 id="查看上传是否成功"><a href="#查看上传是否成功" class="headerlink" title="查看上传是否成功"></a>查看上传是否成功</h4><p>此时就可以去github查看上传的代码，如下，上传成功</p>
+<p><img src="/" class="lazyload" data-src="/2020/04/19/%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E5%88%B0github/upload-suc.png"  alt></p>
+<h3 id="END"><a href="#END" class="headerlink" title="END"></a>END</h3><p>本文是针对有计算机基础的，不是每个步骤都说的太详尽，有不明白的可在自行百度。</p>
+]]></content>
+      <categories>
+        <category>工具</category>
+      </categories>
+      <tags>
+        <tag>github</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>工作问题记录</title>
+    <url>/2020/06/05/%E5%B7%A5%E4%BD%9C%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95/</url>
+    <content><![CDATA[<h3 id="foxmail超大附件问题"><a href="#foxmail超大附件问题" class="headerlink" title="foxmail超大附件问题"></a>foxmail超大附件问题</h3><p>foxmail添加超大附件，提示输入qq密码，但是之前并没有绑定qq账号， 也就是没有建过QQ账号就提示QQ密码错误<br>解决方案：<br>foxmail-&gt;设置-&gt;插件-&gt;超大附件-&gt;禁用-&gt;启用,此时按提示操作绑定相关账号就好</p>
+<h3 id="配置Android-Studio的缓存文件路径（释放你的C盘）"><a href="#配置Android-Studio的缓存文件路径（释放你的C盘）" class="headerlink" title="配置Android Studio的缓存文件路径（释放你的C盘）"></a>配置Android Studio的缓存文件路径（释放你的C盘）</h3><p>Android Studio默认的缓存目录，主要有三个占空间的文件夹，分别是</p>
+<p>.android 这个文件夹是Android SDK生成的AVD（Android Virtual Device Manager）即模拟器存放路径<br>.AndroidStudio 配置、插件缓存文件夹、最近打开的项目<br>.gradle 这其中存储的是本地的gradle全局配置文件 ，但是在每次更新gradle后，这个文件都会增大（可以配置离线gradle）<br>这三个文件默认都是在C盘的，如何把它们移动到指定的路径呢？？</p>
+<h4 id="AndroidStudio文件夹的修改"><a href="#AndroidStudio文件夹的修改" class="headerlink" title=".AndroidStudio文件夹的修改"></a>.AndroidStudio文件夹的修改</h4><p>这个文件夹需要到默认的安装文件中去配置。首先进入 AndroidStudio 安装目录中的 Bin 文件夹。<br>打开文件：idea.properties ，找到idea.config.path和idea.config.path两个选项<br><img src="/" class="lazyload" data-src="/2020/06/05/%E5%B7%A5%E4%BD%9C%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95/android-studio1.png"  alt></p>
+<p>而后修改如下：<br><img src="/" class="lazyload" data-src="/2020/06/05/%E5%B7%A5%E4%BD%9C%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95/android-studio2.png"  alt></p>
+<h4 id="gradle文件夹的修改"><a href="#gradle文件夹的修改" class="headerlink" title=".gradle文件夹的修改"></a>.gradle文件夹的修改</h4><p>这个文件夹直接进入 AndroidStudio &gt; File &gt; Settings<br><img src="/" class="lazyload" data-src="/2020/06/05/%E5%B7%A5%E4%BD%9C%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95/gradle.png"  alt></p>
+]]></content>
+      <categories>
+        <category>杂烩</category>
+      </categories>
   </entry>
   <entry>
     <title>Uni-微信小程序</title>
@@ -441,6 +457,150 @@
       </categories>
       <tags>
         <tag>uni-app小程序</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>java-注解与反射</title>
+    <url>/2020/05/09/java-%E6%B3%A8%E8%A7%A3%E4%B8%8E%E5%8F%8D%E5%B0%84/</url>
+    <content><![CDATA[<h2 id="注解"><a href="#注解" class="headerlink" title="注解"></a>注解</h2><p>Java注解(Annotation)又称Java 标注，是JDK5.0引入的一种注释机制。注解是元数据的一种形式，提供有关于程序但不属于程序本身的数据。注解对他们注解的代码的操作没有直接影响。</p>
+<blockquote>
+<p>注解本身没有任何意义，单独的注解就是一种注释，他需要结合其他如反射、插桩等技术才有意义。</p>
+</blockquote>
+<h3 id="注解声明"><a href="#注解声明" class="headerlink" title="注解声明"></a>注解声明</h3><h4 id="声明一个注解类型"><a href="#声明一个注解类型" class="headerlink" title="声明一个注解类型"></a>声明一个注解类型</h4><p>java中的所有的注解，默认实现Annotation接口：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> java.lang.annotation;</span><br><span class="line"><span class="keyword">public</span> interfce Annotation &#123;</span><br><span class="line"> <span class="function"><span class="keyword">boolean</span> <span class="title">equals</span><span class="params">(Object obj)</span></span>;</span><br><span class="line"> <span class="function"><span class="keyword">int</span> <span class="title">hasCode</span><span class="params">()</span></span>;</span><br><span class="line"> <span class="function">String <span class="title">toString</span><span class="params">()</span></span>;</span><br><span class="line"> Class&lt;? extends Annotation&gt; annotationType();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>与声明一个”class”不同的是，注解的声明使用”@interface”关键字。一个注解的声明如下：</p>
+</blockquote>
+ <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> AnnotationTest&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="元注解"><a href="#元注解" class="headerlink" title="元注解"></a>元注解</h3><p> 在定义注解时，注解类也能够使用其他的注解声明。对注解类型进行注解的注解类，称之为meta-annotation(元注解)。一般的，我们在定义自定义注解时，需要指定的元注解有两个：</p>
+<h4 id="Target"><a href="#Target" class="headerlink" title="@Target"></a>@Target</h4><p>注解标记另一个注解，以限制可以应用注解的Java元素类型。可选择有：</p>
+<ul>
+<li><p>ElementType.ANNOTATION_TYPE   用于注解类型</p>
+</li>
+<li><p>ElementType.CONSTRUCTOR 应用于构造函数</p>
+</li>
+<li><p>ElementType.FIELD 应用于字段或属性</p>
+</li>
+<li><p>ElementType.LOCAL_VARIABLE 用于与局部变量</p>
+</li>
+<li><p>ElementType.METHOD 应用于方法级注解</p>
+</li>
+<li><p>ElementType.PACKAGE 应用于包声明</p>
+</li>
+<li><p>ElementType.PARAMETER 应用于方法的参数</p>
+</li>
+<li><p>ElementType.TYPE 只能应用于类</p>
+<blockquote>
+<p>ElementType.PARAMETER使用时需要添加ElementType.FIELD</p>
+</blockquote>
+</li>
+</ul>
+<h4 id="Retention"><a href="#Retention" class="headerlink" title="@Retention"></a>@Retention</h4><p>指定标记注解的存储方式</p>
+<ul>
+<li><p>RetentionPolicy.SOURCE  标记的注解仅保留在源级别中，并被编译器忽略</p>
+</li>
+<li><p>RetentionPolicy.CLASS   标记的注解在编译时由编译器保留，但Java虚拟机(JVM)会忽略</p>
+</li>
+<li><p>RetentionPolicy.RUNTIME 标记的注解有JVM保留，因此运行时环境可以使用它</p>
+<blockquote>
+<p>@Retention 三个值中 SOURCE &lt; CLASS &lt; RUNTIME，即CLASS包含了SOURCE，RUNTIME包含SOURCE、CLASS.</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="注解类型元素"><a href="#注解类型元素" class="headerlink" title="注解类型元素"></a>注解类型元素</h3><p> 在上文元注解中，允许在使用注解时传递参数，我们也能让自定义注解的主体包含注解类型元素声明，他们看起来很像方法<br> <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Target</span>(&#123;ElementType.TYPE,ElementType.FIELD&#125;) <span class="comment">//允许在类与类属性上标记该注解</span></span><br><span class="line"><span class="meta">@Retention</span>(RetentionPolicy.SOURCE) <span class="comment">// 注解保留在源码中</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> AnnotationTest &#123; </span><br><span class="line"> <span class="function">String <span class="title">value</span><span class="params">()</span></span>; <span class="comment">// 无默认值</span></span><br><span class="line"> <span class="function"><span class="keyword">int</span> <span class="title">age</span><span class="params">()</span> <span class="keyword">default</span> 1</span>; <span class="comment">//有默认值 </span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>在使用注解时，如果定义的注解中的类型元素无默认值，则必须进行传值<br>还要注意：”value是一个很特殊的元素名”，当注解中只有一个”value”参数时，传参可以不写元素名，但是如果使用的不是”value”,则必须添加相关元素名<br>当类型元素多于1个时，元素名都必须要填写</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//如果只存在value元素需要传值的情况，则可以省略:元素名</span></span><br><span class="line"><span class="meta">@AnnotationTest</span>(<span class="string">"帅"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">int</span> num;</span><br><span class="line"><span class="comment">// 多个参数时，元素名必须填写</span></span><br><span class="line"><span class="meta">@AnnotationTest</span>(value=<span class="string">"帅"</span>,age = <span class="number">2</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">int</span> num2;</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="注解使用场景"><a href="#注解使用场景" class="headerlink" title="注解使用场景"></a>注解使用场景</h3><table>
+<thead>
+<tr>
+<th>级别</th>
+<th>技术</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>源码</td>
+<td>APT</td>
+<td>在编译期能够获取注解与注解声明的类，包括类中的所有成员信息，一般用于生产额外的辅助类。</td>
+</tr>
+<tr>
+<td>字节码</td>
+<td>字节码增强</td>
+<td>在编译出Class后，通过修改Class数据以实现修改代码逻辑目的。</td>
+</tr>
+<tr>
+<td>运行时</td>
+<td>反射</td>
+<td>在程序运行期间，通过反射技术动态获取注解与其元素，从而完成不同的逻辑判断。</td>
+</tr>
+</tbody></table>
+<h3 id="编写注解处理器"><a href="#编写注解处理器" class="headerlink" title="编写注解处理器"></a>编写注解处理器</h3><h4 id="创建一个java-library"><a href="#创建一个java-library" class="headerlink" title="创建一个java library"></a>创建一个java library</h4><p>在app-&gt;build.gradle里面添加对其的依赖<br><img src="/" class="lazyload" data-src="/2020/05/09/java-%E6%B3%A8%E8%A7%A3%E4%B8%8E%E5%8F%8D%E5%B0%84/java-lib.png"  alt></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function">annotationProcessor <span class="title">project</span><span class="params">(path: <span class="string">':annotation'</span>)</span></span></span><br></pre></td></tr></table></figure>
+
+<h4 id="注解处理器类"><a href="#注解处理器类" class="headerlink" title="注解处理器类"></a>注解处理器类</h4><blockquote>
+<p>注解处理器需要集成”AbstractProcessor”类<br>@SupportedAnnotationTypes标明要处理的注解类</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 添加要处理的注解</span></span><br><span class="line"><span class="meta">@SupportedAnnotationTypes</span>(<span class="string">"cn.coco.annotationlib.AnnotationTest"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyClass</span> <span class="keyword">extends</span> <span class="title">AbstractProcessor</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">process</span><span class="params">(Set&lt;? extends TypeElement&gt; set, RoundEnvironment roundEnvironment)</span> </span>&#123;</span><br><span class="line">        Messager messager = processingEnv.getMessager();</span><br><span class="line">        messager.printMessage(Diagnostic.Kind.NOTE, <span class="string">"ss"</span>);</span><br><span class="line">        messager.printMessage(Diagnostic.Kind.NOTE, <span class="string">"ss"</span>+set.toString());</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="添加相关资源"><a href="#添加相关资源" class="headerlink" title="添加相关资源"></a>添加相关资源</h5><p>手动创建指定名称的路径：resources-&gt;META-INF-&gt;services-&gt;javax.annotation.processing.Processor<br><img src="/" class="lazyload" data-src="/2020/05/09/java-%E6%B3%A8%E8%A7%A3%E4%B8%8E%E5%8F%8D%E5%B0%84/annotation-resource.png"  alt></p>
+<h5 id="引用注解处理器"><a href="#引用注解处理器" class="headerlink" title="引用注解处理器"></a>引用注解处理器</h5><p>javax.annotation.processing.Processor文件添加注解处理器的引用<br><img src="/" class="lazyload" data-src="/2020/05/09/java-%E6%B3%A8%E8%A7%A3%E4%B8%8E%E5%8F%8D%E5%B0%84/annotation-info.png"  alt></p>
+<h4 id="查看注解处理器效果"><a href="#查看注解处理器效果" class="headerlink" title="查看注解处理器效果"></a>查看注解处理器效果</h4><p>build项目，查看打印信息,看到如下信息说明注解已经起作用了<br><img src="/" class="lazyload" data-src="/2020/05/09/java-%E6%B3%A8%E8%A7%A3%E4%B8%8E%E5%8F%8D%E5%B0%84/logcat-annotation.png"  alt></p>
+<h2 id="反射"><a href="#反射" class="headerlink" title="反射"></a>反射</h2><blockquote>
+<p>反射就是在运行状态中，对于任意一个类，都能够知道这个类的所有属性和方法；对于任意一个对象，都能调用他的任意方法和属性；并且能改变他的属性。</p>
+</blockquote>
+<p>java反射机制主要提供了以下功能：</p>
+<ul>
+<li>在运行时构造任意一个类的对象</li>
+<li>在运行时获取或者修改任意一个类的所具有的成员变量和方法</li>
+<li>在运行时调用任意一个对象的方法或属性</li>
+</ul>
+<p><img src="/" class="lazyload" data-src="/2020/05/09/java-%E6%B3%A8%E8%A7%A3%E4%B8%8E%E5%8F%8D%E5%B0%84/invoke.png"  alt></p>
+<h3 id="Class"><a href="#Class" class="headerlink" title="Class"></a>Class</h3><p>反射始于class，Class是一个类，封装了当前对象所对应的类的信息。</p>
+<h4 id="获取Class对象"><a href="#获取Class对象" class="headerlink" title="获取Class对象"></a>获取Class对象</h4><p>有三种方式</p>
+<ul>
+<li><p>通过类名获取   类名.class</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Class&lt;?&gt; klass = <span class="keyword">int</span><span class="class">.<span class="keyword">class</span></span>;</span><br><span class="line">Class&lt;?&gt; classInt = Integer.TYPE;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>通过对象获取    对象名.getClass()</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">StringBuilder str = <span class="keyword">new</span> StringBuilder(<span class="string">"123"</span>);</span><br><span class="line">Class&lt;?&gt; klass = str.getClass();</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>通过全类名获取  Class.forName(全类名) classLoader.loadClass(全类名)</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> Class&lt;?&gt; forName(String className)</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h2 id="反射-注解Demo"><a href="#反射-注解Demo" class="headerlink" title="反射+注解Demo"></a>反射+注解Demo</h2><p>接下来以获取一个TextView+参数传递的为例，讲解反射+注解的使用</p>
+<h3 id="编写注解类"><a href="#编写注解类" class="headerlink" title="编写注解类"></a>编写注解类</h3><figure class="highlight java"><figcaption><span>InjectView.java</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.coco.annotationtest.Inject;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.ElementType;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.Retention;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.RetentionPolicy;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.Target;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> androidx.annotation.IdRes;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)</span><br><span class="line"><span class="meta">@Target</span>(ElementType.FIELD)</span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> InjectView &#123;</span><br><span class="line">    <span class="comment">// 指定传递参数类型为R.id.*</span></span><br><span class="line">    <span class="meta">@IdRes</span> <span class="function"><span class="keyword">int</span> <span class="title">value</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><figcaption><span>InjectData.java</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.coco.annotationtest.Inject;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.ElementType;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.Retention;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.RetentionPolicy;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.Target;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)</span><br><span class="line"><span class="meta">@Target</span>(ElementType.FIELD)</span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> InjectData &#123;</span><br><span class="line">    <span class="function">String <span class="title">value</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="编写反射方法"><a href="#编写反射方法" class="headerlink" title="编写反射方法"></a>编写反射方法</h3><figure class="highlight java"><figcaption><span>InjectUtil.java</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.coco.annotationtest.Inject;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> android.app.Activity;</span><br><span class="line"><span class="keyword">import</span> android.content.Intent;</span><br><span class="line"><span class="keyword">import</span> android.os.Bundle;</span><br><span class="line"><span class="keyword">import</span> android.os.Parcelable;</span><br><span class="line"><span class="keyword">import</span> android.text.TextUtils;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.Field;</span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.Method;</span><br><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">InjectUtil</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 反射获取view</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">injectView</span><span class="params">(Activity activity)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">null</span> == activity) <span class="keyword">return</span>;</span><br><span class="line">        Class&lt;? extends Activity&gt; cls = activity.getClass();</span><br><span class="line">        <span class="comment">// 获取此类的所有成员</span></span><br><span class="line">        Field[] declaredFields = cls.getDeclaredFields();</span><br><span class="line">        <span class="keyword">for</span>(Field field:declaredFields)&#123;<span class="comment">//获取Activity类里面声明的所有成员变量</span></span><br><span class="line">            <span class="comment">// 判断属性是否被InjectView注解</span></span><br><span class="line">            <span class="keyword">if</span>(field.isAnnotationPresent(InjectView<span class="class">.<span class="keyword">class</span>))</span>&#123;</span><br><span class="line">                InjectView injectView = field.getAnnotation(InjectView<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">                <span class="comment">//获取注解中设置的id</span></span><br><span class="line">                <span class="keyword">int</span> value = injectView.value();</span><br><span class="line">                <span class="keyword">try</span>&#123;</span><br><span class="line">                    <span class="comment">// 找到findViewById方法</span></span><br><span class="line">                    Method findViewById = cls.getMethod(<span class="string">"findViewById"</span>,<span class="keyword">int</span><span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">                    findViewById.setAccessible(<span class="keyword">true</span>);</span><br><span class="line">                    Object view = findViewById.invoke(activity,value);</span><br><span class="line">                    field.setAccessible(<span class="keyword">true</span>);</span><br><span class="line">                    field.set(activity,view);</span><br><span class="line">                &#125;<span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 反射获取传递的参数</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">injectData</span><span class="params">(Activity activity)</span></span>&#123;</span><br><span class="line">        Class&lt;? extends Activity&gt; cls = activity.getClass();</span><br><span class="line">        Intent intent = activity.getIntent();</span><br><span class="line">        Bundle extras = intent.getExtras();</span><br><span class="line">        <span class="keyword">if</span>(extras == <span class="keyword">null</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//获得此类所有的成员</span></span><br><span class="line">        Field[] fields = cls.getDeclaredFields();</span><br><span class="line">        <span class="keyword">for</span>(Field field:fields)&#123;</span><br><span class="line">            <span class="keyword">if</span>(field.isAnnotationPresent(InjectData<span class="class">.<span class="keyword">class</span>))</span>&#123;</span><br><span class="line">                InjectData temp = field.getAnnotation(InjectData<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">                <span class="comment">// 获取key</span></span><br><span class="line">                String key = TextUtils.isEmpty(temp.value()) ? field.getName() : temp.value();</span><br><span class="line">                <span class="keyword">if</span>(extras.containsKey(key))&#123;</span><br><span class="line">                    Object obj = extras.get(key);</span><br><span class="line">                    <span class="comment">// todo Parcelable数组类型不能直接设置，其他的都可以.</span></span><br><span class="line">                    <span class="comment">//获得数组单个元素类型</span></span><br><span class="line">                    Class&lt;?&gt; componentType = field.getType().getComponentType();</span><br><span class="line">                    <span class="comment">//当前属性是数组并且是 Parcelable（子类）数组</span></span><br><span class="line">                    <span class="keyword">if</span>(field.getType().isArray() &amp;&amp; Parcelable<span class="class">.<span class="keyword">class</span>.<span class="title">isAssignableFrom</span>(<span class="title">componentType</span>)) </span>&#123;</span><br><span class="line">                        Object[] objs = (Object[]) obj;</span><br><span class="line">                        <span class="comment">//创建对应类型的数组并由objs拷贝</span></span><br><span class="line">                        Object[] objects = Arrays.copyOf(objs, objs.length, (Class&lt;? extends Object[]&gt;) field.getType());</span><br><span class="line">                        obj = objects;</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="comment">//反射设置属性的值</span></span><br><span class="line">                    field.setAccessible(<span class="keyword">true</span>); <span class="comment">//设置访问权限，允许操作private的属性</span></span><br><span class="line">                    <span class="keyword">try</span> &#123;</span><br><span class="line">                        <span class="comment">//反射赋值</span></span><br><span class="line">                        field.set(activity,obj);</span><br><span class="line">                    &#125; <span class="keyword">catch</span> (IllegalAccessException e) &#123;</span><br><span class="line">                        e.printStackTrace();</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.coco.annotationtest;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> androidx.appcompat.app.AppCompatActivity;</span><br><span class="line"><span class="keyword">import</span> cn.coco.annotationlib.AnnotationTest;</span><br><span class="line"><span class="keyword">import</span> cn.coco.annotationtest.Inject.InjectUtil;</span><br><span class="line"><span class="keyword">import</span> cn.coco.annotationtest.Inject.InjectView;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> android.content.Intent;</span><br><span class="line"><span class="keyword">import</span> android.os.Bundle;</span><br><span class="line"><span class="keyword">import</span> android.view.View;</span><br><span class="line"><span class="keyword">import</span> android.widget.TextView;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">AppCompatActivity</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@AnnotationTest</span>(<span class="string">"帅"</span>)</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span> num;</span><br><span class="line">    <span class="meta">@AnnotationTest</span>(value=<span class="string">"帅"</span>,age = <span class="number">2</span>)</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span> num2;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@InjectView</span>(R.id.tv)</span><br><span class="line">    TextView tv;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.activity_main);</span><br><span class="line">        InjectUtil.injectView(<span class="keyword">this</span>);</span><br><span class="line">        tv.setText(<span class="string">"Coco 你好！！！"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">clicked</span><span class="params">(View v)</span></span>&#123;</span><br><span class="line">        ArrayList&lt;CustomerParcelable&gt; parcelables = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        parcelables.add(<span class="keyword">new</span> CustomerParcelable(<span class="string">"lili"</span>,<span class="number">10</span>));</span><br><span class="line"></span><br><span class="line">        Intent intent = <span class="keyword">new</span> Intent(<span class="keyword">this</span>, InjectTestActivity<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">        intent.putExtra(<span class="string">"name"</span>,<span class="string">"coco"</span>)</span><br><span class="line">                .putExtra(<span class="string">"attr"</span>,<span class="string">"你好！"</span>)</span><br><span class="line">                .putExtra(<span class="string">"array"</span>,<span class="keyword">new</span> <span class="keyword">int</span>[]&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>&#125;)</span><br><span class="line">                .putExtra(<span class="string">"customerParcelable"</span>,<span class="keyword">new</span> CustomerParcelable(<span class="string">"Jact"</span>, <span class="number">13</span>))</span><br><span class="line">                .putExtra(<span class="string">"customerParcelables"</span>,<span class="keyword">new</span> CustomerParcelable[]&#123;<span class="keyword">new</span> CustomerParcelable(<span class="string">"曹"</span>, <span class="number">13</span>)&#125;)</span><br><span class="line">                .putExtra(<span class="string">"users"</span>,<span class="keyword">new</span> CustomerSericalizable[]&#123;<span class="keyword">new</span> CustomerSericalizable(<span class="string">"zhang"</span>, <span class="number">23</span>)&#125;)</span><br><span class="line">                .putExtra(<span class="string">"strs"</span>,<span class="keyword">new</span> String[]&#123;<span class="string">"test1"</span>,<span class="string">"test2"</span>&#125;)</span><br><span class="line">                .putParcelableArrayListExtra(<span class="string">"parcelables"</span>,parcelables);</span><br><span class="line">        startActivity(intent);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.coco.annotationtest;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> android.os.Bundle;</span><br><span class="line"><span class="keyword">import</span> android.widget.TextView;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> androidx.appcompat.app.AppCompatActivity;</span><br><span class="line"><span class="keyword">import</span> cn.coco.annotationtest.Inject.InjectUtil;</span><br><span class="line"><span class="keyword">import</span> cn.coco.annotationtest.Inject.InjectView;</span><br><span class="line"><span class="keyword">import</span> cn.coco.annotationtest.Inject.InjectData;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">InjectTestActivity</span> <span class="keyword">extends</span> <span class="title">AppCompatActivity</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@InjectView</span>(R.id.tv)</span><br><span class="line">    TextView tv;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@InjectData</span></span><br><span class="line">    String name;</span><br><span class="line">    <span class="meta">@InjectData</span>(<span class="string">"attr"</span>)</span><br><span class="line">    String attr;</span><br><span class="line">    <span class="meta">@InjectData</span></span><br><span class="line">    <span class="keyword">int</span>[] array;</span><br><span class="line">    <span class="meta">@InjectData</span></span><br><span class="line">    CustomerParcelable customerParcelable;</span><br><span class="line">    <span class="meta">@InjectData</span></span><br><span class="line">    CustomerParcelable[] customerParcelables;</span><br><span class="line">    <span class="meta">@InjectData</span></span><br><span class="line">    List&lt;CustomerParcelable&gt; parcelables;</span><br><span class="line">    <span class="meta">@InjectData</span>(<span class="string">"users"</span>)</span><br><span class="line">    CustomerSericalizable[] customerSericalizables;</span><br><span class="line">    <span class="meta">@InjectData</span>(<span class="string">"strs"</span>)</span><br><span class="line">    String[] strs;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.activity_test);</span><br><span class="line">        InjectUtil.injectView(<span class="keyword">this</span>);</span><br><span class="line">        InjectUtil.injectData(<span class="keyword">this</span>);</span><br><span class="line">         String temp =<span class="string">""</span>;</span><br><span class="line">         temp = <span class="string">"name="</span>+name+<span class="string">"\n"</span> +</span><br><span class="line">                 <span class="string">"attr="</span>+attr+<span class="string">"\n"</span>+</span><br><span class="line">                 <span class="string">"array="</span>+ Arrays.toString(array)+<span class="string">"\n"</span>+</span><br><span class="line">                 <span class="string">"customerParcelable="</span>+customerParcelable.getName()+<span class="string">"  "</span>+customerParcelable.getAge()+<span class="string">"\n"</span>+</span><br><span class="line">                 <span class="string">"customerParcelables="</span>+customerParcelables[<span class="number">0</span>].getName()+<span class="string">"\n"</span>+</span><br><span class="line">                 <span class="string">"parcelables="</span>+parcelables.get(<span class="number">0</span>).getName()+<span class="string">"  "</span>+parcelables.get(<span class="number">0</span>).getAge()+<span class="string">"\n"</span>+</span><br><span class="line">                 <span class="string">"customerSericalizables="</span>+customerSericalizables[<span class="number">0</span>].getName()+<span class="string">"\n"</span>+</span><br><span class="line">                 <span class="string">"strs="</span>+Arrays.toString(strs);</span><br><span class="line"></span><br><span class="line">        tv.setText(temp);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/" class="lazyload" data-src="/2020/05/09/java-%E6%B3%A8%E8%A7%A3%E4%B8%8E%E5%8F%8D%E5%B0%84/suc.jpg"  alt></p>
+<blockquote>
+<p>相关code已上传github<br><a href="https://github.com/xhongy/Samples" target="_blank" rel="noopener">https://github.com/xhongy/Samples</a></p>
+</blockquote>
+<h2 id="androidstudio安装ASM插件"><a href="#androidstudio安装ASM插件" class="headerlink" title="androidstudio安装ASM插件"></a>androidstudio安装ASM插件</h2><p>打开设置，选择plugin，输入ASM关键词，选择”ASM Bytecode Viewer” 点击安装<br><img src="/" class="lazyload" data-src="/2020/05/09/java-%E6%B3%A8%E8%A7%A3%E4%B8%8E%E5%8F%8D%E5%B0%84/asm-install1.png"  alt></p>
+<p>安装成功后，重启IDE<br><img src="/" class="lazyload" data-src="/2020/05/09/java-%E6%B3%A8%E8%A7%A3%E4%B8%8E%E5%8F%8D%E5%B0%84/asm-install-ok.png"  alt></p>
+<p>androidstudio重启后在右侧就会看到ASM标识了<br><img src="/" class="lazyload" data-src="/2020/05/09/java-%E6%B3%A8%E8%A7%A3%E4%B8%8E%E5%8F%8D%E5%B0%84/asm-show.png"  alt></p>
+<p>查看效果，类右键选择”ASM Bytecode Viewer”</p>
+<p>@Retention </p>
+]]></content>
+      <categories>
+        <category>java</category>
+      </categories>
+      <tags>
+        <tag>注解，反射</tag>
       </tags>
   </entry>
   <entry>
@@ -592,147 +752,84 @@
       </tags>
   </entry>
   <entry>
-    <title>java-注解与反射</title>
-    <url>/2020/05/09/java-%E6%B3%A8%E8%A7%A3%E4%B8%8E%E5%8F%8D%E5%B0%84/</url>
-    <content><![CDATA[<h2 id="注解"><a href="#注解" class="headerlink" title="注解"></a>注解</h2><p>Java注解(Annotation)又称Java 标注，是JDK5.0引入的一种注释机制。注解是元数据的一种形式，提供有关于程序但不属于程序本身的数据。注解对他们注解的代码的操作没有直接影响。</p>
+    <title>uni-app离线打包</title>
+    <url>/2020/06/02/uni-app%E7%A6%BB%E7%BA%BF%E6%89%93%E5%8C%85/</url>
+    <content><![CDATA[<p><em>Uni-app离线打包需要资源</em> <code>APP离线SDK版本要与Hbuilderx版本一致</code></p>
 <blockquote>
-<p>注解本身没有任何意义，单独的注解就是一种注释，他需要结合其他如反射、插桩等技术才有意义。</p>
+<p><a href="https://developer.android.google.cn/studio/index.html" target="_blank" rel="noopener">Android Studio</a>生成打包原生工程<br><a href="https://www.dcloud.io/hbuilderx.html" target="_blank" rel="noopener">Hbuilderx</a>将uni项目生成离线打包资源<br><a href="https://nativesupport.dcloud.net.cn/AppDocs/download/android" target="_blank" rel="noopener">App离线sdk</a></p>
 </blockquote>
-<h3 id="注解声明"><a href="#注解声明" class="headerlink" title="注解声明"></a>注解声明</h3><h4 id="声明一个注解类型"><a href="#声明一个注解类型" class="headerlink" title="声明一个注解类型"></a>声明一个注解类型</h4><p>java中的所有的注解，默认实现Annotation接口：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> java.lang.annotation;</span><br><span class="line"><span class="keyword">public</span> interfce Annotation &#123;</span><br><span class="line"> <span class="function"><span class="keyword">boolean</span> <span class="title">equals</span><span class="params">(Object obj)</span></span>;</span><br><span class="line"> <span class="function"><span class="keyword">int</span> <span class="title">hasCode</span><span class="params">()</span></span>;</span><br><span class="line"> <span class="function">String <span class="title">toString</span><span class="params">()</span></span>;</span><br><span class="line"> Class&lt;? extends Annotation&gt; annotationType();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
+<h3 id="新建原生工程"><a href="#新建原生工程" class="headerlink" title="新建原生工程"></a>新建原生工程</h3><p>打开Android studio新建一个空白项目,选择 Empty Activity 点击 Next</p>
+<p><img src="/" class="lazyload" data-src="/2020/06/02/uni-app%E7%A6%BB%E7%BA%BF%E6%89%93%E5%8C%85/android-new-one.png"  alt></p>
+<p>Minimum API Level 建议选19及以上,点击 Finish 完成创建</p>
+<p><img src="/" class="lazyload" data-src="/2020/06/02/uni-app%E7%A6%BB%E7%BA%BF%E6%89%93%E5%8C%85/android-new-two.png"  alt></p>
 <blockquote>
-<p>与声明一个”class”不同的是，注解的声明使用”@interface”关键字。一个注解的声明如下：</p>
+<p>注意：App离线SDK不支持Kotlin</p>
 </blockquote>
- <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> AnnotationTest&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="配置工程"><a href="#配置工程" class="headerlink" title="配置工程"></a>配置工程</h3><h4 id="基础库配置"><a href="#基础库配置" class="headerlink" title="基础库配置"></a>基础库配置</h4><p>将下载的app离线sdk里目录…\2.6.16\Android-SDK@2.6.16.80137_20200426\SDK\libs下的文件lib.5plus.base-release.aar、<a href="mailto:android-gif-drawable-release@1.2.17.aar">android-gif-drawable-release@1.2.17.aar</a>、uniapp-release.aar和miit_mdid_1.0.10.aar拷贝到刚创建的工程的libs目录下<br><img src="/" class="lazyload" data-src="/2020/06/02/uni-app%E7%A6%BB%E7%BA%BF%E6%89%93%E5%8C%85/android-lib-one.png"  alt></p>
+<p>在build.gradle中添加资源引用</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function">implementation <span class="title">fileTree</span><span class="params">(dir: <span class="string">'libs'</span>, include: [<span class="string">'*.aar'</span>, <span class="string">'*.jar'</span>], exclude: [])</span></span></span><br><span class="line"><span class="function">implementation "com.android.support:support-v4:28.0.0"</span></span><br><span class="line"><span class="function">implementation "com.android.support:appcompat-v7:28.0.0"</span></span><br><span class="line"><span class="function">implementation 'com.android.support:recyclerview-v7:28.0.0'</span></span><br><span class="line"><span class="function">implementation 'com.facebook.fresco:fresco:1.13.0'</span></span><br><span class="line"><span class="function">implementation "com.facebook.fresco:animated-gif:1.13.0"</span></span><br><span class="line"><span class="function">implementation 'com.github.bumptech.glide:glide:4.9.0'</span></span><br><span class="line"><span class="function">implementation 'com.alibaba:fastjson:1.1.46.android'</span></span><br></pre></td></tr></table></figure>
 
-<h3 id="元注解"><a href="#元注解" class="headerlink" title="元注解"></a>元注解</h3><p> 在定义注解时，注解类也能够使用其他的注解声明。对注解类型进行注解的注解类，称之为meta-annotation(元注解)。一般的，我们在定义自定义注解时，需要指定的元注解有两个：</p>
-<h4 id="Target"><a href="#Target" class="headerlink" title="@Target"></a>@Target</h4><p>注解标记另一个注解，以限制可以应用注解的Java元素类型。可选择有：</p>
-<ul>
-<li><p>ElementType.ANNOTATION_TYPE   用于注解类型</p>
-</li>
-<li><p>ElementType.CONSTRUCTOR 应用于构造函数</p>
-</li>
-<li><p>ElementType.FIELD 应用于字段或属性</p>
-</li>
-<li><p>ElementType.LOCAL_VARIABLE 用于与局部变量</p>
-</li>
-<li><p>ElementType.METHOD 应用于方法级注解</p>
-</li>
-<li><p>ElementType.PACKAGE 应用于包声明</p>
-</li>
-<li><p>ElementType.PARAMETER 应用于方法的参数</p>
-</li>
-<li><p>ElementType.TYPE 只能应用于类</p>
+<p>uni-app配置时需要在build.gradle中添加aaptOptions配置</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">aaptOptions &#123;  </span><br><span class="line">  additionalParameters <span class="string">'--auto-add-overlay'</span>  </span><br><span class="line">  ignoreAssetsPattern <span class="string">"!.svn:!.git:.*:!CVS:!thumbs.db:!picasa.ini:!*.scc:*~"</span>  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="应用配置"><a href="#应用配置" class="headerlink" title="应用配置"></a>应用配置</h4><h5 id="配置应用版本号"><a href="#配置应用版本号" class="headerlink" title="配置应用版本号"></a>配置应用版本号</h5><p><img src="/" class="lazyload" data-src="/2020/06/02/uni-app%E7%A6%BB%E7%BA%BF%E6%89%93%E5%8C%85/android-version.png"  alt></p>
 <blockquote>
-<p>ElementType.PARAMETER使用时需要添加ElementType.FIELD</p>
+<p>versionCode为应用的版本号（整数值），用于各应用市场的升级判断，建议与manifest.json中version -&gt; code值一致<br>versionName为应用的版本名称（字符串），在系统应用管理程序中显示的版本号，建议与manifest.json中version -&gt; name值一致。<br>applicationId为应用的包名，一般设置为反向域名，不建议修改。<br>建议将targetSdkVersion设置为25或以上。<br>App离线SDK minSdkVersion最低支持19，小于19在部分4.4以下机型上将无法正常使用。</p>
 </blockquote>
-</li>
-</ul>
-<h4 id="Retention"><a href="#Retention" class="headerlink" title="@Retention"></a>@Retention</h4><p>指定标记注解的存储方式</p>
-<ul>
-<li><p>RetentionPolicy.SOURCE  标记的注解仅保留在源级别中，并被编译器忽略</p>
-</li>
-<li><p>RetentionPolicy.CLASS   标记的注解在编译时由编译器保留，但Java虚拟机(JVM)会忽略</p>
-</li>
-<li><p>RetentionPolicy.RUNTIME 标记的注解有JVM保留，因此运行时环境可以使用它</p>
+<h5 id="build-gradle"><a href="#build-gradle" class="headerlink" title="build.gradle"></a>build.gradle</h5><p>完整版build.gradle可参考如下内容。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">apply plugin: <span class="string">'com.android.application'</span></span><br><span class="line"></span><br><span class="line">android &#123;</span><br><span class="line">    compileSdkVersion <span class="number">29</span></span><br><span class="line">    buildToolsVersion <span class="string">"29.0.3"</span></span><br><span class="line">    defaultConfig &#123;</span><br><span class="line">        applicationId <span class="string">"io.dcloud.HBuilder"</span></span><br><span class="line">        minSdkVersion <span class="number">19</span></span><br><span class="line">        targetSdkVersion <span class="number">29</span></span><br><span class="line">        versionCode <span class="number">322</span></span><br><span class="line">        versionName <span class="string">"3.2.2"</span></span><br><span class="line">        multiDexEnabled <span class="keyword">true</span></span><br><span class="line">        testInstrumentationRunner <span class="string">"androidx.test.runner.AndroidJUnitRunner"</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    buildTypes &#123;</span><br><span class="line">        release &#123;</span><br><span class="line">            minifyEnabled <span class="keyword">false</span></span><br><span class="line">            <span class="function">proguardFiles <span class="title">getDefaultProguardFile</span><span class="params">(<span class="string">'proguard-android-optimize.txt'</span>)</span>, 'proguard-rules.pro'</span></span><br><span class="line"><span class="function">        &#125;</span></span><br><span class="line"><span class="function">    &#125;</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function">    <span class="comment">//uni离线打包需要</span></span></span><br><span class="line"><span class="function">    aaptOptions </span>&#123;</span><br><span class="line">        additionalParameters <span class="string">'--auto-add-overlay'</span></span><br><span class="line">        ignoreAssetsPattern <span class="string">"!.svn:!.git:.*:!CVS:!thumbs.db:!picasa.ini:!*.scc:*~"</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">repositories &#123;</span><br><span class="line">    flatDir &#123;</span><br><span class="line">        dirs <span class="string">'libs'</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">dependencies &#123;</span><br><span class="line">    <span class="function">implementation <span class="title">fileTree</span><span class="params">(dir: <span class="string">'libs'</span>, include: [<span class="string">'*.aar'</span>, <span class="string">'*.jar'</span>], exclude: [])</span></span></span><br><span class="line"><span class="function">    implementation "com.android.support:support-v4:28.0.0"</span></span><br><span class="line"><span class="function">    implementation "com.android.support:appcompat-v7:28.0.0"</span></span><br><span class="line"><span class="function">    implementation 'com.android.support:recyclerview-v7:28.0.0'</span></span><br><span class="line"><span class="function">    implementation 'com.facebook.fresco:fresco:1.13.0'</span></span><br><span class="line"><span class="function">    implementation "com.facebook.fresco:animated-gif:1.13.0"</span></span><br><span class="line"><span class="function">    implementation 'com.github.bumptech.glide:glide:4.9.0'<span class="comment">// 基座依赖</span></span></span><br><span class="line"><span class="function">    implementation 'com.alibaba:fastjson:1.1.46.android'</span></span><br><span class="line"><span class="function">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="配置应用名称"><a href="#配置应用名称" class="headerlink" title="配置应用名称"></a>配置应用名称</h5><p>打开app-&gt;res -&gt; main -&gt; values -&gt; strings.xml文件，修改“app_name”字段值，该值为安装到手机上桌面显示的应用名称，建议与manifest.json中name（基础配置中的应用名称）对应。</p>
+<h5 id="配置应用启动页"><a href="#配置应用启动页" class="headerlink" title="配置应用启动页"></a>配置应用启动页</h5><p>将下述内容添加到Androidmanifest.xml的application节点中</p>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line">&lt;activity</span><br><span class="line">      android:name=<span class="string">"io.dcloud.PandoraEntry"</span></span><br><span class="line">      android:configChanges=<span class="string">"orientation|keyboardHidden|keyboard|navigation"</span></span><br><span class="line">      android:label=<span class="string">"@string/app_name"</span></span><br><span class="line">      android:launchMode=<span class="string">"singleTask"</span></span><br><span class="line">      android:hardwareAccelerated=<span class="string">"true"</span></span><br><span class="line">      android:theme=<span class="string">"@style/TranslucentTheme"</span></span><br><span class="line">      android:screenOrientation=<span class="string">"user"</span></span><br><span class="line">      android:windowSoftInputMode=<span class="string">"adjustResize"</span> &gt;</span><br><span class="line">      &lt;intent-filter&gt;</span><br><span class="line">          &lt;action android:name=<span class="string">"android.intent.action.MAIN"</span> /&gt;</span><br><span class="line">          &lt;category android:name=<span class="string">"android.intent.category.LAUNCHER"</span> /&gt;</span><br><span class="line">      &lt;/intent-filter&gt;</span><br><span class="line">  &lt;/activity&gt;</span><br><span class="line">  &lt;activity</span><br><span class="line">      android:name=<span class="string">"io.dcloud.PandoraEntryActivity"</span></span><br><span class="line">      android:launchMode=<span class="string">"singleTask"</span></span><br><span class="line">      android:configChanges=<span class="string">"orientation|keyboardHidden|screenSize|mcc|mnc|fontScale|keyboard"</span></span><br><span class="line">      android:hardwareAccelerated=<span class="string">"true"</span></span><br><span class="line">      android:permission=<span class="string">"com.miui.securitycenter.permission.AppPermissionsEditor"</span></span><br><span class="line">      android:screenOrientation=<span class="string">"user"</span></span><br><span class="line">      android:theme=<span class="string">"@style/DCloudTheme"</span></span><br><span class="line">      android:windowSoftInputMode=<span class="string">"adjustResize"</span>&gt;</span><br><span class="line">      &lt;intent-filter&gt;</span><br><span class="line">          &lt;category android:name=<span class="string">"android.intent.category.DEFAULT"</span> /&gt;</span><br><span class="line">          &lt;category android:name=<span class="string">"android.intent.category.BROWSABLE"</span> /&gt;</span><br><span class="line">          &lt;action android:name=<span class="string">"android.intent.action.VIEW"</span> /&gt;</span><br><span class="line">          &lt;data android:scheme=<span class="string">"h56131bcf"</span> /&gt;</span><br><span class="line">      &lt;/intent-filter&gt;</span><br><span class="line">  &lt;/activity&gt;</span><br></pre></td></tr></table></figure>
+
+<h5 id="配置应用图标和启动界面"><a href="#配置应用图标和启动界面" class="headerlink" title="配置应用图标和启动界面"></a>配置应用图标和启动界面</h5><blockquote>
+<p>icon.png为应用的图标。<br>push.png为推送消息的图标。<br>splash.png为应用启动页的图标。</p>
+</blockquote>
+<p>将icon.png、push.png、splash.png放置到drawable，drawalbe-ldpi，drawable-mdpi，drawable-hdpi，drawable-xhdpi，drawable-xxhdpi文件夹下，不同文件夹下对应不同图片尺寸<br>//todo</p>
+<p>修改Androidmanifest.xml中application节点的icon属性为@drawable/icon<br><img src="/" class="lazyload" data-src="/2020/06/02/uni-app%E7%A6%BB%E7%BA%BF%E6%89%93%E5%8C%85/android-manifest.png"  alt></p>
+<h5 id="权限配置"><a href="#权限配置" class="headerlink" title="权限配置"></a>权限配置</h5><p>查看hx里面manifest.xml文件里相关权限<br><img src="/" class="lazyload" data-src="/2020/06/02/uni-app%E7%A6%BB%E7%BA%BF%E6%89%93%E5%8C%85/hx-permission.png"  alt></p>
+<p>在android功能的androidmenifest.xml里面配置相关权限<br><img src="/" class="lazyload" data-src="/2020/06/02/uni-app%E7%A6%BB%E7%BA%BF%E6%89%93%E5%8C%85/android-permission.png"  alt></p>
+<h4 id="资源配置"><a href="#资源配置" class="headerlink" title="资源配置"></a>资源配置</h4><h5 id="创建data文件夹"><a href="#创建data文件夹" class="headerlink" title="创建data文件夹"></a>创建data文件夹</h5><p>手动创建于java同级的目录assets，然后将App离线SDK-&gt;assets-&gt;data文件夹拷贝到刚刚创建的assets文件夹下</p>
+<p><img src="/" class="lazyload" data-src="/2020/06/02/uni-app%E7%A6%BB%E7%BA%BF%E6%89%93%E5%8C%85/android-assets.png"  alt></p>
 <blockquote>
-<p>@Retention 三个值中 SOURCE &lt; CLASS &lt; RUNTIME，即CLASS包含了SOURCE，RUNTIME包含SOURCE、CLASS.</p>
+<p>SDK升级时，data下资源需要同时更新</p>
 </blockquote>
-</li>
-</ul>
-<h3 id="注解类型元素"><a href="#注解类型元素" class="headerlink" title="注解类型元素"></a>注解类型元素</h3><p> 在上文元注解中，允许在使用注解时传递参数，我们也能让自定义注解的主体包含注解类型元素声明，他们看起来很像方法<br> <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Target</span>(&#123;ElementType.TYPE,ElementType.FIELD&#125;) <span class="comment">//允许在类与类属性上标记该注解</span></span><br><span class="line"><span class="meta">@Retention</span>(RetentionPolicy.SOURCE) <span class="comment">// 注解保留在源码中</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> AnnotationTest &#123; </span><br><span class="line"> <span class="function">String <span class="title">value</span><span class="params">()</span></span>; <span class="comment">// 无默认值</span></span><br><span class="line"> <span class="function"><span class="keyword">int</span> <span class="title">age</span><span class="params">()</span> <span class="keyword">default</span> 1</span>; <span class="comment">//有默认值 </span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<blockquote>
-<p>在使用注解时，如果定义的注解中的类型元素无默认值，则必须进行传值<br>还要注意：”value是一个很特殊的元素名”，当注解中只有一个”value”参数时，传参可以不写元素名，但是如果使用的不是”value”,则必须添加相关元素名<br>当类型元素多于1个时，元素名都必须要填写</p>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//如果只存在value元素需要传值的情况，则可以省略:元素名</span></span><br><span class="line"><span class="meta">@AnnotationTest</span>(<span class="string">"帅"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">int</span> num;</span><br><span class="line"><span class="comment">// 多个参数时，元素名必须填写</span></span><br><span class="line"><span class="meta">@AnnotationTest</span>(value=<span class="string">"帅"</span>,age = <span class="number">2</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">int</span> num2;</span><br></pre></td></tr></table></figure>
+<h5 id="HbuilderX生成打包资源"><a href="#HbuilderX生成打包资源" class="headerlink" title="HbuilderX生成打包资源"></a>HbuilderX生成打包资源</h5><p>执行如下操作<br><img src="/" class="lazyload" data-src="/2020/06/02/uni-app%E7%A6%BB%E7%BA%BF%E6%89%93%E5%8C%85/hx-create.png"  alt></p>
+<p>查看生成的打包资源</p>
+<p><img src="/" class="lazyload" data-src="/2020/06/02/uni-app%E7%A6%BB%E7%BA%BF%E6%89%93%E5%8C%85/hx-end.png"  alt></p>
+<h5 id="创建apps文件夹"><a href="#创建apps文件夹" class="headerlink" title="创建apps文件夹"></a>创建apps文件夹</h5><p>在assets目录下手动创建apps目录，将上一步生成的打包资源copy到apps目录下面,修改dcloud_control.xml配置文件appid为拷贝过来的uni-APP的id，确保dcloud_control.xml中的appid与manifest.json中的id与文件夹名一致</p>
+<p><img src="/" class="lazyload" data-src="/2020/06/02/uni-app%E7%A6%BB%E7%BA%BF%E6%89%93%E5%8C%85/android-apps.png"  alt></p>
+<h3 id="uni三方模块配置"><a href="#uni三方模块配置" class="headerlink" title="uni三方模块配置"></a>uni三方模块配置</h3><p><code>已讯飞语音为例</code></p>
+<p>将以下文件放入工程的libs下<br><img src="/" class="lazyload" data-src="/2020/06/02/uni-app%E7%A6%BB%E7%BA%BF%E6%89%93%E5%8C%85/android-xunfei.png"  alt></p>
+<p>权限配置</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">&lt;uses-permission android:name=<span class="string">"android.permission.RECORD_AUDIO"</span> /&gt;</span><br><span class="line">    &lt;uses-permission android:name=<span class="string">"android.permission.INTERNET"</span> /&gt;</span><br><span class="line">    &lt;uses-permission android:name=<span class="string">"android.permission.ACCESS_NETWORK_STATE"</span> /&gt;</span><br><span class="line">    &lt;uses-permission android:name=<span class="string">"android.permission.ACCESS_WIFI_STATE"</span> /&gt;</span><br><span class="line">    &lt;uses-permission android:name=<span class="string">"android.permission.CHANGE_NETWORK_STATE"</span> /&gt;</span><br><span class="line">    &lt;uses-permission android:name=<span class="string">"android.permission.READ_PHONE_STATE"</span> /&gt;</span><br><span class="line">    &lt;uses-permission android:name=<span class="string">"android.permission.WRITE_EXTERNAL_STORAGE"</span> /&gt;</span><br></pre></td></tr></table></figure>
+
+<p>application节点配置</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">&lt;meta-data</span><br><span class="line">           android:name=<span class="string">"IFLY_APPKEY"</span></span><br><span class="line">           android:value=<span class="string">"$&#123;讯飞语音申请的appid&#125;"</span> /&gt;</span><br></pre></td></tr></table></figure>
 
 
-<h3 id="注解使用场景"><a href="#注解使用场景" class="headerlink" title="注解使用场景"></a>注解使用场景</h3><table>
-<thead>
-<tr>
-<th>级别</th>
-<th>技术</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>源码</td>
-<td>APT</td>
-<td>在编译期能够获取注解与注解声明的类，包括类中的所有成员信息，一般用于生产额外的辅助类。</td>
-</tr>
-<tr>
-<td>字节码</td>
-<td>字节码增强</td>
-<td>在编译出Class后，通过修改Class数据以实现修改代码逻辑目的。</td>
-</tr>
-<tr>
-<td>运行时</td>
-<td>反射</td>
-<td>在程序运行期间，通过反射技术动态获取注解与其元素，从而完成不同的逻辑判断。</td>
-</tr>
-</tbody></table>
-<h3 id="编写注解处理器"><a href="#编写注解处理器" class="headerlink" title="编写注解处理器"></a>编写注解处理器</h3><h4 id="创建一个java-library"><a href="#创建一个java-library" class="headerlink" title="创建一个java library"></a>创建一个java library</h4><p>在app-&gt;build.gradle里面添加对其的依赖<br><img src="/" class="lazyload" data-src="/2020/05/09/java-%E6%B3%A8%E8%A7%A3%E4%B8%8E%E5%8F%8D%E5%B0%84/java-lib.png"  alt></p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function">annotationProcessor <span class="title">project</span><span class="params">(path: <span class="string">':annotation'</span>)</span></span></span><br></pre></td></tr></table></figure>
+<p>dcloud_properties.xml配置</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;feature name&#x3D;&quot;Speech&quot; value&#x3D;&quot;io.dcloud.feature.speech.SpeechFeatureImpl&quot;&gt;</span><br><span class="line">   &lt;module name&#x3D;&quot;iFly&quot; value&#x3D;&quot;io.dcloud.feature.speech.IflySpeechEngine&quot;&#x2F;&gt;</span><br><span class="line">&lt;&#x2F;feature&gt;</span><br></pre></td></tr></table></figure>
 
-<h4 id="注解处理器类"><a href="#注解处理器类" class="headerlink" title="注解处理器类"></a>注解处理器类</h4><blockquote>
-<p>注解处理器需要集成”AbstractProcessor”类<br>@SupportedAnnotationTypes标明要处理的注解类</p>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 添加要处理的注解</span></span><br><span class="line"><span class="meta">@SupportedAnnotationTypes</span>(<span class="string">"cn.coco.annotationlib.AnnotationTest"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyClass</span> <span class="keyword">extends</span> <span class="title">AbstractProcessor</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">process</span><span class="params">(Set&lt;? extends TypeElement&gt; set, RoundEnvironment roundEnvironment)</span> </span>&#123;</span><br><span class="line">        Messager messager = processingEnv.getMessager();</span><br><span class="line">        messager.printMessage(Diagnostic.Kind.NOTE, <span class="string">"ss"</span>);</span><br><span class="line">        messager.printMessage(Diagnostic.Kind.NOTE, <span class="string">"ss"</span>+set.toString());</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="原生插件配置"><a href="#原生插件配置" class="headerlink" title="原生插件配置"></a>原生插件配置</h3><p>项目里面若是用到了自定义原生插件，需要将此插件进行相关配置</p>
+<h4 id="dcloud-uniplugins-json文件"><a href="#dcloud-uniplugins-json文件" class="headerlink" title="dcloud_uniplugins.json文件"></a>dcloud_uniplugins.json文件</h4><p>android端 assets目录下面创建dcloud_uniplugins.json文件</p>
+<p><img src="/" class="lazyload" data-src="/2020/06/02/uni-app%E7%A6%BB%E7%BA%BF%E6%89%93%E5%8C%85/android-plugin-new.png"  alt></p>
+<h4 id="原生插件资源配置"><a href="#原生插件资源配置" class="headerlink" title="原生插件资源配置"></a>原生插件资源配置</h4><p>查看项目里面的原生插件，在nativeplugins目录下面，将用到的资源文件（下图方框所示），复制到android项目libs目录下面</p>
+<p><img src="/" class="lazyload" data-src="/2020/06/02/uni-app%E7%A6%BB%E7%BA%BF%E6%89%93%E5%8C%85/hx-plugin-aar.png"  alt><br><img src="/" class="lazyload" data-src="/2020/06/02/uni-app%E7%A6%BB%E7%BA%BF%E6%89%93%E5%8C%85/android-plugin-copy.png"  alt></p>
+<p>将nativeplugins/package.json文件内红框内容复制到android项目的dcloud_uniplugins.json文件<br><img src="/" class="lazyload" data-src="/2020/06/02/uni-app%E7%A6%BB%E7%BA%BF%E6%89%93%E5%8C%85/hx-package1.png"  alt></p>
+<p>此时dcloud_uniplugins.json文件内容为</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="string">"nativePlugins"</span>: [</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="string">"hooksClass"</span>: <span class="string">""</span>,</span><br><span class="line">      <span class="string">"plugins"</span>: [&#123;</span><br><span class="line">        <span class="string">"type"</span>: <span class="string">"module"</span>,</span><br><span class="line">        <span class="string">"name"</span>: <span class="string">"rongyunplugin"</span>,</span><br><span class="line">        <span class="string">"class"</span>: <span class="string">"cn.******.rongyunplugin.UniMeetingModule"</span></span><br><span class="line">      &#125;]</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h5 id="添加相关资源"><a href="#添加相关资源" class="headerlink" title="添加相关资源"></a>添加相关资源</h5><p>手动创建指定名称的路径：resources-&gt;META-INF-&gt;services-&gt;javax.annotation.processing.Processor<br><img src="/" class="lazyload" data-src="/2020/05/09/java-%E6%B3%A8%E8%A7%A3%E4%B8%8E%E5%8F%8D%E5%B0%84/annotation-resource.png"  alt></p>
-<h5 id="引用注解处理器"><a href="#引用注解处理器" class="headerlink" title="引用注解处理器"></a>引用注解处理器</h5><p>javax.annotation.processing.Processor文件添加注解处理器的引用<br><img src="/" class="lazyload" data-src="/2020/05/09/java-%E6%B3%A8%E8%A7%A3%E4%B8%8E%E5%8F%8D%E5%B0%84/annotation-info.png"  alt></p>
-<h4 id="查看注解处理器效果"><a href="#查看注解处理器效果" class="headerlink" title="查看注解处理器效果"></a>查看注解处理器效果</h4><p>build项目，查看打印信息,看到如下信息说明注解已经起作用了<br><img src="/" class="lazyload" data-src="/2020/05/09/java-%E6%B3%A8%E8%A7%A3%E4%B8%8E%E5%8F%8D%E5%B0%84/logcat-annotation.png"  alt></p>
-<h2 id="反射"><a href="#反射" class="headerlink" title="反射"></a>反射</h2><blockquote>
-<p>反射就是在运行状态中，对于任意一个类，都能够知道这个类的所有属性和方法；对于任意一个对象，都能调用他的任意方法和属性；并且能改变他的属性。</p>
-</blockquote>
-<p>java反射机制主要提供了以下功能：</p>
-<ul>
-<li>在运行时构造任意一个类的对象</li>
-<li>在运行时获取或者修改任意一个类的所具有的成员变量和方法</li>
-<li>在运行时调用任意一个对象的方法或属性</li>
-</ul>
-<p><img src="/" class="lazyload" data-src="/2020/05/09/java-%E6%B3%A8%E8%A7%A3%E4%B8%8E%E5%8F%8D%E5%B0%84/invoke.png"  alt></p>
-<h3 id="Class"><a href="#Class" class="headerlink" title="Class"></a>Class</h3><p>反射始于class，Class是一个类，封装了当前对象所对应的类的信息。</p>
-<h4 id="获取Class对象"><a href="#获取Class对象" class="headerlink" title="获取Class对象"></a>获取Class对象</h4><p>有三种方式</p>
-<ul>
-<li><p>通过类名获取   类名.class</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Class&lt;?&gt; klass = <span class="keyword">int</span><span class="class">.<span class="keyword">class</span></span>;</span><br><span class="line">Class&lt;?&gt; classInt = Integer.TYPE;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>通过对象获取    对象名.getClass()</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">StringBuilder str = <span class="keyword">new</span> StringBuilder(<span class="string">"123"</span>);</span><br><span class="line">Class&lt;?&gt; klass = str.getClass();</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>通过全类名获取  Class.forName(全类名) classLoader.loadClass(全类名)</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> Class&lt;?&gt; forName(String className)</span><br></pre></td></tr></table></figure>
-
-</li>
-</ul>
-<h2 id="反射-注解Demo"><a href="#反射-注解Demo" class="headerlink" title="反射+注解Demo"></a>反射+注解Demo</h2><p>接下来以获取一个TextView+参数传递的为例，讲解反射+注解的使用</p>
-<h3 id="编写注解类"><a href="#编写注解类" class="headerlink" title="编写注解类"></a>编写注解类</h3><figure class="highlight java"><figcaption><span>InjectView.java</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.coco.annotationtest.Inject;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.ElementType;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.Retention;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.RetentionPolicy;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.Target;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> androidx.annotation.IdRes;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)</span><br><span class="line"><span class="meta">@Target</span>(ElementType.FIELD)</span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> InjectView &#123;</span><br><span class="line">    <span class="comment">// 指定传递参数类型为R.id.*</span></span><br><span class="line">    <span class="meta">@IdRes</span> <span class="function"><span class="keyword">int</span> <span class="title">value</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight java"><figcaption><span>InjectData.java</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.coco.annotationtest.Inject;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.ElementType;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.Retention;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.RetentionPolicy;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.Target;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)</span><br><span class="line"><span class="meta">@Target</span>(ElementType.FIELD)</span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> InjectData &#123;</span><br><span class="line">    <span class="function">String <span class="title">value</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="编写反射方法"><a href="#编写反射方法" class="headerlink" title="编写反射方法"></a>编写反射方法</h3><figure class="highlight java"><figcaption><span>InjectUtil.java</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.coco.annotationtest.Inject;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> android.app.Activity;</span><br><span class="line"><span class="keyword">import</span> android.content.Intent;</span><br><span class="line"><span class="keyword">import</span> android.os.Bundle;</span><br><span class="line"><span class="keyword">import</span> android.os.Parcelable;</span><br><span class="line"><span class="keyword">import</span> android.text.TextUtils;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.Field;</span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.Method;</span><br><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">InjectUtil</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 反射获取view</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">injectView</span><span class="params">(Activity activity)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">null</span> == activity) <span class="keyword">return</span>;</span><br><span class="line">        Class&lt;? extends Activity&gt; cls = activity.getClass();</span><br><span class="line">        <span class="comment">// 获取此类的所有成员</span></span><br><span class="line">        Field[] declaredFields = cls.getDeclaredFields();</span><br><span class="line">        <span class="keyword">for</span>(Field field:declaredFields)&#123;<span class="comment">//获取Activity类里面声明的所有成员变量</span></span><br><span class="line">            <span class="comment">// 判断属性是否被InjectView注解</span></span><br><span class="line">            <span class="keyword">if</span>(field.isAnnotationPresent(InjectView<span class="class">.<span class="keyword">class</span>))</span>&#123;</span><br><span class="line">                InjectView injectView = field.getAnnotation(InjectView<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">                <span class="comment">//获取注解中设置的id</span></span><br><span class="line">                <span class="keyword">int</span> value = injectView.value();</span><br><span class="line">                <span class="keyword">try</span>&#123;</span><br><span class="line">                    <span class="comment">// 找到findViewById方法</span></span><br><span class="line">                    Method findViewById = cls.getMethod(<span class="string">"findViewById"</span>,<span class="keyword">int</span><span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">                    findViewById.setAccessible(<span class="keyword">true</span>);</span><br><span class="line">                    Object view = findViewById.invoke(activity,value);</span><br><span class="line">                    field.setAccessible(<span class="keyword">true</span>);</span><br><span class="line">                    field.set(activity,view);</span><br><span class="line">                &#125;<span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 反射获取传递的参数</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">injectData</span><span class="params">(Activity activity)</span></span>&#123;</span><br><span class="line">        Class&lt;? extends Activity&gt; cls = activity.getClass();</span><br><span class="line">        Intent intent = activity.getIntent();</span><br><span class="line">        Bundle extras = intent.getExtras();</span><br><span class="line">        <span class="keyword">if</span>(extras == <span class="keyword">null</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//获得此类所有的成员</span></span><br><span class="line">        Field[] fields = cls.getDeclaredFields();</span><br><span class="line">        <span class="keyword">for</span>(Field field:fields)&#123;</span><br><span class="line">            <span class="keyword">if</span>(field.isAnnotationPresent(InjectData<span class="class">.<span class="keyword">class</span>))</span>&#123;</span><br><span class="line">                InjectData temp = field.getAnnotation(InjectData<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">                <span class="comment">// 获取key</span></span><br><span class="line">                String key = TextUtils.isEmpty(temp.value()) ? field.getName() : temp.value();</span><br><span class="line">                <span class="keyword">if</span>(extras.containsKey(key))&#123;</span><br><span class="line">                    Object obj = extras.get(key);</span><br><span class="line">                    <span class="comment">// todo Parcelable数组类型不能直接设置，其他的都可以.</span></span><br><span class="line">                    <span class="comment">//获得数组单个元素类型</span></span><br><span class="line">                    Class&lt;?&gt; componentType = field.getType().getComponentType();</span><br><span class="line">                    <span class="comment">//当前属性是数组并且是 Parcelable（子类）数组</span></span><br><span class="line">                    <span class="keyword">if</span>(field.getType().isArray() &amp;&amp; Parcelable<span class="class">.<span class="keyword">class</span>.<span class="title">isAssignableFrom</span>(<span class="title">componentType</span>)) </span>&#123;</span><br><span class="line">                        Object[] objs = (Object[]) obj;</span><br><span class="line">                        <span class="comment">//创建对应类型的数组并由objs拷贝</span></span><br><span class="line">                        Object[] objects = Arrays.copyOf(objs, objs.length, (Class&lt;? extends Object[]&gt;) field.getType());</span><br><span class="line">                        obj = objects;</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="comment">//反射设置属性的值</span></span><br><span class="line">                    field.setAccessible(<span class="keyword">true</span>); <span class="comment">//设置访问权限，允许操作private的属性</span></span><br><span class="line">                    <span class="keyword">try</span> &#123;</span><br><span class="line">                        <span class="comment">//反射赋值</span></span><br><span class="line">                        field.set(activity,obj);</span><br><span class="line">                    &#125; <span class="keyword">catch</span> (IllegalAccessException e) &#123;</span><br><span class="line">                        e.printStackTrace();</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.coco.annotationtest;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> androidx.appcompat.app.AppCompatActivity;</span><br><span class="line"><span class="keyword">import</span> cn.coco.annotationlib.AnnotationTest;</span><br><span class="line"><span class="keyword">import</span> cn.coco.annotationtest.Inject.InjectUtil;</span><br><span class="line"><span class="keyword">import</span> cn.coco.annotationtest.Inject.InjectView;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> android.content.Intent;</span><br><span class="line"><span class="keyword">import</span> android.os.Bundle;</span><br><span class="line"><span class="keyword">import</span> android.view.View;</span><br><span class="line"><span class="keyword">import</span> android.widget.TextView;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">AppCompatActivity</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@AnnotationTest</span>(<span class="string">"帅"</span>)</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span> num;</span><br><span class="line">    <span class="meta">@AnnotationTest</span>(value=<span class="string">"帅"</span>,age = <span class="number">2</span>)</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span> num2;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@InjectView</span>(R.id.tv)</span><br><span class="line">    TextView tv;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.activity_main);</span><br><span class="line">        InjectUtil.injectView(<span class="keyword">this</span>);</span><br><span class="line">        tv.setText(<span class="string">"Coco 你好！！！"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">clicked</span><span class="params">(View v)</span></span>&#123;</span><br><span class="line">        ArrayList&lt;CustomerParcelable&gt; parcelables = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        parcelables.add(<span class="keyword">new</span> CustomerParcelable(<span class="string">"lili"</span>,<span class="number">10</span>));</span><br><span class="line"></span><br><span class="line">        Intent intent = <span class="keyword">new</span> Intent(<span class="keyword">this</span>, InjectTestActivity<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">        intent.putExtra(<span class="string">"name"</span>,<span class="string">"coco"</span>)</span><br><span class="line">                .putExtra(<span class="string">"attr"</span>,<span class="string">"你好！"</span>)</span><br><span class="line">                .putExtra(<span class="string">"array"</span>,<span class="keyword">new</span> <span class="keyword">int</span>[]&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>&#125;)</span><br><span class="line">                .putExtra(<span class="string">"customerParcelable"</span>,<span class="keyword">new</span> CustomerParcelable(<span class="string">"Jact"</span>, <span class="number">13</span>))</span><br><span class="line">                .putExtra(<span class="string">"customerParcelables"</span>,<span class="keyword">new</span> CustomerParcelable[]&#123;<span class="keyword">new</span> CustomerParcelable(<span class="string">"曹"</span>, <span class="number">13</span>)&#125;)</span><br><span class="line">                .putExtra(<span class="string">"users"</span>,<span class="keyword">new</span> CustomerSericalizable[]&#123;<span class="keyword">new</span> CustomerSericalizable(<span class="string">"zhang"</span>, <span class="number">23</span>)&#125;)</span><br><span class="line">                .putExtra(<span class="string">"strs"</span>,<span class="keyword">new</span> String[]&#123;<span class="string">"test1"</span>,<span class="string">"test2"</span>&#125;)</span><br><span class="line">                .putParcelableArrayListExtra(<span class="string">"parcelables"</span>,parcelables);</span><br><span class="line">        startActivity(intent);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.coco.annotationtest;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> android.os.Bundle;</span><br><span class="line"><span class="keyword">import</span> android.widget.TextView;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> androidx.appcompat.app.AppCompatActivity;</span><br><span class="line"><span class="keyword">import</span> cn.coco.annotationtest.Inject.InjectUtil;</span><br><span class="line"><span class="keyword">import</span> cn.coco.annotationtest.Inject.InjectView;</span><br><span class="line"><span class="keyword">import</span> cn.coco.annotationtest.Inject.InjectData;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">InjectTestActivity</span> <span class="keyword">extends</span> <span class="title">AppCompatActivity</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@InjectView</span>(R.id.tv)</span><br><span class="line">    TextView tv;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@InjectData</span></span><br><span class="line">    String name;</span><br><span class="line">    <span class="meta">@InjectData</span>(<span class="string">"attr"</span>)</span><br><span class="line">    String attr;</span><br><span class="line">    <span class="meta">@InjectData</span></span><br><span class="line">    <span class="keyword">int</span>[] array;</span><br><span class="line">    <span class="meta">@InjectData</span></span><br><span class="line">    CustomerParcelable customerParcelable;</span><br><span class="line">    <span class="meta">@InjectData</span></span><br><span class="line">    CustomerParcelable[] customerParcelables;</span><br><span class="line">    <span class="meta">@InjectData</span></span><br><span class="line">    List&lt;CustomerParcelable&gt; parcelables;</span><br><span class="line">    <span class="meta">@InjectData</span>(<span class="string">"users"</span>)</span><br><span class="line">    CustomerSericalizable[] customerSericalizables;</span><br><span class="line">    <span class="meta">@InjectData</span>(<span class="string">"strs"</span>)</span><br><span class="line">    String[] strs;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.activity_test);</span><br><span class="line">        InjectUtil.injectView(<span class="keyword">this</span>);</span><br><span class="line">        InjectUtil.injectData(<span class="keyword">this</span>);</span><br><span class="line">         String temp =<span class="string">""</span>;</span><br><span class="line">         temp = <span class="string">"name="</span>+name+<span class="string">"\n"</span> +</span><br><span class="line">                 <span class="string">"attr="</span>+attr+<span class="string">"\n"</span>+</span><br><span class="line">                 <span class="string">"array="</span>+ Arrays.toString(array)+<span class="string">"\n"</span>+</span><br><span class="line">                 <span class="string">"customerParcelable="</span>+customerParcelable.getName()+<span class="string">"  "</span>+customerParcelable.getAge()+<span class="string">"\n"</span>+</span><br><span class="line">                 <span class="string">"customerParcelables="</span>+customerParcelables[<span class="number">0</span>].getName()+<span class="string">"\n"</span>+</span><br><span class="line">                 <span class="string">"parcelables="</span>+parcelables.get(<span class="number">0</span>).getName()+<span class="string">"  "</span>+parcelables.get(<span class="number">0</span>).getAge()+<span class="string">"\n"</span>+</span><br><span class="line">                 <span class="string">"customerSericalizables="</span>+customerSericalizables[<span class="number">0</span>].getName()+<span class="string">"\n"</span>+</span><br><span class="line">                 <span class="string">"strs="</span>+Arrays.toString(strs);</span><br><span class="line"></span><br><span class="line">        tv.setText(temp);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><img src="/" class="lazyload" data-src="/2020/05/09/java-%E6%B3%A8%E8%A7%A3%E4%B8%8E%E5%8F%8D%E5%B0%84/suc.jpg"  alt></p>
-<blockquote>
-<p>相关code已上传github<br><a href="https://github.com/xhongy/Samples" target="_blank" rel="noopener">https://github.com/xhongy/Samples</a></p>
-</blockquote>
-<h2 id="androidstudio安装ASM插件"><a href="#androidstudio安装ASM插件" class="headerlink" title="androidstudio安装ASM插件"></a>androidstudio安装ASM插件</h2><p>打开设置，选择plugin，输入ASM关键词，选择”ASM Bytecode Viewer” 点击安装<br><img src="/" class="lazyload" data-src="/2020/05/09/java-%E6%B3%A8%E8%A7%A3%E4%B8%8E%E5%8F%8D%E5%B0%84/asm-install1.png"  alt></p>
-<p>安装成功后，重启IDE<br><img src="/" class="lazyload" data-src="/2020/05/09/java-%E6%B3%A8%E8%A7%A3%E4%B8%8E%E5%8F%8D%E5%B0%84/asm-install-ok.png"  alt></p>
-<p>androidstudio重启后在右侧就会看到ASM标识了<br><img src="/" class="lazyload" data-src="/2020/05/09/java-%E6%B3%A8%E8%A7%A3%E4%B8%8E%E5%8F%8D%E5%B0%84/asm-show.png"  alt></p>
-<p>查看效果，类右键选择”ASM Bytecode Viewer”</p>
-<p>@Retention </p>
+<h3 id="打包运行"><a href="#打包运行" class="headerlink" title="打包运行"></a>打包运行</h3><p>在android studio里面直接运行项目到手机进行测试</p>
+<h3 id="END"><a href="#END" class="headerlink" title="END"></a>END</h3><p>参考：<br><a href="https://nativesupport.dcloud.net.cn/AppDocs/README" target="_blank" rel="noopener">uiniapp离线打包</a><br><a href="https://blog.csdn.net/fade999/article/details/103309203" target="_blank" rel="noopener">uniapp离线打包-原生插件配置</a></p>
 ]]></content>
       <categories>
-        <category>java</category>
+        <category>uni-app</category>
       </categories>
       <tags>
-        <tag>注解，反射</tag>
+        <tag>uni-app</tag>
+        <tag>uni-app离线打包</tag>
       </tags>
   </entry>
   <entry>
